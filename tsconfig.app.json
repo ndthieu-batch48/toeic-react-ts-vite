@@ -15,7 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shadcn/*": ["./src/shadcn/*"]
     },
     "skipLibCheck": true,
     /* Linting */
