@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@shadcn/*": ["./src/shadcn/*"]
+      "@/*": ["./src/*"]
     }
   },
   "files": [],

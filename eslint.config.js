@@ -22,7 +22,7 @@ export default tseslint.config([
   },
   {
     // Disable linter for shadcn ui libs
-    files: ['src/components/shadcn_ui/**/*.{ts,tsx}'],
+    files: ['src/components/ui/**/*.{ts,tsx}'],
     rules: {
       'react-refresh/only-export-components': 'off',
     },
