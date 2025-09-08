@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Clock, BookOpen, History } from 'lucide-react'
 import LandingCarousel from '@/features/landing/component/carousel'
-import { LandingFooter } from '@/features/landing/component/footer'
+import { MainFooter } from '@/components/footer'
 
 export const Route = createFileRoute('/_protected/tests/')({
 	component: RouteComponent,
@@ -123,7 +123,7 @@ function RouteComponent() {
 				</section>
 			</div>
 
-			<LandingFooter />
+			<MainFooter />
 		</>
 	)
 }

@@ -15,9 +15,6 @@ import { Button } from "@/components/ui/button"
 
 export function VerifyOTPForm() {
 	const [value, setValue] = useState("")
-	// const [isVerified, setIsVerified] = useState(false)
-
-	// const handleV
 
   return (
     <Card className="w-full max-w-md mx-auto p-4 shadow-lg">

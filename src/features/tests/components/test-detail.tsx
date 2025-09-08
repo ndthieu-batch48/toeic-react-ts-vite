@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Clock, BookOpen } from 'lucide-react'
 import { MainNavigationMenu } from '@/components/main-navigation-menu'
-import { LandingFooter } from '@/features/landing/component/footer'
+import { MainFooter } from '@/components/footer'
 
 interface TestPart {
 	id: string
@@ -166,7 +166,7 @@ const TestDetail: React.FC<TestDetailProps> = ({
 					</div>
 				)}
 			</div>
-			<LandingFooter />
+			<MainFooter />
 		</>
 	)
 }

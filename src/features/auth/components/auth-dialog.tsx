@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components
 import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { TermsNotice } from "@/components/term-notice";
+import { TmaLogo } from "@/components/tma-logo";
 
 type AuthDialogProps = {
 	children: React.ReactNode
@@ -15,7 +16,7 @@ export function AuthDialog({ children }: AuthDialogProps) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>{children}</DialogTrigger>
-			<DialogContent className="sm:max-w-[800px] sm:h-[720px] p-0">
+			<DialogContent className="sm:max-w-[800px] sm:h-[600px] p-0">
 				<div className="flex w-full h-full">
 
 					{/* Auth Form */}
@@ -28,12 +29,8 @@ export function AuthDialog({ children }: AuthDialogProps) {
 					</div>
 
 					{/* Image */}
-					<div className={`bg-muted hidden md:block w-[350px] h-[620px] ${mode === "login" ? "order-2" : "order-1"}`}>
-						<img
-							src="/placeholder.svg"
-							alt="Image"
-							className="inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-						/>
+					<div className={`bg-muted hidden md:block w-[350px] h-full ${mode === "login" ? "order-2" : "order-1"}`}>
+						<TmaLogo />
 					</div>
 				</div>
 
