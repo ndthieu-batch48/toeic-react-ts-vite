@@ -7,7 +7,7 @@ export function LandingHeader() {
 		<header className="container mx-auto bg-primary-foreground">
 			<nav className="flex items-center justify-between">
 				<div className="flex items-center space-x-3">
-					<TmaLogo />
+					<TmaLogo className="w-30" />
 					<span className="text-2xl font-bold bg-primary bg-clip-text text-transparent">
 						TMA TOEIC
 					</span>

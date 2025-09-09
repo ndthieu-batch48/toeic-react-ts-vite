@@ -1,15 +1,18 @@
 import { MainFooter } from '@/components/footer'
 import { MainNavigationMenu } from '@/components/main-navigation-menu'
-import { createFileRoute } from '@tanstack/react-router'
+import { getUserSession } from '@/features/helper/authHelper';
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/_layout')({
-	component: RouteComponent,
+	component: ProtectedComponent,
 })
 
-function RouteComponent() {
+function ProtectedComponent() {
+	console.log(getUserSession())
 	return (
 		<>
 			<MainNavigationMenu />
+			<Outlet />
 			<MainFooter />
 		</>
 	)

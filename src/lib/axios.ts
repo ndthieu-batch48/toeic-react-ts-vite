@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { clearAuthStorage, getAccessToken } from '@/utils/localStorageUtil';
-import { isTokenExpired } from '@/utils/jwtUtils';
+import { clearUserSession, getUserSession } from '@/features/helper/authHelper';
 
 // Base axios instance (no auth)
 export const axiosBase = axios.create({
@@ -21,16 +20,10 @@ export const axiosJWT = axios.create({
 // Request interceptor - check token before sending
 axiosJWT.interceptors.request.use(
   async (config) => {
-    const accessToken = getAccessToken();
+    const userSession = getUserSession();
 
-    if (accessToken) {
-      if (isTokenExpired(accessToken)) {
-        clearAuthStorage();
-        window.location.replace('/');
-        return Promise.reject(new Error('Token expired'));
-      }
-
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    if (userSession) {
+      config.headers.Authorization = `Bearer ${userSession.access_token}`;
     }
 
     return config;
@@ -45,7 +38,7 @@ axiosJWT.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      clearAuthStorage();
+      clearUserSession();
       window.location.replace('/');
     }
     return Promise.reject(error);

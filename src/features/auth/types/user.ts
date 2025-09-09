@@ -10,6 +10,11 @@ export interface UserResponse {
   token_type: string;
 }
 
+export interface RegisterResponse {
+  message: string,
+  user: UserResponse,
+}
+
 export interface LoginRequest {
   credential: string;
   password: string;
@@ -35,4 +40,11 @@ export interface OtpVerifyRequest {
 export interface ResetPassswordRequest {
   token: string;
   new_password: string;
+}
+
+export interface OtpSession {
+  credential_value: string;
+  credential_type: string;
+  purpose: string;
+  token: string;
 }

@@ -8,8 +8,8 @@ import { Calendar, Clock, BookOpen, History } from 'lucide-react'
 // import LandingCarousel from '@/features/landing/component/carousel'
 import { MainFooter } from '@/components/footer'
 
-export const Route = createFileRoute('/_protected/tests/')({
-	component: RouteComponent,
+export const Route = createFileRoute('/_protected/test/')({
+	component: TestDashBoardComponent,
 })
 
 const availableTests = [
@@ -32,7 +32,7 @@ const testHistory = [
 	{ id: 6, title: "System Design Interview", completedDate: "2025-08-20", score: "74%", status: "Passed" }
 ]
 
-function RouteComponent() {
+function TestDashBoardComponent() {
 	return (
 		<>
 			{/* Header */}

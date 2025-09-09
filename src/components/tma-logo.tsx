@@ -1,9 +1,11 @@
 import TMA_LOGO from "@/assets/images/tma_logo.png";
+import { cn } from "@/lib/utils";
 
-export function TmaLogo() {
+export function TmaLogo({ className, ...props }: React.ComponentProps<"div">) {
 	return (
-		<div className="w-20 h-20 p-1	bg-primary rounded-2xl flex items-center justify-center">
-			<img src={TMA_LOGO} alt="TMA Solutions" />
+		<div className={
+			cn("w-full h-full bg-primary rounded-lg shadow-none flex items-center justify-center overflow-hidden p-2", className)}{...props}>
+			<img src={TMA_LOGO} alt="TMA Solutions" className="max-w-full max-h-full object-contain" />
 		</div>
 	);
 }

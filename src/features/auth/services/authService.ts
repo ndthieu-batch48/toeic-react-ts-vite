@@ -1,13 +1,13 @@
 import { axiosBase } from '@/lib/axios';
-import type { LoginRequest, UserResponse, RegisterRequest, OtpRequest, OtpVerifyRequest, ResetPassswordRequest } from '../types/user';
+import type { LoginRequest, UserResponse, RegisterRequest, RegisterResponse, OtpRequest, OtpVerifyRequest, ResetPassswordRequest } from '../types/user';
 
 export const login = async (request: LoginRequest): Promise<UserResponse> => {
-  const url = `auth/login`;
+  const url = 'auth/login';
   const response = await axiosBase.post(url, request);
   return response.data;
 };
 
-export const register = async (request: RegisterRequest) => {
+export const register = async (request: RegisterRequest): Promise<RegisterResponse> => {
   const url = 'auth/register';
   const response = await axiosBase.post(url, request);
   return response.data;
