@@ -1,4 +1,4 @@
-import type { AuthUserResponse } from "@/features/auth/types/authUser";
+import type { UserResponse } from "@/features/auth/types/user";
 
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: 'access_token',
@@ -87,11 +87,11 @@ export const setStorageJSON = <T>(key: string, value: T): boolean => {
 // Token-specific storage functions
 export const getAccessToken = (): string | null => getStorageItem(STORAGE_KEYS.ACCESS_TOKEN);
 export const getRefreshToken = (): string | null => getStorageItem(STORAGE_KEYS.REFRESH_TOKEN);
-export const getLocalUser = (): AuthUserResponse | null => getStorageJSON<AuthUserResponse | null>(STORAGE_KEYS.USER, null);
+export const getLocalUser = (): UserResponse | null => getStorageJSON<UserResponse | null>(STORAGE_KEYS.USER, null);
 
 export const saveAccessToken = (token: string): boolean => setStorageItem(STORAGE_KEYS.ACCESS_TOKEN, token);
 export const saveRefreshToken = (refreshToken: string): boolean => setStorageItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
-export const saveLocalUser = (user: AuthUserResponse): boolean => setStorageJSON(STORAGE_KEYS.USER, user);
+export const saveLocalUser = (user: UserResponse): boolean => setStorageJSON(STORAGE_KEYS.USER, user);
 
 /**
  * Set tokens to storage
@@ -126,11 +126,11 @@ export const clearAuthStorage = (): boolean => {
 /**
  * Save complete user session to storage
  */
-export const saveUserSession = (userData: AuthUserResponse): boolean => {
+export const saveUserSession = (userData: UserResponse): boolean => {
   const { access_token, refresh_token, ...userDataWithoutTokens } = userData;
 
   const results = [
-    saveLocalUser(userDataWithoutTokens as AuthUserResponse),
+    saveLocalUser(userDataWithoutTokens as UserResponse),
     saveTokens(access_token, refresh_token),
   ];
 

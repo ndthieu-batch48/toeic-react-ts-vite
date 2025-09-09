@@ -1,3 +1,5 @@
+import { MainFooter } from '@/components/footer'
+import { MainNavigationMenu } from '@/components/main-navigation-menu'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/_layout')({
@@ -6,6 +8,9 @@ export const Route = createFileRoute('/_protected/_layout')({
 
 function RouteComponent() {
 	return (
-		<div>Hello I am test screen</div>
+		<>
+			<MainNavigationMenu />
+			<MainFooter />
+		</>
 	)
 }

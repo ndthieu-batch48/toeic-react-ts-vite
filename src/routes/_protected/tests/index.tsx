@@ -5,14 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Clock, BookOpen, History } from 'lucide-react'
-import LandingCarousel from '@/features/landing/component/carousel'
+// import LandingCarousel from '@/features/landing/component/carousel'
 import { MainFooter } from '@/components/footer'
 
 export const Route = createFileRoute('/_protected/tests/')({
 	component: RouteComponent,
 })
-
-
 
 const availableTests = [
 	{ id: 1, title: "Data Structures & Algorithms", category: "Programming", duration: "150 min" },
@@ -47,7 +45,7 @@ function RouteComponent() {
 			<div className="container mx-auto p-6 space-y-8">
 
 				{/* Carousel Section */}
-				<LandingCarousel />
+				{/* <LandingCarousel /> */}
 
 				<Separator className="my-8" />
 

@@ -13,39 +13,41 @@ import {
 
 export function MainNavigationMenu() {
 	return (
-		<NavigationMenu viewport={false}>
-			<NavigationMenuList>
+		<header>
+			<NavigationMenu viewport={false}>
+				<NavigationMenuList>
 
-				{/* Home tabs */}
-				<NavigationMenuItem>
-					<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-						<Link to='/'>Home</Link>
-					</NavigationMenuLink>
-				</NavigationMenuItem>
+					{/* Home tabs */}
+					<NavigationMenuItem>
+						<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+							<Link to='/'>Home</Link>
+						</NavigationMenuLink>
+					</NavigationMenuItem>
 
-				{/* Test tabs */}
-				<NavigationMenuItem>
-					<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-						<Link to='/tests'>Test</Link>
-					</NavigationMenuLink>
-				</NavigationMenuItem>
+					{/* Test tabs */}
+					<NavigationMenuItem>
+						<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+							<Link to='/tests'>Test</Link>
+						</NavigationMenuLink>
+					</NavigationMenuItem>
 
-				{/* User tabs */}
-				<NavigationMenuItem>
-					<NavigationMenuTrigger>User</NavigationMenuTrigger>
-					<NavigationMenuContent>
-						<ul className="grid w-[300px] gap-4">
-							<li>
-								<div className="font-medium">Profile</div>
-								<div className="font-medium">History</div>
-								<div className="font-medium">Logout</div>
-							</li>
-						</ul>
-					</NavigationMenuContent>
-				</NavigationMenuItem>
+					{/* User tabs */}
+					<NavigationMenuItem>
+						<NavigationMenuTrigger>User</NavigationMenuTrigger>
+						<NavigationMenuContent>
+							<ul className="grid w-[300px] gap-4">
+								<li>
+									<div className="font-medium">Profile</div>
+									<div className="font-medium">History</div>
+									<div className="font-medium">Logout</div>
+								</li>
+							</ul>
+						</NavigationMenuContent>
+					</NavigationMenuItem>
 
-			</NavigationMenuList>
-		</NavigationMenu>
+				</NavigationMenuList>
+			</NavigationMenu>
+		</header>
 	)
 }
 
