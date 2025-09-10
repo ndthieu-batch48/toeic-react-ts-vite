@@ -8,7 +8,7 @@ import { Calendar, Clock, BookOpen, History } from 'lucide-react'
 // import LandingCarousel from '@/features/landing/component/carousel'
 import { MainFooter } from '@/components/footer'
 
-export const Route = createFileRoute('/_protected/test/')({
+export const Route = createFileRoute('/_authenticated/_authenticated/test')({
 	component: TestDashBoardComponent,
 })
 
@@ -36,10 +36,10 @@ function TestDashBoardComponent() {
 	return (
 		<>
 			{/* Header */}
-			<header className="flex">
+			{/* <header className="flex">
 				<div style={{ width: '150px', backgroundColor: 'blue' }}>TMA LOGO</div>
 				<MainNavigationMenu />
-			</header>
+			</header> */}
 
 			{/* Main Content */}
 			<div className="container mx-auto p-6 space-y-8">

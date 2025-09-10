@@ -26,3 +26,4 @@ dist-ssr
 
 #tanstack 
 .tanstack
+/src/routeTree.gen.ts

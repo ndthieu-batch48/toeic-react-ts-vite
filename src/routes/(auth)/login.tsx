@@ -7,12 +7,23 @@ import { MainFooter } from '@/components/footer'
 import { LandingHeader } from '@/features/landing/component/header'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
+import z from 'zod'
+
+const fallback = '/' as const
 
 export const Route = createFileRoute('/(auth)/login')({
-	beforeLoad: ({ context }) => {
-		const user = context.queryClient.getQueryData(['user']);
-		if (user) {
-			throw redirect({ to: '/test' })
+	// beforeLoad: ({ context }) => {
+	// 	const user = context.queryClient.getQueryData(['user']);
+	// 	if (user) {
+	// 		throw redirect({ to: '/test' })
+	// 	}
+	// },
+	validateSearch: z.object({
+		redirect: z.string().optional().catch(''),
+	}),
+	beforeLoad: ({ context, search }) => {
+		if (context.auth.isAuthenticated) {
+			throw redirect({ to: search.redirect || fallback })
 		}
 	},
 	component: LoginComponent,
@@ -31,7 +42,7 @@ function LoginComponent() {
 						<div className={`flex-1 ${mode === "login" ? "order-1" : "order-2"} flex flex-col gap-4 p-6`}>
 							<div className="flex flex-1 items-center justify-center">
 								<div className="w-full max-w-xs">
-									{mode === "login" ? (
+									{mode === 'login' ? (
 										<LoginForm switchToRegister={() => setMode("register")} />
 									) : (
 										<RegisterForm switchToLogin={() => setMode("login")} />
