@@ -19,11 +19,11 @@ import { Route as protectedHistoryProtectedRouteImport } from './routes/(protect
 import { Route as authPasswordVerifyRouteImport } from './routes/(auth)/password/verify'
 import { Route as authPasswordResetRouteImport } from './routes/(auth)/password/reset'
 import { Route as authPasswordForgotRouteImport } from './routes/(auth)/password/forgot'
-import { Route as protectedTestProtectedIndexRouteImport } from './routes/(protected)/test/_protected.index'
+import { Route as protectedTestProtectedIndexRouteImport } from './routes/(protected)/test/_protected/index'
 import { Route as protectedProfileProtectedIndexRouteImport } from './routes/(protected)/profile/_protected.index'
 import { Route as protectedHistoryProtectedIndexRouteImport } from './routes/(protected)/history/_protected.index'
-import { Route as protectedTestProtectedTestIdRouteImport } from './routes/(protected)/test/_protected.$testId'
-import { Route as protectedTestProtectedTestIdChar123PartIdChar125RouteImport } from './routes/(protected)/test/_protected.$testId.{-$partId}'
+import { Route as protectedTestProtectedTestIdRouteImport } from './routes/(protected)/test/_protected/$testId'
+import { Route as protectedTestProtectedTestIdPartIdRouteImport } from './routes/(protected)/test/_protected/$testId/$partId'
 
 const protectedTestRouteImport = createFileRoute('/(protected)/test')()
 const protectedProfileRouteImport = createFileRoute('/(protected)/profile')()
@@ -107,10 +107,10 @@ const protectedTestProtectedTestIdRoute =
     path: '/$testId',
     getParentRoute: () => protectedTestProtectedRoute,
   } as any)
-const protectedTestProtectedTestIdChar123PartIdChar125Route =
-  protectedTestProtectedTestIdChar123PartIdChar125RouteImport.update({
-    id: '/{-$partId}',
-    path: '/{-$partId}',
+const protectedTestProtectedTestIdPartIdRoute =
+  protectedTestProtectedTestIdPartIdRouteImport.update({
+    id: '/$partId',
+    path: '/$partId',
     getParentRoute: () => protectedTestProtectedTestIdRoute,
   } as any)
 
@@ -127,7 +127,7 @@ export interface FileRoutesByFullPath {
   '/history/': typeof protectedHistoryProtectedIndexRoute
   '/profile/': typeof protectedProfileProtectedIndexRoute
   '/test/': typeof protectedTestProtectedIndexRoute
-  '/test/$testId/{-$partId}': typeof protectedTestProtectedTestIdChar123PartIdChar125Route
+  '/test/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -139,7 +139,7 @@ export interface FileRoutesByTo {
   '/profile': typeof protectedProfileProtectedIndexRoute
   '/test': typeof protectedTestProtectedIndexRoute
   '/test/$testId': typeof protectedTestProtectedTestIdRouteWithChildren
-  '/test/$testId/{-$partId}': typeof protectedTestProtectedTestIdChar123PartIdChar125Route
+  '/test/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -158,7 +158,7 @@ export interface FileRoutesById {
   '/(protected)/history/_protected/': typeof protectedHistoryProtectedIndexRoute
   '/(protected)/profile/_protected/': typeof protectedProfileProtectedIndexRoute
   '/(protected)/test/_protected/': typeof protectedTestProtectedIndexRoute
-  '/(protected)/test/_protected/$testId/{-$partId}': typeof protectedTestProtectedTestIdChar123PartIdChar125Route
+  '/(protected)/test/_protected/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -175,7 +175,7 @@ export interface FileRouteTypes {
     | '/history/'
     | '/profile/'
     | '/test/'
-    | '/test/$testId/{-$partId}'
+    | '/test/$testId/$partId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,7 +187,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/test'
     | '/test/$testId'
-    | '/test/$testId/{-$partId}'
+    | '/test/$testId/$partId'
   id:
     | '__root__'
     | '/'
@@ -205,7 +205,7 @@ export interface FileRouteTypes {
     | '/(protected)/history/_protected/'
     | '/(protected)/profile/_protected/'
     | '/(protected)/test/_protected/'
-    | '/(protected)/test/_protected/$testId/{-$partId}'
+    | '/(protected)/test/_protected/$testId/$partId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -326,11 +326,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof protectedTestProtectedTestIdRouteImport
       parentRoute: typeof protectedTestProtectedRoute
     }
-    '/(protected)/test/_protected/$testId/{-$partId}': {
-      id: '/(protected)/test/_protected/$testId/{-$partId}'
-      path: '/{-$partId}'
-      fullPath: '/test/$testId/{-$partId}'
-      preLoaderRoute: typeof protectedTestProtectedTestIdChar123PartIdChar125RouteImport
+    '/(protected)/test/_protected/$testId/$partId': {
+      id: '/(protected)/test/_protected/$testId/$partId'
+      path: '/$partId'
+      fullPath: '/test/$testId/$partId'
+      preLoaderRoute: typeof protectedTestProtectedTestIdPartIdRouteImport
       parentRoute: typeof protectedTestProtectedTestIdRoute
     }
   }
@@ -387,13 +387,13 @@ const protectedProfileRouteWithChildren =
   protectedProfileRoute._addFileChildren(protectedProfileRouteChildren)
 
 interface protectedTestProtectedTestIdRouteChildren {
-  protectedTestProtectedTestIdChar123PartIdChar125Route: typeof protectedTestProtectedTestIdChar123PartIdChar125Route
+  protectedTestProtectedTestIdPartIdRoute: typeof protectedTestProtectedTestIdPartIdRoute
 }
 
 const protectedTestProtectedTestIdRouteChildren: protectedTestProtectedTestIdRouteChildren =
   {
-    protectedTestProtectedTestIdChar123PartIdChar125Route:
-      protectedTestProtectedTestIdChar123PartIdChar125Route,
+    protectedTestProtectedTestIdPartIdRoute:
+      protectedTestProtectedTestIdPartIdRoute,
   }
 
 const protectedTestProtectedTestIdRouteWithChildren =

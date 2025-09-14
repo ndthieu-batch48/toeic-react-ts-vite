@@ -29,7 +29,7 @@ function TestDashBoardComponent() {
 			<div className="container mx-auto p-6">
 				<div className="text-center">Loading tests...</div>
 			</div>
-		);
+		)
 	}
 
 	if (isError) {
@@ -39,7 +39,7 @@ function TestDashBoardComponent() {
 					Error loading tests: {error?.message}
 				</div>
 			</div>
-		);
+		)
 	}
 
 	return (

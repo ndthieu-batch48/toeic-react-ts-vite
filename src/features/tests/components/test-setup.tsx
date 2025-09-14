@@ -2,21 +2,22 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Clock, BookOpen } from 'lucide-react'
 import type { Test, TestPart } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
+import { TimePickerComponent } from './time-picker'
 
 interface TestDetailProps {
 	currentTest: Test
 }
 
 const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
-	const navigate = useNavigate();
+	const navigate = useNavigate({ from: '/test/$testId' });
 	const [selectedPartIds, setSelectedPartIds] = useState<Set<number>>(
-		new Set() // Mặc định không chọn part nào
+		new Set()
 	)
 	const [timeLimit, setTimeLimit] = useState<string>("")
 
@@ -46,19 +47,17 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 
 	const handleStartTest = () => {
 		const selectedParts = getSelectedPartIds()
-		const testConfig = {
+		const testSetup = {
 			testId: currentTest.test_id,
-			selectedParts: selectedParts,
+			selectedParts: selectedParts.map(p => p.part_id),
 			timeLimit: timeLimit ? parseInt(timeLimit) : currentTest.test_duration,
 		}
 
-		console.log('Starting test with config:', testConfig)
+		console.log('Starting test with config:', testSetup)
+
 		navigate({
-			to: '/test/$testId/{-$partId}',
-			params: {
-				testId: currentTest.test_id.toString(),
-				// partId: selectedParts[0]?.part_id.toString() ?? undefined
-			},
+			to: '/test/$testId/$partId',
+			params: { testId: String(currentTest.test_id), partId: '45' }
 		})
 
 	}
@@ -121,15 +120,13 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}
-								>
+									onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}>
 									Select All
 								</Button>
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => setSelectedPartIds(new Set())}
-								>
+									onClick={() => setSelectedPartIds(new Set())}>
 									Deselect All
 								</Button>
 							</div>
@@ -155,45 +152,11 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 								</label>
 							</div>
 						))}
+
 					</CardContent>
 				</Card>
 
-				{/* Time Limit Section */}
-				<Card>
-					<CardContent className="pt-6">
-						<div className="space-y-4">
-							<div className="flex flex-col space-y-2">
-								<label className="text-sm font-medium">
-									Time Limit <span className="text-muted-foreground">(Don't choose unless you want to set):</span>
-								</label>
-								<div className="flex items-center gap-2">
-									<Select value={timeLimit} onValueChange={setTimeLimit}>
-										<SelectTrigger className="w-[180px]">
-											<SelectValue placeholder="-- Pick time --" />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="15">15</SelectItem>
-											<SelectItem value="30">30</SelectItem>
-											<SelectItem value="45">45</SelectItem>
-											<SelectItem value="60">60</SelectItem>
-											<SelectItem value="75">75</SelectItem>
-											<SelectItem value="90">90</SelectItem>
-											<SelectItem value="120">120</SelectItem>
-											<SelectItem value="150">150</SelectItem>
-											<SelectItem value="180">180</SelectItem>
-										</SelectContent>
-									</Select>
-									<span className="text-sm text-muted-foreground">minutes</span>
-								</div>
-								{timeLimit && (
-									<p className="text-xs text-muted-foreground">
-										Custom time limit: {timeLimit} minutes (Default: {currentTest.test_duration} minutes)
-									</p>
-								)}
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+				<TimePickerComponent timeLimit={timeLimit} onTimeLimitChange={setTimeLimit} testDuration={String(currentTest.test_duration)} />
 
 				<Separator />
 
