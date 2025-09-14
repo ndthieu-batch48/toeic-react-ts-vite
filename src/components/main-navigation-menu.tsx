@@ -1,6 +1,4 @@
-
-import { Link } from "@tanstack/react-router"
-
+import { Link, useRouter, useNavigate } from "@tanstack/react-router"
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -10,63 +8,259 @@ import {
 	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "./ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Menu, User, LogOut, History } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { cn } from "@/lib/utils"
+import { TmaLogo } from "./tma-logo"
 
 export function MainNavigationMenu() {
+	const router = useRouter()
+	const navigate = useNavigate()
+	const auth = useAuth()
+
+	const handleLogout = async () => {
+		if (window.confirm('Are you sure you want to logout?')) {
+			try {
+				auth.logout()
+				await router.invalidate()
+				await navigate({ to: '/' })
+			} catch (error) {
+				console.error('Logout error:', error)
+			}
+		}
+	}
+
+	const NavigationItems = () => (
+		<>
+			<NavigationMenuItem>
+				<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+					<Link
+						to='/'
+						className="transition-colors hover:text-foreground/80 text-foreground/60"
+						activeProps={{ className: "text-foreground" }}
+					>
+						Home
+					</Link>
+				</NavigationMenuLink>
+			</NavigationMenuItem>
+
+			<NavigationMenuItem>
+				<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+					<Link
+						to='/test'
+						className="transition-colors hover:text-foreground/80 text-foreground/60"
+						activeProps={{ className: "text-foreground" }}
+					>
+						Test
+					</Link>
+				</NavigationMenuLink>
+			</NavigationMenuItem>
+
+			{/* Features Dropdown - Example of structured navigation */}
+			<NavigationMenuItem>
+				<NavigationMenuTrigger>Features</NavigationMenuTrigger>
+				<NavigationMenuContent>
+					<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+						<ListItem to="/dashboard" title="Dashboard">
+							Overview and analytics for your account
+						</ListItem>
+						<ListItem to="/reports" title="Reports">
+							View detailed reports and analytics
+						</ListItem>
+						<ListItem to="/help" title="Help & Support">
+							Get help and contact support
+						</ListItem>
+					</ul>
+				</NavigationMenuContent>
+			</NavigationMenuItem>
+		</>
+	)
+
 	return (
-		<header>
-			<NavigationMenu viewport={false}>
-				<NavigationMenuList>
+		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+			<div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4">
+				{/* Logo/Brand */}
+				<div className="flex items-center space-x-4">
+					<Link to="/" className="flex items-center space-x-2">
+						<TmaLogo className="w-15 h-15" />
+						<div className="font-bold text-xl">YourApp</div>
+					</Link>
+				</div>
 
-					{/* Home tabs */}
-					<NavigationMenuItem>
-						<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-							<Link to='/'>Home</Link>
-						</NavigationMenuLink>
-					</NavigationMenuItem>
+				{/* Desktop Navigation */}
+				<NavigationMenu className="hidden md:flex">
+					<NavigationMenuList>
+						<NavigationItems />
+					</NavigationMenuList>
+				</NavigationMenu>
 
-					{/* Test tabs */}
-					<NavigationMenuItem>
-						<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-							<Link to='/tests'>Test</Link>
-						</NavigationMenuLink>
-					</NavigationMenuItem>
+				{/* User Menu & Mobile Toggle */}
+				<div className="flex items-center space-x-4">
+					{/* User Dropdown Menu */}
+					{auth.isAuthenticated ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+									<Avatar className="h-8 w-8">
+										<AvatarImage src={auth.user?.avatar} alt={auth.user?.username || 'User'} />
+										<AvatarFallback>
+											{auth.user?.username?.charAt(0) || 'U'}
+										</AvatarFallback>
+									</Avatar>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="w-56" align="end" forceMount>
+								<DropdownMenuLabel className="font-normal">
+									<div className="flex flex-col space-y-1">
+										<p className="text-sm font-medium leading-none">
+											{auth.user?.username || 'User'}
+										</p>
+										<p className="text-xs leading-none text-muted-foreground">
+											{auth.user?.email}
+										</p>
+									</div>
+								</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem asChild>
+									<Link to="/profile" className="flex items-center">
+										<User className="mr-2 h-4 w-4" />
+										Profile
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link to="/history" className="flex items-center">
+										<History className="mr-2 h-4 w-4" />
+										History
+									</Link>
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onClick={handleLogout}>
+									<LogOut className="mr-2 h-4 w-4" />
+									Log out
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<div className="flex items-center space-x-2">
+							<Button asChild>
+								<Link to="/login">Login</Link>
+							</Button>
+						</div>
+					)}
 
-					{/* User tabs */}
-					<NavigationMenuItem>
-						<NavigationMenuTrigger>User</NavigationMenuTrigger>
-						<NavigationMenuContent>
-							<ul className="grid w-[300px] gap-4">
-								<li>
-									<div className="font-medium">Profile</div>
-									<div className="font-medium">History</div>
-									<div className="font-medium">Logout</div>
-								</li>
-							</ul>
-						</NavigationMenuContent>
-					</NavigationMenuItem>
-
-				</NavigationMenuList>
-			</NavigationMenu>
+					{/* Mobile Navigation */}
+					<Sheet>
+						<SheetTrigger asChild>
+							<Button
+								variant="ghost"
+								className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+							>
+								<Menu className="h-5 w-5" />
+								<span className="sr-only">Toggle Menu</span>
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="left" className="pr-0">
+							<MobileNav />
+						</SheetContent>
+					</Sheet>
+				</div>
+			</div>
 		</header>
 	)
 }
 
-// function ListItem({
-//   title,
-//   children,
-//   to,
-//   ...props
-// }: React.ComponentPropsWithoutRef<"li"> & { to: string }) {
-//   return (
-//     <li {...props}>
-//       <NavigationMenuLink asChild>
-//         <Link to={to}>
-//           <div className="text-sm leading-none font-medium">{title}</div>
-//           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-//             {children} 
-//           </p>
-//         </Link>
-//       </NavigationMenuLink>
-//     </li>
-//   )
-// }
+// Mobile Navigation Component
+function MobileNav() {
+	const auth = useAuth()
+
+	return (
+		<div className="flex flex-col space-y-4">
+
+			<Link to="/" className="flex items-center space-x-2">
+				<div className="font-bold text-xl">YourApp</div>
+			</Link>
+
+			<nav className="flex flex-col space-y-2">
+				<Link
+					to="/"
+					className="text-foreground/60 transition-colors hover:text-foreground"
+					activeProps={{ className: "text-foreground font-medium" }}
+				>
+					Home
+				</Link>
+				<Link
+					to="/test"
+					className="text-foreground/60 transition-colors hover:text-foreground"
+					activeProps={{ className: "text-foreground font-medium" }}
+				>
+					Test
+				</Link>
+
+				{auth.isAuthenticated && (
+					<>
+						<div className="border-t pt-2 mt-2">
+							<p className="font-medium text-sm mb-2">Account</p>
+							<Link
+								to="/profile"
+								className="text-foreground/60 transition-colors hover:text-foreground block py-1"
+								activeProps={{ className: "text-foreground font-medium" }}
+							>
+								Profile
+							</Link>
+							<Link
+								to="/history"
+								className="text-foreground/60 transition-colors hover:text-foreground block py-1"
+								activeProps={{ className: "text-foreground font-medium" }}
+							>
+								History
+							</Link>
+						</div>
+					</>
+				)}
+			</nav>
+		</div>
+	)
+}
+
+// Enhanced ListItem component for navigation menus
+function ListItem({
+	title,
+	children,
+	to,
+	className,
+	...props
+}: React.ComponentPropsWithoutRef<"li"> & {
+	to: string
+	title: string
+	children: React.ReactNode
+}) {
+	return (
+		<li {...props}>
+			<NavigationMenuLink asChild>
+				<Link
+					to={to}
+					className={cn(
+						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+						className
+					)}
+				>
+					<div className="text-sm font-medium leading-none">{title}</div>
+					<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+						{children}
+					</p>
+				</Link>
+			</NavigationMenuLink>
+		</li>
+	)
+}

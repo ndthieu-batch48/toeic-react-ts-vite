@@ -3,38 +3,66 @@ import { TmaLogo } from '@/components/tma-logo'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { LoginForm } from '@/features/auth/components/login-form'
 import { RegisterForm } from '@/features/auth/components/register-form'
-import { MainFooter } from '@/components/footer'
-import { LandingHeader } from '@/features/landing/component/header'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { MainFooter } from '@/components/main-footer'
+import { createFileRoute, redirect, useNavigate, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
+import { MainNavigationMenu } from '@/components/main-navigation-menu'
 import z from 'zod'
-
-const fallback = '/' as const
+import { useAuthApi } from '@/features/auth/hooks/useAuthApi'
+import type { LoginRequest, RegisterRequest } from '@/features/auth/types/user'
 
 export const Route = createFileRoute('/(auth)/login')({
-	// beforeLoad: ({ context }) => {
-	// 	const user = context.queryClient.getQueryData(['user']);
-	// 	if (user) {
-	// 		throw redirect({ to: '/test' })
-	// 	}
-	// },
 	validateSearch: z.object({
 		redirect: z.string().optional().catch(''),
 	}),
 	beforeLoad: ({ context, search }) => {
 		if (context.auth.isAuthenticated) {
-			throw redirect({ to: search.redirect || fallback })
+			return redirect({ to: search.redirect || '/test', replace: true })
 		}
 	},
 	component: LoginComponent,
 })
 
 function LoginComponent() {
+	const navigate = useNavigate()
+	const router = useRouter()
+	const search = Route.useSearch()
+
+	const { loginMutation, registerMutation } = useAuthApi();
+
 	const [mode, setMode] = useState<"login" | "register">("login")
+
+	const handleAuthSuccess = async () => {
+		await router.invalidate()
+		await navigate({
+			to: search.redirect || '/test',
+			replace: true
+		})
+	}
+
+	const handleLogin = async (data: LoginRequest) => {
+		try {
+			await loginMutation.mutateAsync(data)
+			await handleAuthSuccess()
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	const handleRegister = async (data: RegisterRequest) => {
+		try {
+			await registerMutation.mutateAsync(data)
+			await handleAuthSuccess()
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
 
 	return (
 		<>
-			<LandingHeader />
+			<MainNavigationMenu />
+
 			<div className="bg-muted min-h-screen p-4">
 				<Card className="md:h-[80vh] md:max-w-6xl md:mx-auto p-0">
 					<CardContent className="flex min-h-full lg:flex-row flex-col p-0">
@@ -43,9 +71,17 @@ function LoginComponent() {
 							<div className="flex flex-1 items-center justify-center">
 								<div className="w-full max-w-xs">
 									{mode === 'login' ? (
-										<LoginForm switchToRegister={() => setMode("register")} />
+										<LoginForm
+											switchToRegister={() => setMode("register")}
+											onFormSubmit={handleLogin}
+											loginStatus={loginMutation.status}
+										/>
 									) : (
-										<RegisterForm switchToLogin={() => setMode("login")} />
+										<RegisterForm
+											switchToLogin={() => setMode("login")}
+											onFormSubmit={handleRegister}
+											registerStatus={registerMutation.status}
+										/>
 									)}
 								</div>
 							</div>
@@ -65,7 +101,6 @@ function LoginComponent() {
 			</div>
 
 			<MainFooter />
-
 		</>
 	)
 }

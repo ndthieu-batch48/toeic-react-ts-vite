@@ -1,26 +1,51 @@
 export interface Answer {
-  id: number
+  answer_id: number;
+  content: string;
+  is_correct: boolean;
 }
 
 export interface Question {
-  id: number
+  question_id: number;
+  question_number: number;
+  question_content: string;
+
 }
 
 export interface Media {
-  id: number
+  media_id: number;
+  media_name: string;
+  media_audio_script: string;
+  media_paragraph_main: string;
+  media_explain_question: string;
+  media_translate_script: string;
+  question_list: Question[]
 }
 
 export interface Part {
-  id: number
+  part_id: number;
+  part_order: string;
+  part_title: string;
+  total_question: number;
+
+  // Additional fields từ detail page
+  part_audio_url?: string;
+  media_list?: Media[];
 }
 
 export interface Test {
-  id: number
-}
-
-export interface TestList {
   test_id: number;
   test_title: string;
   test_duration: number;
   test_description: string;
+  part_list: TestPart[];
 }
+
+export interface TestPart {
+  part_id: number;
+  part_order: string;
+  part_title: string;
+  total_question: number;
+}
+
+
+

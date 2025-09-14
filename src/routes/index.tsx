@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { MainFooter } from '@/components/footer'
-import { LandingHeader } from '@/features/landing/component/header'
+import { MainFooter } from '@/components/main-footer'
 import { LandingMainContent } from '@/features/landing/component/main-content'
+import { MainNavigationMenu } from '@/components/main-navigation-menu'
 
 export const Route = createFileRoute('/')({
 	component: LandingComponent,
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/')({
 export default function LandingComponent() {
 	return (
 		<div className="min-h-screen bg-primary-foreground">
-			<LandingHeader />
+			<MainNavigationMenu />
 
 			<LandingMainContent />
 

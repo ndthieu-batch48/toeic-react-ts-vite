@@ -1,62 +1,78 @@
+import { refreshTokenService } from '@/features/auth/services/authService';
+import type { UserResponse } from '@/features/auth/types/user';
+import { clearUserSession, getUserSession, saveUserSession } from '@/features/helper/authHelper';
+import { isTokenExpired } from '@/utils/jwtUtil';
 import * as React from 'react'
 
-async function sleep(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms))
+export interface User {
+	id: number;
+	username: string;
+	email: string;
+	role: string;
+	date_joined: string;
+	access_token: string;
+	refresh_token: string;
+	token_type: string;
+	avatar?: string;
 }
 
 export interface AuthContext {
 	isAuthenticated: boolean
-	login: (username: string) => Promise<void>
-	logout: () => Promise<void>
-	user: string | null
+	logout: () => void
+	user: User | null
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null)
 
-const key = 'tanstack.auth.user'
-
-function getStoredUser() {
-	return localStorage.getItem(key)
-}
-
-function setStoredUser(user: string | null) {
-	if (user) {
-		localStorage.setItem(key, user)
-	} else {
-		localStorage.removeItem(key)
-	}
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-	const [user, setUser] = React.useState<string | null>(getStoredUser())
+	const [user, setUser] = React.useState<User | null>(null)
 	const isAuthenticated = !!user
 
-	const logout = React.useCallback(async () => {
-		await sleep(250)
+	async function getAuthenticatedUser(): Promise<UserResponse | null> {
+		const session = getUserSession()
 
-		setStoredUser(null)
+		if (!session) {
+			return null
+		}
+
+		if (!isTokenExpired(session.access_token)) {
+			return session
+		}
+		const { access_token, refresh_token } = await refreshTokenService(session.refresh_token)
+
+		const updatedSession: UserResponse = { ...session, access_token, refresh_token }
+		saveUserSession(updatedSession)
+		return updatedSession
+	}
+
+	const logout = () => {
 		setUser(null)
-	}, [])
-
-	const login = React.useCallback(async (username: string) => {
-		await sleep(500)
-
-		setStoredUser(username)
-		setUser(username)
-	}, [])
+		clearUserSession()
+	}
 
 	React.useEffect(() => {
-		setUser(getStoredUser())
+		const initializeAuth = async () => {
+			try {
+				const user = await getAuthenticatedUser()
+				setUser(user)
+			} catch (error) {
+				console.error('Auth initialization failed:', error)
+				setUser(null)
+			}
+		}
+		initializeAuth()
 	}, [])
+	// console.log("AUTH CONTEXT isAuthenticated", isAuthenticated)
+	// console.log("AUTH CONTEXT user", user)
+	// console.log('AUTH CONTEXT local', getUserSession())
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+		<AuthContext.Provider value={{ isAuthenticated, user, logout }}>
 			{children}
 		</AuthContext.Provider>
 	)
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
 	const context = React.useContext(AuthContext)
 	if (!context) {

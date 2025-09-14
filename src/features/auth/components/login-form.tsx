@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Link } from "@tanstack/react-router"
-import { toast } from "sonner"
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +14,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { useAuth } from "../hooks/useAuth"
+import type { LoginRequest } from "../types/user";
 
 const loginSchema = z.object({
 	credential: z.string().min(1, "Email or username is required"),
@@ -26,12 +25,12 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 type LoginFormProps = React.ComponentProps<"div"> & {
 	switchToRegister?: () => void
+	onFormSubmit: (data: LoginRequest) => Promise<void>,
+	loginStatus: "error" | "idle" | "success" | "pending"
 }
 
-export function LoginForm({ switchToRegister }: LoginFormProps) {
-	const { loginMutation } = useAuth();
+export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: LoginFormProps) {
 
-	// React Hook Form setup
 	const form = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -41,15 +40,7 @@ export function LoginForm({ switchToRegister }: LoginFormProps) {
 	});
 
 	const onSubmit = async (data: LoginFormData) => {
-		try {
-			await loginMutation.mutateAsync({
-				credential: data.credential,
-				password: data.password,
-			});
-
-		} catch (error) {
-			toast.error(error?.toString())
-		}
+		await onFormSubmit(data);
 	};
 
 	return (
@@ -73,7 +64,7 @@ export function LoginForm({ switchToRegister }: LoginFormProps) {
 								<Input
 									type="text"
 									placeholder="m@example.com"
-									autoComplete="off"
+									autoComplete="username"
 									{...field}
 								/>
 							</FormControl>
@@ -93,7 +84,7 @@ export function LoginForm({ switchToRegister }: LoginFormProps) {
 								<Input
 									type="password"
 									placeholder="******"
-									autoComplete="new-password"
+									autoComplete="current-password"
 									{...field}
 								/>
 							</FormControl>
@@ -115,9 +106,9 @@ export function LoginForm({ switchToRegister }: LoginFormProps) {
 					variant="default"
 					type="submit"
 					className="w-full"
-					disabled={loginMutation.isPending}
+					disabled={loginStatus === 'pending'}
 				>
-					{loginMutation.isPending ? "Logging in..." : "Login"}
+					{loginStatus === 'pending' ? "Logging in..." : "Login"}
 				</Button>
 
 				{/* OAuth buttons */}
@@ -152,6 +143,7 @@ export function LoginForm({ switchToRegister }: LoginFormProps) {
 					Don&apos;t have an account?{" "}
 					<Button
 						variant="link"
+						type="button"
 						className="underline underline-offset-4 p-0 m-0"
 						onClick={switchToRegister}>
 						Create one

@@ -4,9 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useAuth } from "../hooks/useAuth"
-import { toast } from "sonner"
-// import { toast } from "sonner"
+import type { RegisterRequest } from "../types/user"
 
 const registerSchema = z.object({
 	email: z.string().min(1, "Email is required"),
@@ -18,11 +16,11 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 type RegisterFormProps = {
 	switchToLogin?: () => void
+	onFormSubmit: (data: RegisterRequest) => Promise<void>,
+	registerStatus: "error" | "idle" | "success" | "pending"
 }
 
-export function RegisterForm({ switchToLogin }: RegisterFormProps) {
-	const { registerMutation } = useAuth()
-
+export function RegisterForm({ switchToLogin, onFormSubmit, registerStatus }: RegisterFormProps) {
 	const form = useForm<RegisterFormData>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -33,17 +31,8 @@ export function RegisterForm({ switchToLogin }: RegisterFormProps) {
 	});
 
 	const onSubmit = async (data: RegisterFormData) => {
-		try {
-			await registerMutation.mutateAsync({
-				email: data.email,
-				username: data.username,
-				password: data.password,
-			});
-
-		} catch (error) {
-			toast.error(error?.toString())
-		}
-	}
+		await onFormSubmit(data);
+	};
 
 	return (
 		<Form {...form}>
@@ -62,12 +51,12 @@ export function RegisterForm({ switchToLogin }: RegisterFormProps) {
 					name="email"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Email or Username</FormLabel>
+							<FormLabel>Email</FormLabel>
 							<FormControl>
 								<Input
 									type="email"
 									placeholder="m@example.com"
-									autoComplete="off"
+									autoComplete="email"
 									{...field}
 								/>
 							</FormControl>
@@ -87,7 +76,7 @@ export function RegisterForm({ switchToLogin }: RegisterFormProps) {
 								<Input
 									type="text"
 									placeholder="Your user name"
-									autoComplete="off"
+									autoComplete="username"
 									{...field}
 								/>
 							</FormControl>
@@ -121,9 +110,8 @@ export function RegisterForm({ switchToLogin }: RegisterFormProps) {
 					variant="default"
 					type="submit"
 					className="w-full"
-					disabled={registerMutation.isPending}>
-					{registerMutation.isPending ? "Creating account..." : "Create account"}
-					Create account
+					disabled={registerStatus === "pending"}>
+					{registerStatus === "pending" ? "Creating account..." : "Create account"}
 				</Button>
 
 				{/* OAuth buttons */}
@@ -159,9 +147,10 @@ export function RegisterForm({ switchToLogin }: RegisterFormProps) {
 					Already have an account?{" "}
 					<Button
 						variant="link"
+						type="button"
 						className="underline underline-offset-4 p-0 m-0"
 						onClick={switchToLogin}>
-						Create one
+						Log in
 					</Button>
 				</div>
 
