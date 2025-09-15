@@ -1,10 +1,10 @@
+import { TestPractice } from '@/features/tests/components/test-practice';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(protected)/test/_protected/$testId/$partId')({
-	beforeLoad: () => {
-		console.log("TestDetailPage RENDERED", window.location.pathname);
-
+export const Route = createFileRoute('/_protected/test/$testId/$partId')({
+	beforeLoad: ({ context, location, search }) => {
+		console.log("TestDetailPage RENDERED", context, location, search);
 	},
 	component: TestDetailPage,
 })
@@ -20,9 +20,8 @@ function TestDetailPage() {
 	console.log("DETAILLLL", testId, partId)
 
 	return (
-
-		<div style={{ backgroundColor: 'red', width: '50000px' }}>
-			<p>Data: {String(data)}</p>
-		</div>
+		<>
+			<TestPractice testData={data!} />
+		</>
 	)
 }

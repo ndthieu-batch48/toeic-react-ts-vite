@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Clock, BookOpen } from 'lucide-react'
-import type { Test, TestPart } from '../types/test'
+import type { Test, Part } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
 import { TimePickerComponent } from './time-picker'
 
@@ -15,7 +15,7 @@ interface TestDetailProps {
 }
 
 const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
-	const navigate = useNavigate({ from: '/test/$testId' });
+	const navigate = useNavigate();
 	const [selectedPartIds, setSelectedPartIds] = useState<Set<number>>(
 		new Set()
 	)
@@ -36,7 +36,7 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 	const hasSelectedParts = selectedPartIds.size > 0
 
 	// Lấy danh sách các parts đã được chọn
-	const getSelectedPartIds = (): TestPart[] => {
+	const getSelectedPartIds = (): Part[] => {
 		return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
 	}
 

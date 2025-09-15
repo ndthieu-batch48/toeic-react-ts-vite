@@ -7,7 +7,7 @@ import { Calendar, History } from 'lucide-react'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi'
 import { AllTestsSection } from '@/features/tests/components/all-tests-section'
 
-export const Route = createFileRoute('/(protected)/test/_protected/')({
+export const Route = createFileRoute('/_protected/test/')({
 	component: TestDashBoardComponent,
 })
 

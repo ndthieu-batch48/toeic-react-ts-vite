@@ -8,7 +8,7 @@ export interface Question {
   question_id: number;
   question_number: number;
   question_content: string;
-
+  answer_list: Answer[]
 }
 
 export interface Media {
@@ -37,14 +37,7 @@ export interface Test {
   test_title: string;
   test_duration: number;
   test_description: string;
-  part_list: TestPart[];
-}
-
-export interface TestPart {
-  part_id: number;
-  part_order: string;
-  part_title: string;
-  total_question: number;
+  part_list: Part[];
 }
 
 

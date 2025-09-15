@@ -7,7 +7,7 @@ export const getAllTests = async (): Promise<Test[]> => {
   return res.data;
 };
 
-export const getTestDetail = async (id: number): Promise<unknown> => {
+export const getTestDetail = async (id: number): Promise<Test> => {
   const url = `tests/${id}`;
   const res = await axiosBase.get(url);
   return res.data;

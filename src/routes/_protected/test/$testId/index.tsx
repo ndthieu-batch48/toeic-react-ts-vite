@@ -2,7 +2,7 @@ import TestSetupComponent from '@/features/tests/components/test-setup'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(protected)/test/_protected/$testId')({
+export const Route = createFileRoute('/_protected/test/$testId/')({
 	component: TestSetupPage,
 })
 

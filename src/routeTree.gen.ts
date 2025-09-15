@@ -11,42 +11,30 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
-import { Route as protectedTestProtectedRouteImport } from './routes/(protected)/test/_protected'
-import { Route as protectedProfileProtectedRouteImport } from './routes/(protected)/profile/_protected'
-import { Route as protectedHistoryProtectedRouteImport } from './routes/(protected)/history/_protected'
+import { Route as ProtectedTestIndexRouteImport } from './routes/_protected/test/index'
+import { Route as ProtectedProfileIndexRouteImport } from './routes/_protected/profile/index'
+import { Route as ProtectedHistoryIndexRouteImport } from './routes/_protected/history/index'
 import { Route as authPasswordVerifyRouteImport } from './routes/(auth)/password/verify'
 import { Route as authPasswordResetRouteImport } from './routes/(auth)/password/reset'
 import { Route as authPasswordForgotRouteImport } from './routes/(auth)/password/forgot'
-import { Route as protectedTestProtectedIndexRouteImport } from './routes/(protected)/test/_protected/index'
-import { Route as protectedProfileProtectedIndexRouteImport } from './routes/(protected)/profile/_protected.index'
-import { Route as protectedHistoryProtectedIndexRouteImport } from './routes/(protected)/history/_protected.index'
-import { Route as protectedTestProtectedTestIdRouteImport } from './routes/(protected)/test/_protected/$testId'
-import { Route as protectedTestProtectedTestIdPartIdRouteImport } from './routes/(protected)/test/_protected/$testId/$partId'
+import { Route as ProtectedTestTestIdIndexRouteImport } from './routes/_protected/test/$testId/index'
+import { Route as ProtectedTestTestIdLayoutRouteImport } from './routes/_protected/test/$testId/_layout'
+import { Route as ProtectedTestTestIdPartIdRouteImport } from './routes/_protected/test/$testId/$partId'
 
-const protectedTestRouteImport = createFileRoute('/(protected)/test')()
-const protectedProfileRouteImport = createFileRoute('/(protected)/profile')()
-const protectedHistoryRouteImport = createFileRoute('/(protected)/history')()
+const ProtectedTestTestIdRouteImport = createFileRoute(
+  '/_protected/test/$testId',
+)()
 
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const protectedTestRoute = protectedTestRouteImport.update({
-  id: '/(protected)/test',
-  path: '/test',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const protectedProfileRoute = protectedProfileRouteImport.update({
-  id: '/(protected)/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const protectedHistoryRoute = protectedHistoryRouteImport.update({
-  id: '/(protected)/history',
-  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authLoginRoute = authLoginRouteImport.update({
@@ -54,20 +42,26 @@ const authLoginRoute = authLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const protectedTestProtectedRoute = protectedTestProtectedRouteImport.update({
-  id: '/_protected',
-  getParentRoute: () => protectedTestRoute,
+const ProtectedTestTestIdRoute = ProtectedTestTestIdRouteImport.update({
+  id: '/test/$testId',
+  path: '/test/$testId',
+  getParentRoute: () => ProtectedRoute,
 } as any)
-const protectedProfileProtectedRoute =
-  protectedProfileProtectedRouteImport.update({
-    id: '/_protected',
-    getParentRoute: () => protectedProfileRoute,
-  } as any)
-const protectedHistoryProtectedRoute =
-  protectedHistoryProtectedRouteImport.update({
-    id: '/_protected',
-    getParentRoute: () => protectedHistoryRoute,
-  } as any)
+const ProtectedTestIndexRoute = ProtectedTestIndexRouteImport.update({
+  id: '/test/',
+  path: '/test/',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedProfileIndexRoute = ProtectedProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedHistoryIndexRoute = ProtectedHistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const authPasswordVerifyRoute = authPasswordVerifyRouteImport.update({
   id: '/(auth)/password/verify',
   path: '/password/verify',
@@ -83,35 +77,22 @@ const authPasswordForgotRoute = authPasswordForgotRouteImport.update({
   path: '/password/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
-const protectedTestProtectedIndexRoute =
-  protectedTestProtectedIndexRouteImport.update({
+const ProtectedTestTestIdIndexRoute =
+  ProtectedTestTestIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => protectedTestProtectedRoute,
+    getParentRoute: () => ProtectedTestTestIdRoute,
   } as any)
-const protectedProfileProtectedIndexRoute =
-  protectedProfileProtectedIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => protectedProfileProtectedRoute,
+const ProtectedTestTestIdLayoutRoute =
+  ProtectedTestTestIdLayoutRouteImport.update({
+    id: '/_layout',
+    getParentRoute: () => ProtectedTestTestIdRoute,
   } as any)
-const protectedHistoryProtectedIndexRoute =
-  protectedHistoryProtectedIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => protectedHistoryProtectedRoute,
-  } as any)
-const protectedTestProtectedTestIdRoute =
-  protectedTestProtectedTestIdRouteImport.update({
-    id: '/$testId',
-    path: '/$testId',
-    getParentRoute: () => protectedTestProtectedRoute,
-  } as any)
-const protectedTestProtectedTestIdPartIdRoute =
-  protectedTestProtectedTestIdPartIdRouteImport.update({
-    id: '/$partId',
-    path: '/$partId',
-    getParentRoute: () => protectedTestProtectedTestIdRoute,
+const ProtectedTestTestIdPartIdRoute =
+  ProtectedTestTestIdPartIdRouteImport.update({
+    id: '/test/$testId/$partId',
+    path: '/test/$testId/$partId',
+    getParentRoute: () => ProtectedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -120,14 +101,12 @@ export interface FileRoutesByFullPath {
   '/password/forgot': typeof authPasswordForgotRoute
   '/password/reset': typeof authPasswordResetRoute
   '/password/verify': typeof authPasswordVerifyRoute
-  '/history': typeof protectedHistoryProtectedRouteWithChildren
-  '/profile': typeof protectedProfileProtectedRouteWithChildren
-  '/test': typeof protectedTestProtectedRouteWithChildren
-  '/test/$testId': typeof protectedTestProtectedTestIdRouteWithChildren
-  '/history/': typeof protectedHistoryProtectedIndexRoute
-  '/profile/': typeof protectedProfileProtectedIndexRoute
-  '/test/': typeof protectedTestProtectedIndexRoute
-  '/test/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
+  '/history': typeof ProtectedHistoryIndexRoute
+  '/profile': typeof ProtectedProfileIndexRoute
+  '/test': typeof ProtectedTestIndexRoute
+  '/test/$testId/$partId': typeof ProtectedTestTestIdPartIdRoute
+  '/test/$testId': typeof ProtectedTestTestIdLayoutRoute
+  '/test/$testId/': typeof ProtectedTestTestIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -135,30 +114,27 @@ export interface FileRoutesByTo {
   '/password/forgot': typeof authPasswordForgotRoute
   '/password/reset': typeof authPasswordResetRoute
   '/password/verify': typeof authPasswordVerifyRoute
-  '/history': typeof protectedHistoryProtectedIndexRoute
-  '/profile': typeof protectedProfileProtectedIndexRoute
-  '/test': typeof protectedTestProtectedIndexRoute
-  '/test/$testId': typeof protectedTestProtectedTestIdRouteWithChildren
-  '/test/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
+  '/history': typeof ProtectedHistoryIndexRoute
+  '/profile': typeof ProtectedProfileIndexRoute
+  '/test': typeof ProtectedTestIndexRoute
+  '/test/$testId/$partId': typeof ProtectedTestTestIdPartIdRoute
+  '/test/$testId': typeof ProtectedTestTestIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_protected': typeof ProtectedRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/password/forgot': typeof authPasswordForgotRoute
   '/(auth)/password/reset': typeof authPasswordResetRoute
   '/(auth)/password/verify': typeof authPasswordVerifyRoute
-  '/(protected)/history': typeof protectedHistoryRouteWithChildren
-  '/(protected)/history/_protected': typeof protectedHistoryProtectedRouteWithChildren
-  '/(protected)/profile': typeof protectedProfileRouteWithChildren
-  '/(protected)/profile/_protected': typeof protectedProfileProtectedRouteWithChildren
-  '/(protected)/test': typeof protectedTestRouteWithChildren
-  '/(protected)/test/_protected': typeof protectedTestProtectedRouteWithChildren
-  '/(protected)/test/_protected/$testId': typeof protectedTestProtectedTestIdRouteWithChildren
-  '/(protected)/history/_protected/': typeof protectedHistoryProtectedIndexRoute
-  '/(protected)/profile/_protected/': typeof protectedProfileProtectedIndexRoute
-  '/(protected)/test/_protected/': typeof protectedTestProtectedIndexRoute
-  '/(protected)/test/_protected/$testId/$partId': typeof protectedTestProtectedTestIdPartIdRoute
+  '/_protected/history/': typeof ProtectedHistoryIndexRoute
+  '/_protected/profile/': typeof ProtectedProfileIndexRoute
+  '/_protected/test/': typeof ProtectedTestIndexRoute
+  '/_protected/test/$testId/$partId': typeof ProtectedTestTestIdPartIdRoute
+  '/_protected/test/$testId': typeof ProtectedTestTestIdRouteWithChildren
+  '/_protected/test/$testId/_layout': typeof ProtectedTestTestIdLayoutRoute
+  '/_protected/test/$testId/': typeof ProtectedTestTestIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,11 +147,9 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/test'
-    | '/test/$testId'
-    | '/history/'
-    | '/profile/'
-    | '/test/'
     | '/test/$testId/$partId'
+    | '/test/$testId'
+    | '/test/$testId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,67 +160,48 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/test'
-    | '/test/$testId'
     | '/test/$testId/$partId'
+    | '/test/$testId'
   id:
     | '__root__'
     | '/'
+    | '/_protected'
     | '/(auth)/login'
     | '/(auth)/password/forgot'
     | '/(auth)/password/reset'
     | '/(auth)/password/verify'
-    | '/(protected)/history'
-    | '/(protected)/history/_protected'
-    | '/(protected)/profile'
-    | '/(protected)/profile/_protected'
-    | '/(protected)/test'
-    | '/(protected)/test/_protected'
-    | '/(protected)/test/_protected/$testId'
-    | '/(protected)/history/_protected/'
-    | '/(protected)/profile/_protected/'
-    | '/(protected)/test/_protected/'
-    | '/(protected)/test/_protected/$testId/$partId'
+    | '/_protected/history/'
+    | '/_protected/profile/'
+    | '/_protected/test/'
+    | '/_protected/test/$testId/$partId'
+    | '/_protected/test/$testId'
+    | '/_protected/test/$testId/_layout'
+    | '/_protected/test/$testId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   authLoginRoute: typeof authLoginRoute
   authPasswordForgotRoute: typeof authPasswordForgotRoute
   authPasswordResetRoute: typeof authPasswordResetRoute
   authPasswordVerifyRoute: typeof authPasswordVerifyRoute
-  protectedHistoryRoute: typeof protectedHistoryRouteWithChildren
-  protectedProfileRoute: typeof protectedProfileRouteWithChildren
-  protectedTestRoute: typeof protectedTestRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(protected)/test': {
-      id: '/(protected)/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof protectedTestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(protected)/profile': {
-      id: '/(protected)/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof protectedProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(protected)/history': {
-      id: '/(protected)/history'
-      path: '/history'
-      fullPath: '/history'
-      preLoaderRoute: typeof protectedHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/login': {
@@ -256,26 +211,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(protected)/test/_protected': {
-      id: '/(protected)/test/_protected'
+    '/_protected/test/$testId': {
+      id: '/_protected/test/$testId'
+      path: '/test/$testId'
+      fullPath: '/test/$testId'
+      preLoaderRoute: typeof ProtectedTestTestIdRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/test/': {
+      id: '/_protected/test/'
       path: '/test'
       fullPath: '/test'
-      preLoaderRoute: typeof protectedTestProtectedRouteImport
-      parentRoute: typeof protectedTestRoute
+      preLoaderRoute: typeof ProtectedTestIndexRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/(protected)/profile/_protected': {
-      id: '/(protected)/profile/_protected'
+    '/_protected/profile/': {
+      id: '/_protected/profile/'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof protectedProfileProtectedRouteImport
-      parentRoute: typeof protectedProfileRoute
+      preLoaderRoute: typeof ProtectedProfileIndexRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/(protected)/history/_protected': {
-      id: '/(protected)/history/_protected'
+    '/_protected/history/': {
+      id: '/_protected/history/'
       path: '/history'
       fullPath: '/history'
-      preLoaderRoute: typeof protectedHistoryProtectedRouteImport
-      parentRoute: typeof protectedHistoryRoute
+      preLoaderRoute: typeof ProtectedHistoryIndexRouteImport
+      parentRoute: typeof ProtectedRoute
     }
     '/(auth)/password/verify': {
       id: '/(auth)/password/verify'
@@ -298,147 +260,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authPasswordForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(protected)/test/_protected/': {
-      id: '/(protected)/test/_protected/'
+    '/_protected/test/$testId/': {
+      id: '/_protected/test/$testId/'
       path: '/'
-      fullPath: '/test/'
-      preLoaderRoute: typeof protectedTestProtectedIndexRouteImport
-      parentRoute: typeof protectedTestProtectedRoute
+      fullPath: '/test/$testId/'
+      preLoaderRoute: typeof ProtectedTestTestIdIndexRouteImport
+      parentRoute: typeof ProtectedTestTestIdRoute
     }
-    '/(protected)/profile/_protected/': {
-      id: '/(protected)/profile/_protected/'
-      path: '/'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof protectedProfileProtectedIndexRouteImport
-      parentRoute: typeof protectedProfileProtectedRoute
-    }
-    '/(protected)/history/_protected/': {
-      id: '/(protected)/history/_protected/'
-      path: '/'
-      fullPath: '/history/'
-      preLoaderRoute: typeof protectedHistoryProtectedIndexRouteImport
-      parentRoute: typeof protectedHistoryProtectedRoute
-    }
-    '/(protected)/test/_protected/$testId': {
-      id: '/(protected)/test/_protected/$testId'
-      path: '/$testId'
+    '/_protected/test/$testId/_layout': {
+      id: '/_protected/test/$testId/_layout'
+      path: '/test/$testId'
       fullPath: '/test/$testId'
-      preLoaderRoute: typeof protectedTestProtectedTestIdRouteImport
-      parentRoute: typeof protectedTestProtectedRoute
+      preLoaderRoute: typeof ProtectedTestTestIdLayoutRouteImport
+      parentRoute: typeof ProtectedTestTestIdRoute
     }
-    '/(protected)/test/_protected/$testId/$partId': {
-      id: '/(protected)/test/_protected/$testId/$partId'
-      path: '/$partId'
+    '/_protected/test/$testId/$partId': {
+      id: '/_protected/test/$testId/$partId'
+      path: '/test/$testId/$partId'
       fullPath: '/test/$testId/$partId'
-      preLoaderRoute: typeof protectedTestProtectedTestIdPartIdRouteImport
-      parentRoute: typeof protectedTestProtectedTestIdRoute
+      preLoaderRoute: typeof ProtectedTestTestIdPartIdRouteImport
+      parentRoute: typeof ProtectedRoute
     }
   }
 }
 
-interface protectedHistoryProtectedRouteChildren {
-  protectedHistoryProtectedIndexRoute: typeof protectedHistoryProtectedIndexRoute
+interface ProtectedTestTestIdRouteChildren {
+  ProtectedTestTestIdLayoutRoute: typeof ProtectedTestTestIdLayoutRoute
+  ProtectedTestTestIdIndexRoute: typeof ProtectedTestTestIdIndexRoute
 }
 
-const protectedHistoryProtectedRouteChildren: protectedHistoryProtectedRouteChildren =
-  {
-    protectedHistoryProtectedIndexRoute: protectedHistoryProtectedIndexRoute,
-  }
-
-const protectedHistoryProtectedRouteWithChildren =
-  protectedHistoryProtectedRoute._addFileChildren(
-    protectedHistoryProtectedRouteChildren,
-  )
-
-interface protectedHistoryRouteChildren {
-  protectedHistoryProtectedRoute: typeof protectedHistoryProtectedRouteWithChildren
+const ProtectedTestTestIdRouteChildren: ProtectedTestTestIdRouteChildren = {
+  ProtectedTestTestIdLayoutRoute: ProtectedTestTestIdLayoutRoute,
+  ProtectedTestTestIdIndexRoute: ProtectedTestTestIdIndexRoute,
 }
 
-const protectedHistoryRouteChildren: protectedHistoryRouteChildren = {
-  protectedHistoryProtectedRoute: protectedHistoryProtectedRouteWithChildren,
+const ProtectedTestTestIdRouteWithChildren =
+  ProtectedTestTestIdRoute._addFileChildren(ProtectedTestTestIdRouteChildren)
+
+interface ProtectedRouteChildren {
+  ProtectedHistoryIndexRoute: typeof ProtectedHistoryIndexRoute
+  ProtectedProfileIndexRoute: typeof ProtectedProfileIndexRoute
+  ProtectedTestIndexRoute: typeof ProtectedTestIndexRoute
+  ProtectedTestTestIdPartIdRoute: typeof ProtectedTestTestIdPartIdRoute
+  ProtectedTestTestIdRoute: typeof ProtectedTestTestIdRouteWithChildren
 }
 
-const protectedHistoryRouteWithChildren =
-  protectedHistoryRoute._addFileChildren(protectedHistoryRouteChildren)
-
-interface protectedProfileProtectedRouteChildren {
-  protectedProfileProtectedIndexRoute: typeof protectedProfileProtectedIndexRoute
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedHistoryIndexRoute: ProtectedHistoryIndexRoute,
+  ProtectedProfileIndexRoute: ProtectedProfileIndexRoute,
+  ProtectedTestIndexRoute: ProtectedTestIndexRoute,
+  ProtectedTestTestIdPartIdRoute: ProtectedTestTestIdPartIdRoute,
+  ProtectedTestTestIdRoute: ProtectedTestTestIdRouteWithChildren,
 }
 
-const protectedProfileProtectedRouteChildren: protectedProfileProtectedRouteChildren =
-  {
-    protectedProfileProtectedIndexRoute: protectedProfileProtectedIndexRoute,
-  }
-
-const protectedProfileProtectedRouteWithChildren =
-  protectedProfileProtectedRoute._addFileChildren(
-    protectedProfileProtectedRouteChildren,
-  )
-
-interface protectedProfileRouteChildren {
-  protectedProfileProtectedRoute: typeof protectedProfileProtectedRouteWithChildren
-}
-
-const protectedProfileRouteChildren: protectedProfileRouteChildren = {
-  protectedProfileProtectedRoute: protectedProfileProtectedRouteWithChildren,
-}
-
-const protectedProfileRouteWithChildren =
-  protectedProfileRoute._addFileChildren(protectedProfileRouteChildren)
-
-interface protectedTestProtectedTestIdRouteChildren {
-  protectedTestProtectedTestIdPartIdRoute: typeof protectedTestProtectedTestIdPartIdRoute
-}
-
-const protectedTestProtectedTestIdRouteChildren: protectedTestProtectedTestIdRouteChildren =
-  {
-    protectedTestProtectedTestIdPartIdRoute:
-      protectedTestProtectedTestIdPartIdRoute,
-  }
-
-const protectedTestProtectedTestIdRouteWithChildren =
-  protectedTestProtectedTestIdRoute._addFileChildren(
-    protectedTestProtectedTestIdRouteChildren,
-  )
-
-interface protectedTestProtectedRouteChildren {
-  protectedTestProtectedTestIdRoute: typeof protectedTestProtectedTestIdRouteWithChildren
-  protectedTestProtectedIndexRoute: typeof protectedTestProtectedIndexRoute
-}
-
-const protectedTestProtectedRouteChildren: protectedTestProtectedRouteChildren =
-  {
-    protectedTestProtectedTestIdRoute:
-      protectedTestProtectedTestIdRouteWithChildren,
-    protectedTestProtectedIndexRoute: protectedTestProtectedIndexRoute,
-  }
-
-const protectedTestProtectedRouteWithChildren =
-  protectedTestProtectedRoute._addFileChildren(
-    protectedTestProtectedRouteChildren,
-  )
-
-interface protectedTestRouteChildren {
-  protectedTestProtectedRoute: typeof protectedTestProtectedRouteWithChildren
-}
-
-const protectedTestRouteChildren: protectedTestRouteChildren = {
-  protectedTestProtectedRoute: protectedTestProtectedRouteWithChildren,
-}
-
-const protectedTestRouteWithChildren = protectedTestRoute._addFileChildren(
-  protectedTestRouteChildren,
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProtectedRoute: ProtectedRouteWithChildren,
   authLoginRoute: authLoginRoute,
   authPasswordForgotRoute: authPasswordForgotRoute,
   authPasswordResetRoute: authPasswordResetRoute,
   authPasswordVerifyRoute: authPasswordVerifyRoute,
-  protectedHistoryRoute: protectedHistoryRouteWithChildren,
-  protectedProfileRoute: protectedProfileRouteWithChildren,
-  protectedTestRoute: protectedTestRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
