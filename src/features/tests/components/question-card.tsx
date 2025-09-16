@@ -21,7 +21,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	const { question_number, question_content, answer_list } = questionData
 
 	return (
-		<Card className="w-full max-w-4xl mx-auto">
+		<Card className="w-full mx-auto mb-3">
 			<CardHeader className="pb-4">
 				<div className="flex items-center justify-between mb-4">
 					<Badge variant="default" className="text-sm font-medium">
@@ -46,7 +46,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 					<RadioGroup
 						value={selectedValue}
 						onValueChange={onValueChange}
-						className="space-y-3">
+					>
 						{answer_list.map((answer, index) => (
 							<div
 								key={index}

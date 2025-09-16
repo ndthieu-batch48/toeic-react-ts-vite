@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { ImageIcon } from "lucide-react";
 
 interface MainParagraphProps {
@@ -7,6 +7,7 @@ interface MainParagraphProps {
 }
 
 export const MainParagraph: React.FC<MainParagraphProps> = ({ paragraphMain }) => {
+	console.log(paragraphMain)
 	// const [imgError, setImgError] = useState(false);
 
 	// const imgMatch = paragraphMain.match(/<img[^>]+src="([^"]+)"[^>]*>/);

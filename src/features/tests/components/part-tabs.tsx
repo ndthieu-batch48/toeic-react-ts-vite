@@ -3,19 +3,56 @@ import type { Part } from "../types/test"
 import { QuestionMediaCard } from "./question-media-card"
 import { QuestionCard } from "./question-card"
 import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
+import { Audio } from "./audio"
+import type { ActiveQuestion } from "./test-practice"
+import { useEffect, useState } from "react"
 
 type PartTabsProps = {
 	partData: Part[]
+	activeQuestion: ActiveQuestion
+	onSelectTab: (value: ActiveQuestion) => void
+	className?: string
 }
 
-export const PartTabs: React.FC<PartTabsProps> = ({ partData }) => {
+export const PartTabs: React.FC<PartTabsProps> = ({ className, partData, activeQuestion, onSelectTab }) => {
+	const defaultValue = `part-${partData[0].part_id}`
+	const tabValue = `part-${activeQuestion.part_id}`
 
-	const defaultValue = partData.length > 0 ? `part-${partData[0].part_id}` : 'part-1'
+	const [selectedTab, setSelectedTab] = useState(defaultValue)
+
+	const handleTabChange = (value: string) => {
+		setSelectedTab(value)
+
+		// Extract part_id from the tab value (e.g., "part-1" -> 1)
+		const partId = parseInt(value.replace('part-', ''))
+		const part = partData.find(p => p.part_id === partId)
+
+		console.log("TAB CHANGEDDDD", {
+			part_id: partId,
+			question_id: part!.media_list![0].question_list[0].question_id
+		})
+
+		if (part && part.media_list?.[0]?.question_list?.[0]) {
+			onSelectTab({
+				part_id: partId,
+				question_id: part.media_list[0].question_list[0].question_id
+			})
+		}
+	}
+
+	useEffect(() => {
+		setSelectedTab(tabValue)
+	}, [tabValue])
 
 	return (
-		<Tabs defaultValue={defaultValue} className="w-full ml-5">
+		<Tabs
+			value={selectedTab}
+			onValueChange={handleTabChange}
+			className={cn("w-full ml-5", className)}
+		>
 			<TabsList
-				className="h-auto w-[1000px] bg-transparent p-0 grid gap-5 mt-6"
+				className="h-auto w-full bg-transparent p-0 grid gap-5"
 				style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
 			>
 				{partData.map((part, index) => (
@@ -31,25 +68,28 @@ export const PartTabs: React.FC<PartTabsProps> = ({ partData }) => {
 				))}
 			</TabsList>
 
+			<Audio audio={""} />
 
-			{partData.map((part, index) => (
-				<TabsContent
-					key={part.part_id || index}
-					value={`part-${part.part_id}`}
-					className="mt-6 flex flex-col"
-				>
-					<div className="self-start w-[1000px]">
-						{part.media_list?.map((media, key) =>
-							media.question_list.length === 1 ? (
-								<QuestionCard key={key} questionData={media.question_list[0]} />
-							) : (
-								<QuestionMediaCard key={key} mediaName={media.media_name} paragraphMain={""} questionData={media.question_list} />
-							)
-						)}
-					</div>
+			{
+				partData.map((part, index) => (
+					<TabsContent
+						key={part.part_id || index}
+						value={`part-${part.part_id}`}
+						className="mt-6"
+					>
 
-				</TabsContent>
-			))}
-		</Tabs>
+						<div className="">
+							{part.media_list?.map((media, key) =>
+								media.question_list.length === 1 ? (
+									<QuestionCard key={key} questionData={media.question_list[0]} />
+								) : (
+									<QuestionMediaCard key={key} mediaName={media.media_name} paragraphMain={""} questionData={media.question_list} />
+								)
+							)}
+						</div>
+					</TabsContent>
+				))
+			}
+		</Tabs >
 	)
 }

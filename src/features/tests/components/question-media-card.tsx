@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { MainParagraph } from './main-paragraph'
 import type { Question } from '../types/test'
+import { TranslationCard } from './translation-card'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
@@ -28,16 +29,17 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	}
 
 	return (
-		<Card className="w-full max-w-6xl mx-auto">
-			<CardHeader className="pb-4">
+		<Card className="w-full mx-auto">
+			<CardHeader className="flex pb-4">
 				<div className="flex flex-col mb-2 space-y-2">
 					<Badge variant="default" className="text-sm font-medium w-fit">
-						{mediaName}
+						Questions {mediaName} refer to the following
 					</Badge>
 					<h2 className="text-lg font-semibold text-gray-900">
 						Reading Comprehension
 					</h2>
 				</div>
+				<TranslationCard mediaId={'11'} />
 			</CardHeader>
 
 			<CardContent className="flex gap-6">
@@ -53,11 +55,13 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				<div className="flex-1 space-y-6">
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
+
 							{/* Question Block */}
 							<div className="space-y-4">
+
 								{/* Question Header */}
 								<div className="flex items-center gap-3">
-									<Badge variant="outline" className="text-xs">
+									<Badge variant="secondary" className="text-xs bg-primary-foreground">
 										Question {question.question_number}
 									</Badge>
 									<h3 className="text-base font-medium text-gray-900">
@@ -69,7 +73,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								<RadioGroup
 									value={selectedAnswers[String(question.question_id)] || ''}
 									onValueChange={handleValueChange(String(question.question_id))}
-									className="space-y-2 ml-4"
 								>
 									{question.answer_list.map((answer, answerIndex) => (
 										<div
@@ -93,6 +96,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 													<span className="leading-relaxed">
 														{answer.content}
 													</span>
+
 												</Label>
 											</div>
 										</div>
