@@ -2,35 +2,27 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import type { Part } from "../types/test"
 import { Label } from "@/components/ui/label"
-import { useEffect, useState } from "react"
 import type { ActiveQuestion } from "./test-practice"
+import { useQuestionContext } from "../context/question-context"
+import React from "react"
 
 type QuestionTabProps = {
 	partData: Part[]
-	activateQuestion: ActiveQuestion
-	onSelectQuestion: (value: ActiveQuestion) => void
 	className?: string
 }
 
-export const QuestionTab: React.FC<QuestionTabProps> = ({
+const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	className,
 	partData,
-	activateQuestion,
-	onSelectQuestion
 }) => {
-	const [selectedQuestion, setSelectedQuestion] = useState<ActiveQuestion | null>(activateQuestion)
-
-	useEffect(() => {
-		setSelectedQuestion(activateQuestion)
-	}, [activateQuestion])
+	const { activeQuestion, setActiveQuestion } = useQuestionContext()
 
 	const toggleActive = (newSelectedQuestion: ActiveQuestion) => {
-		setSelectedQuestion(newSelectedQuestion)
-		onSelectQuestion(newSelectedQuestion)
+		setActiveQuestion(newSelectedQuestion)
 	}
 
 	const isQuestionActive = (partId: number, questionId: number) => {
-		return selectedQuestion?.part_id === partId && selectedQuestion?.question_id === questionId
+		return activeQuestion?.part_id === partId && activeQuestion?.question_id === questionId
 	}
 
 	return (
@@ -69,3 +61,5 @@ export const QuestionTab: React.FC<QuestionTabProps> = ({
 		</ScrollArea>
 	)
 }
+
+export const QuestionTab = React.memo(QuestionTabComponent)

@@ -11,7 +11,7 @@ export interface Question {
   answer_list: Answer[]
 }
 
-export interface Media {
+export interface MediaQuestion {
   media_id: number;
   media_name: string;
   media_audio_script: string;
@@ -29,7 +29,7 @@ export interface Part {
 
   // Additional fields từ detail page
   part_audio_url?: string;
-  media_list?: Media[];
+  media_list?: MediaQuestion[];
 }
 
 export interface Test {

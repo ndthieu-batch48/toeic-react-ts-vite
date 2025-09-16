@@ -16,7 +16,10 @@ function TestDetailPage() {
 
 	return (
 		<>
-			<TestPractice testData={data!} testTitle={'TMA TOEIC'} testDuration={0} />
+			<TestPractice
+				testData={data!}
+				testTitle={data?.test_title || "TMA TOEIC"}
+				testDuration={data!.test_duration} />
 		</>
 	)
 }
