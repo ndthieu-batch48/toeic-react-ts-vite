@@ -5,7 +5,6 @@ export const useGetAllTests = () => {
 	return useQuery({
 		queryKey: ['tests'],
 		queryFn: getAllTests,
-		staleTime: 5 * 60 * 1000,
 	});
 };
 
@@ -14,6 +13,5 @@ export const useGetTestDetail = (id: number) => {
 		queryKey: ['test', id],
 		queryFn: () => getTestDetail(id),
 		enabled: !!id,
-		staleTime: 5 * 60 * 1000,
 	});
 }

@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { Clock, BookOpen } from 'lucide-react'
+import { Clock, BookOpen, Info } from 'lucide-react'
 import type { Test, Part } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
 import { TimePickerComponent } from './time-picker'
@@ -16,12 +16,12 @@ interface TestDetailProps {
 
 const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 	const navigate = useNavigate();
-	const [selectedPartIds, setSelectedPartIds] = useState<Set<number>>(
-		new Set()
-	)
+
+	const [isPracticeTest, setIsPracticeTest] = useState<boolean>(true)
+	const [selectedPartIds, setSelectedPartIds] = useState<Set<number>>(new Set())
 	const [timeLimit, setTimeLimit] = useState<string>("")
 
-	const handlePartToggle = (partId: number) => {
+	const handlePartSelect = (partId: number) => {
 		setSelectedPartIds(prev => {
 			const newSet = new Set(prev)
 			if (newSet.has(partId)) {
@@ -33,11 +33,14 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 		})
 	}
 
-	const hasSelectedParts = selectedPartIds.size > 0
+	const hasSelectedParts = isPracticeTest ? selectedPartIds.size > 0 : true
 
 	// Lấy danh sách các parts đã được chọn
 	const getSelectedPartIds = (): Part[] => {
-		return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
+		if (isPracticeTest) {
+			return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
+		}
+		return currentTest.part_list
 	}
 
 	// Tính tổng số câu hỏi của các parts đã chọn
@@ -48,18 +51,33 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 	const handleStartTest = () => {
 		const selectedParts = getSelectedPartIds()
 		const testSetup = {
-			testId: currentTest.test_id,
+			testId: String(currentTest.test_id),
 			selectedParts: selectedParts.map(p => p.part_id),
-			timeLimit: timeLimit ? parseInt(timeLimit) : currentTest.test_duration,
+			timeLimit: isPracticeTest
+				? (timeLimit ? parseInt(timeLimit) : 0)
+				: currentTest.test_duration,
 		}
 
-		console.log('Starting test with config:', testSetup)
-
 		navigate({
-			to: '/test/$testId/$partId',
-			params: { testId: String(currentTest.test_id), partId: '45' }
+			to: '/test/$testId/practice',
+			params: { testId: testSetup.testId },
+			search: {
+				selectedParts: testSetup.selectedParts,
+				timeLimit: testSetup.timeLimit,
+			}
 		})
+	}
 
+
+	const handlePracticeToggle = (practice: boolean) => {
+		setIsPracticeTest(practice)
+		if (!practice) {
+			// For full test, select all parts automatically
+			setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))
+		} else {
+			// For practice test, start with no selections
+			setSelectedPartIds(new Set())
+		}
 	}
 
 	return (
@@ -74,91 +92,171 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 						<span>Time: {currentTest.test_duration} minutes</span>
 					</div>
 
-					{/* Hiển thị thông tin về parts đã chọn */}
-					{hasSelectedParts && (
-						<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-							<span>Selected: {selectedPartIds.size} part(s)</span>
-							<span>•</span>
-							<span>Total: {getTotalQuestions()} questions</span>
-						</div>
-					)}
+					{/* Display info about selected parts */}
+					<div className="w-full h-5 flex items-center justify-center">
+						{isPracticeTest && hasSelectedParts ? (
+							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+								<span>Selected: {selectedPartIds.size} part(s)</span>
+								<span>•</span>
+								<span>Total: {getTotalQuestions()} questions</span>
+							</div>
+						) : !isPracticeTest ? (
+							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+								<span>Full Test: {currentTest.part_list.length} parts</span>
+								<span>•</span>
+								<span>Total: {getTotalQuestions()} questions</span>
+							</div>
+						) : (
+							<div></div> // Empty div to maintain height
+						)}
+					</div>
 				</div>
 
 				{/* Action Buttons */}
 				<div className="flex flex-wrap gap-3 justify-center">
 					<Button
-						variant="default"
-						className="bg-green-600 hover:bg-green-700 text-white px-6">
+						variant={isPracticeTest ? "default" : "outline"}
+						className={isPracticeTest ? "bg-blue-600 hover:bg-blue-700 text-white px-6" : "px-6"}
+						onClick={() => { handlePracticeToggle(true) }}>
 						Practice
 					</Button>
 					<Button
-						variant="default"
-						className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+						variant={!isPracticeTest ? "default" : "outline"}
+						className={!isPracticeTest ? "bg-blue-600 hover:bg-blue-700 text-white px-6" : "px-6"}
+						onClick={() => { handlePracticeToggle(false) }}>
+
 						Full test
 					</Button>
 					<Button
-						variant="default"
-						className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+						variant="outline"
+						className="px-6"
 					>
 						Answer
 					</Button>
 				</div>
 
-				{/* Test Parts Selection */}
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<BookOpen className="h-5 w-5" />
-							Select Test Parts
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						{/* Select All / Deselect All */}
-						<div className="flex items-center justify-between pb-2 border-b">
-							<span className="text-sm font-medium">Select Parts:</span>
-							<div className="flex gap-2">
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}>
-									Select All
-								</Button>
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setSelectedPartIds(new Set())}>
-									Deselect All
-								</Button>
-							</div>
-						</div>
+				{/* Main Content Section - Always maintain the same height */}
+				<section className="grid gap-2 min-h-[400px]">
+					{isPracticeTest ? (
+						<>
+							{/* Test Parts Selection for Practice Mode */}
+							<Card>
+								<CardHeader>
+									<CardTitle className="flex items-center gap-2">
+										<BookOpen className="h-5 w-5" />
+										Select Test Parts
+									</CardTitle>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									{/* Select All / Deselect All */}
+									<div className="flex items-center justify-between pb-2 border-b">
+										<span className="text-sm font-medium">Select Parts:</span>
+										<div className="flex gap-2">
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}
+											>
+												Select All
+											</Button>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={() => setSelectedPartIds(new Set())}
+											>
+												Deselect All
+											</Button>
+										</div>
+									</div>
 
-						{currentTest.part_list.map((part) => (
-							<div key={part.part_id} className="flex items-center space-x-3">
-								<Checkbox
-									id={String(part.part_id)}
-									checked={selectedPartIds.has(part.part_id)}
-									onCheckedChange={() => handlePartToggle(part.part_id)}
-								/>
-								<label
-									htmlFor={String(part.part_id)}
-									className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer flex-1"
-								>
-									<span>{part.part_order}</span>
-									<span className="text-muted-foreground">-</span>
-									<span className="text-muted-foreground text-xs">{part.part_title}</span>
-									<Badge variant="secondary" className="text-xs ml-auto">
-										{part.total_question} questions
-									</Badge>
-								</label>
-							</div>
-						))}
+									{currentTest.part_list.map((part) => (
+										<div key={part.part_id} className="flex items-center space-x-3">
+											<Checkbox
+												id={String(part.part_id)}
+												checked={selectedPartIds.has(part.part_id)}
+												onCheckedChange={() => handlePartSelect(part.part_id)}
+											/>
+											<label
+												htmlFor={String(part.part_id)}
+												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer flex-1"
+											>
+												<span>{part.part_order}</span>
+												<span className="text-muted-foreground">-</span>
+												<span className="text-muted-foreground text-xs">{part.part_title}</span>
+												<Badge variant="secondary" className="text-xs ml-auto">
+													{part.total_question} questions
+												</Badge>
+											</label>
+										</div>
+									))}
+								</CardContent>
+							</Card>
 
-					</CardContent>
-				</Card>
+							<TimePickerComponent
+								timeLimit={timeLimit}
+								onTimeLimitChange={setTimeLimit}
+								testDuration={String(currentTest.test_duration)}
+							/>
 
-				<TimePickerComponent timeLimit={timeLimit} onTimeLimitChange={setTimeLimit} testDuration={String(currentTest.test_duration)} />
+							{/* Info Message for Practice Mode */}
+							{!hasSelectedParts && (
+								<div className="text-center">
+									<p className="text-sm text-muted-foreground">
+										Please select at least one test part to continue
+									</p>
+								</div>
+							)}
+						</>
+					) : (
+						/* Full Test Mode - Show test overview instead of empty space */
+						<Card>
+							<CardHeader>
+								<CardTitle className="flex items-center gap-2">
+									<Info className="h-5 w-5" />
+									Full Test Overview
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<div className="text-sm text-muted-foreground mb-4">
+									You will take the complete test with all sections included.
+								</div>
 
-				<Separator />
+								{/* Show all parts that will be included */}
+								<div className="space-y-3">
+									<div className="text-sm font-medium border-b pb-2">
+										Test Sections:
+									</div>
+									{currentTest.part_list.map((part) => (
+										<div key={part.part_id} className="flex items-center space-x-3">
+											<div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0"></div>
+											<label className="text-sm font-medium leading-none flex items-center gap-2 flex-1">
+												<span>{part.part_order}</span>
+												<span className="text-muted-foreground">-</span>
+												<span className="text-muted-foreground text-xs">{part.part_title}</span>
+												<Badge variant="secondary" className="text-xs ml-auto">
+													{part.total_question} questions
+												</Badge>
+											</label>
+										</div>
+									))}
+								</div>
+
+								<Separator />
+
+								<div className="flex items-center justify-between text-sm">
+									<span className="font-medium">Total Duration:</span>
+									<span className="text-muted-foreground">{currentTest.test_duration} minutes</span>
+								</div>
+
+								<div className="bg-blue-50 p-3 rounded-md">
+									<p className="text-xs text-blue-800">
+										<strong>Note:</strong> In full test mode, you'll complete all sections in order with the standard time allocation.
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+					)}
+				</section>
 
 				{/* Start Practice Button */}
 				<div className="flex justify-start">
@@ -168,18 +266,10 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 						disabled={!hasSelectedParts}
 						onClick={handleStartTest}
 					>
-						Start Test
+						Start {isPracticeTest ? 'Practice' : 'Full Test'}
 					</Button>
 				</div>
 
-				{/* Info Message */}
-				{!hasSelectedParts && (
-					<div className="text-center">
-						<p className="text-sm text-muted-foreground">
-							Please select at least one test part to continue
-						</p>
-					</div>
-				)}
 			</div>
 		</>
 	)

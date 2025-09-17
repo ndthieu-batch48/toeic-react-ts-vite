@@ -1,6 +1,6 @@
 import { refreshTokenService } from '@/features/auth/services/authService';
 import type { UserResponse } from '@/features/auth/types/user';
-import { clearUserSession, getUserSession, saveUserSession } from '@/features/helper/authHelper';
+import { clearUserSession, getUserSession, saveUserSession } from '@/features/auth/helper/authHelper';
 import { isTokenExpired } from '@/utils/jwtUtil';
 import * as React from 'react'
 
@@ -62,9 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 		initializeAuth()
 	}, [])
-	// console.log("AUTH CONTEXT isAuthenticated", isAuthenticated)
-	// console.log("AUTH CONTEXT user", user)
-	// console.log('AUTH CONTEXT local', getUserSession())
 
 	return (
 		<AuthContext.Provider value={{ isAuthenticated, user, logout }}>

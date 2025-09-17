@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login, register } from '../services/authService';
-import { saveUserSession } from '@/features/helper/authHelper';
+import { saveUserSession } from '@/features/auth/helper/authHelper';
 import { toast } from "sonner"
 
-export function useAuthApi() {
+export const useAuthApi = () => {
   const queryClient = useQueryClient();
 
   const loginMutation = useMutation({

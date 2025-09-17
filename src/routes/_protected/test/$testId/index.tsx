@@ -11,7 +11,6 @@ function TestSetupPage() {
 
 	const { status, data, isError, error } = useGetAllTests();
 
-	const currentTest = data?.find(test => test.test_id === Number(testId));
 
 	if (status === 'pending') {
 		return (
@@ -30,6 +29,9 @@ function TestSetupPage() {
 			</div>
 		)
 	}
+
+	const currentTest = data.find(test => test.test_id === Number(testId));
+
 
 	return (
 		<>

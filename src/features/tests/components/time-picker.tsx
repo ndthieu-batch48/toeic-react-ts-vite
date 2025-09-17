@@ -7,7 +7,7 @@ type TimePickerComponentProps = {
 	onTimeLimitChange?(value: string): void
 }
 
-export function TimePickerComponent({ timeLimit, onTimeLimitChange, testDuration }: TimePickerComponentProps) {
+export function TimePickerComponent({ timeLimit, onTimeLimitChange }: TimePickerComponentProps) {
 	return (
 		<Card>
 			<CardContent className="pt-6">
@@ -22,7 +22,6 @@ export function TimePickerComponent({ timeLimit, onTimeLimitChange, testDuration
 									<SelectValue placeholder="-- Pick time --" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="15">15</SelectItem>
 									<SelectItem value="30">30</SelectItem>
 									<SelectItem value="45">45</SelectItem>
 									<SelectItem value="60">60</SelectItem>
@@ -37,7 +36,7 @@ export function TimePickerComponent({ timeLimit, onTimeLimitChange, testDuration
 						</div>
 						{timeLimit && (
 							<p className="text-xs text-muted-foreground">
-								Custom time limit: {timeLimit} minutes (Default: {testDuration} minutes)
+								Time limit: {timeLimit} minutes
 							</p>
 						)}
 					</div>
