@@ -7,7 +7,7 @@ export const createHistory = async (request: HistoryCreateRequest) => {
   return response.data;
 }
 
-export const getSaveProgressHistory = async (testId: string): Promise<HistoryResponse> => {
+export const getSaveProgressHistory = async (testId: number): Promise<HistoryResponse> => {
   const url = 'history/save';
   const response = await axiosJWT.get<HistoryResponse>(url, {
     params: { test_id: testId },
@@ -21,10 +21,10 @@ export const getHistoryResultList = async (): Promise<HistoryResultListResponse[
   return response.data;
 }
 
-export const getHistoryResultDetail = async (hitoryId: string): Promise<HistoryResultDetailResponse> => {
+export const getHistoryResultDetail = async (historyId: number): Promise<HistoryResultDetailResponse> => {
   const url = 'history/result/detail'
   const response = await axiosJWT.get<HistoryResultDetailResponse>(url,
-    { params: hitoryId },
+    { params: { history_id: historyId } },
   );
   return response.data;
 }

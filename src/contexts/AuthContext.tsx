@@ -20,6 +20,7 @@ export interface AuthContext {
 	isAuthenticated: boolean
 	logout: () => void
 	user: User | null
+	refreshAuth: () => Promise<void>
 }
 
 const AuthContext = React.createContext<AuthContext | null>(null)
@@ -28,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [user, setUser] = React.useState<User | null>(null)
 	const isAuthenticated = !!user
 
-	async function getAuthenticatedUser(): Promise<UserResponse | null> {
+	const getAuthenticatedUser = React.useCallback(async (): Promise<UserResponse | null> => {
 		const session = getUserSession()
 
 		if (!session) {
@@ -43,28 +44,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		const updatedSession: UserResponse = { ...session, access_token, refresh_token }
 		saveUserSession(updatedSession)
 		return updatedSession
-	}
+	}, [])
 
 	const logout = () => {
 		setUser(null)
 		clearUserSession()
 	}
 
-	React.useEffect(() => {
-		const initializeAuth = async () => {
-			try {
-				const user = await getAuthenticatedUser()
-				setUser(user)
-			} catch (error) {
-				console.error('Auth initialization failed:', error)
-				setUser(null)
-			}
+	const refreshAuth = React.useCallback(async () => {
+		try {
+			const user = await getAuthenticatedUser()
+			setUser(user)
+		} catch (error) {
+			console.error('Auth refresh failed:', error)
+			setUser(null)
 		}
-		initializeAuth()
-	}, [])
+	}, [getAuthenticatedUser])
+
+	React.useEffect(() => {
+		refreshAuth()
+	}, [refreshAuth])
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, user, logout }}>
+		<AuthContext.Provider value={{ isAuthenticated, user, logout, refreshAuth }}>
 			{children}
 		</AuthContext.Provider>
 	)

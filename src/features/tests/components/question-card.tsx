@@ -1,76 +1,103 @@
-import React from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import type { Question } from '../types/test'
+import { MainParagraph } from './main-paragraph'
+import { TranslationCard } from './translation-card'
+import { useTestContext } from '../context/TestContext'
 
 export interface QuestionCardProps {
+	paragraphMain: string
+	translateScript?: string
 	questionData: Question,
-	selectedValue?: string
-	onValueChange?: (value: string) => void
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
+	paragraphMain,
+	translateScript,
 	questionData,
-	selectedValue,
-	onValueChange,
-
 }) => {
+	const {
+		selectedAnswers,
+		setSelectedAnswer
+	} = useTestContext()
 
-	const { question_number, question_content, answer_list } = questionData
+	const { question_id, question_number, question_content, answer_list } = questionData
+
+	// Check if paragraphMain contains an image
+	const hasImage = paragraphMain && paragraphMain.includes('<img')
+
+	//TODO: Trigger active question 
+	const handleSelectAnswer = (answerId: string) => {
+		const updatedAnswers = {
+			...selectedAnswers,
+			[String(question_id)]: answerId
+		};
+		setSelectedAnswer(updatedAnswers);
+	}
+
+	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
 
 	return (
-		<Card className="w-full mx-auto mb-3">
-			<CardHeader className="pb-4">
-				<div className="flex items-center justify-between mb-4">
-					<Badge variant="default" className="text-sm font-medium">
+		<Card className="w-full mx-auto mb-3 bg-card border-border">
+			<CardHeader className="mb-3">
+
+				<div className="flex items-center gap-2 mb-2">
+					<Badge className="">
 						Question {question_number}
 					</Badge>
+					<Label className="">
+						{question_content}
+					</Label>
 				</div>
 
-				<div className="space-y-4">
-					<h3 className="text-lg font-semibold leading-relaxed text-gray-900">
-						{question_content}
-					</h3>
-				</div>
+				<TranslationCard
+					translateScript={translateScript || ''}
+					selectedLanguage={''}
+					isExpanded={false} onToggle={function (): void {
+						throw new Error('Function not implemented.')
+					}}
+					onLanguageChange={function (lang: string): void {
+						console.log(lang);
+						throw new Error('Function not implemented.')
+					}}
+				/>
 			</CardHeader>
 
-			<CardContent className="pt-0">
-				{/* Radio Group for Answer Options */}
-				<div className="space-y-4">
-					<p className="text-sm font-medium text-gray-700 mb-3">
-						Select your answer:
-					</p>
 
-					<RadioGroup
-						value={selectedValue}
-						onValueChange={onValueChange}
-					>
+
+			<CardContent className="flex px-2 gap-4">
+				{hasImage && (
+					<div className="w-2/3">
+						<MainParagraph paragraphMain={paragraphMain} />
+					</div>
+				)}
+
+				{/* Radio Group for Answer Options */}
+				<div className={`space-y-4 ${hasImage ? 'w-1/3' : 'w-full'}`}>
+					<Label>
+						Select your answer:
+					</Label>
+
+					<RadioGroup value={currentSelectedAnswer} onValueChange={handleSelectAnswer}>
 						{answer_list.map((answer, index) => (
-							<div
-								key={index}
-								className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${selectedValue === String(answer.answer_id)
-									? "border-blue-200 bg-blue-50"
-									: "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-									} cursor-pointer`}
+							<Label
+								key={answer.answer_id || index}
+								htmlFor={`question-${question_id}-option-${answer.answer_id}`}
+								className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${currentSelectedAnswer === String(answer.answer_id)
+									? "border-primary bg-primary-foreground"
+									: "hover:border-primary/50 hover:bg-primary-foreground"
+									}`}
 							>
 								<RadioGroupItem
+									id={`question-${question_id}-option-${answer.answer_id}`}
 									value={String(answer.answer_id)}
-									id={`question-${question_number}-option-${answer.answer_id}`}
 									className="mt-0.5"
 								/>
-								<div className="flex-1 min-w-0">
-									<Label
-										htmlFor={`question-${question_number}-option-${answer.answer_id}`}
-										className="text-sm font-medium text-gray-900 cursor-pointer flex items-start gap-2"
-									>
-										<span className="leading-relaxed">{answer.content}</span>
-									</Label>
-								</div>
-							</div>
+								{answer.content}
+							</Label>
 						))}
-
 					</RadioGroup>
 				</div>
 			</CardContent>

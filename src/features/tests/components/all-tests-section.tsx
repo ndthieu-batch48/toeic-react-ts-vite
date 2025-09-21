@@ -12,26 +12,26 @@ type AllTestsSection = React.ComponentProps<"section"> & {
 export function AllTestsSection({ availableTests }: AllTestsSection) {
 
 	return (
-		<section className="space-y-4">
+		<section className="space-y-4 font-sans">
 			<div className="flex items-center gap-2">
 				<BookOpen className="h-6 w-6 text-primary" />
-				<h2 className="text-3xl font-bold">Available Tests</h2>
+				<h2 className="text-3xl font-bold text-foreground font-serif">Available Tests</h2>
 			</div>
-			<p className="text-muted-foreground">Choose from our comprehensive collection of assessments</p>
+			<p className="text-muted-foreground font-sans">Choose from our comprehensive collection of assessments</p>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 				{availableTests.map((test) => (
-					<Card key={test.test_id} className="hover:shadow-md transition-shadow">
+					<Card key={test.test_id} className="hover:shadow-md transition-shadow bg-card border-border">
 
 						<CardHeader>
-							<CardTitle className="text-lg">{test.test_title}</CardTitle>
+							<CardTitle className="text-lg text-card-foreground font-serif">{test.test_title}</CardTitle>
 							<div className="flex justify-between items-center">
-								<Badge variant="outline">TOEIC</Badge>
+								<Badge variant="outline" className="border-border text-foreground">TOEIC</Badge>
 							</div>
 						</CardHeader>
 
 						<CardContent>
-							<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="flex items-center gap-2 text-sm text-muted-foreground font-sans">
 								<Clock className="h-4 w-4" />
 								{test.test_duration}
 							</div>
@@ -39,7 +39,7 @@ export function AllTestsSection({ availableTests }: AllTestsSection) {
 
 						<CardFooter>
 							<Button
-								className="w-full"
+								className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-sans"
 								variant="default"
 								size="lg"
 								asChild>

@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Clock, BookOpen, Info } from 'lucide-react'
 import type { Test, Part } from '../types/test'
@@ -82,12 +80,12 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 
 	return (
 		<>
-			<div className="max-w-2xl mx-auto p-6 space-y-6">
+			<div className="max-w-2xl mx-auto p-6 space-y-6 font-sans">
 				{/* Header Section */}
 				<div className="text-center space-y-4">
-					<h1 className="text-3xl font-bold text-gray-900">{currentTest.test_title}</h1>
+					<h1 className="text-3xl font-bold text-foreground font-serif">{currentTest.test_title}</h1>
 
-					<div className="flex items-center justify-center gap-2 text-muted-foreground">
+					<div className="flex items-center justify-center gap-2 text-muted-foreground font-sans">
 						<Clock className="h-4 w-4" />
 						<span>Time: {currentTest.test_duration} minutes</span>
 					</div>
@@ -95,13 +93,13 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 					{/* Display info about selected parts */}
 					<div className="w-full h-5 flex items-center justify-center">
 						{isPracticeTest && hasSelectedParts ? (
-							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground font-sans">
 								<span>Selected: {selectedPartIds.size} part(s)</span>
 								<span>•</span>
 								<span>Total: {getTotalQuestions()} questions</span>
 							</div>
 						) : !isPracticeTest ? (
-							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+							<div className="flex items-center justify-center gap-4 text-sm text-muted-foreground font-sans">
 								<span>Full Test: {currentTest.part_list.length} parts</span>
 								<span>•</span>
 								<span>Total: {getTotalQuestions()} questions</span>
@@ -116,23 +114,20 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 				<div className="flex flex-wrap gap-3 justify-center">
 					<Button
 						variant={isPracticeTest ? "default" : "outline"}
-						className={isPracticeTest ? "bg-blue-600 hover:bg-blue-700 text-white px-6" : "px-6"}
+						className={isPracticeTest ? "px-6 font-sans" : "px-6 font-sans"}
 						onClick={() => { handlePracticeToggle(true) }}>
 						Practice
 					</Button>
 					<Button
 						variant={!isPracticeTest ? "default" : "outline"}
-						className={!isPracticeTest ? "bg-blue-600 hover:bg-blue-700 text-white px-6" : "px-6"}
+						className={!isPracticeTest ? "px-6 font-sans" : "px-6 font-sans"}
 						onClick={() => { handlePracticeToggle(false) }}>
-
 						Full test
 					</Button>
-					<Button
-						variant="outline"
-						className="px-6"
-					>
+					{/* <Button
+						className="px-6 border-border text-foreground hover:bg-secondary font-sans">
 						Answer
-					</Button>
+					</Button> */}
 				</div>
 
 				{/* Main Content Section - Always maintain the same height */}
@@ -140,28 +135,26 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 					{isPracticeTest ? (
 						<>
 							{/* Test Parts Selection for Practice Mode */}
-							<Card>
+							<Card className="bg-card border-border">
 								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
+									<CardTitle className="flex items-center gap-2 text-card-foreground font-serif">
 										<BookOpen className="h-5 w-5" />
 										Select Test Parts
 									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
 									{/* Select All / Deselect All */}
-									<div className="flex items-center justify-between pb-2 border-b">
-										<span className="text-sm font-medium">Select Parts:</span>
+									<div className="flex items-center justify-between pb-2 border-b border-border">
+										<span className="text-sm font-medium text-card-foreground font-sans">Select Parts:</span>
 										<div className="flex gap-2">
 											<Button
 												variant="outline"
-												size="sm"
 												onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}
 											>
 												Select All
 											</Button>
 											<Button
 												variant="outline"
-												size="sm"
 												onClick={() => setSelectedPartIds(new Set())}
 											>
 												Deselect All
@@ -178,14 +171,11 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 											/>
 											<label
 												htmlFor={String(part.part_id)}
-												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer flex-1"
+												className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer flex-1 text-card-foreground font-sans"
 											>
 												<span>{part.part_order}</span>
 												<span className="text-muted-foreground">-</span>
 												<span className="text-muted-foreground text-xs">{part.part_title}</span>
-												<Badge variant="secondary" className="text-xs ml-auto">
-													{part.total_question} questions
-												</Badge>
 											</label>
 										</div>
 									))}
@@ -201,7 +191,7 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 							{/* Info Message for Practice Mode */}
 							{!hasSelectedParts && (
 								<div className="text-center">
-									<p className="text-sm text-muted-foreground">
+									<p className="text-sm text-muted-foreground font-sans">
 										Please select at least one test part to continue
 									</p>
 								</div>
@@ -209,47 +199,44 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 						</>
 					) : (
 						/* Full Test Mode - Show test overview instead of empty space */
-						<Card>
+						<Card className="bg-card border-border">
 							<CardHeader>
-								<CardTitle className="flex items-center gap-2">
+								<CardTitle className="flex items-center gap-2 text-card-foreground font-serif">
 									<Info className="h-5 w-5" />
 									Full Test Overview
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<div className="text-sm text-muted-foreground mb-4">
+								<div className="text-sm text-muted-foreground mb-4 font-sans">
 									You will take the complete test with all sections included.
 								</div>
 
 								{/* Show all parts that will be included */}
 								<div className="space-y-3">
-									<div className="text-sm font-medium border-b pb-2">
+									<div className="text-sm font-medium border-b border-border pb-2 text-card-foreground font-sans">
 										Test Sections:
 									</div>
 									{currentTest.part_list.map((part) => (
 										<div key={part.part_id} className="flex items-center space-x-3">
-											<div className="w-4 h-4 bg-blue-600 rounded-full flex-shrink-0"></div>
-											<label className="text-sm font-medium leading-none flex items-center gap-2 flex-1">
+											<div className="w-4 h-4 bg-primary rounded-full flex-shrink-0"></div>
+											<label className="text-sm font-medium leading-none flex items-center gap-2 flex-1 text-card-foreground font-sans">
 												<span>{part.part_order}</span>
 												<span className="text-muted-foreground">-</span>
 												<span className="text-muted-foreground text-xs">{part.part_title}</span>
-												<Badge variant="secondary" className="text-xs ml-auto">
-													{part.total_question} questions
-												</Badge>
 											</label>
 										</div>
 									))}
 								</div>
 
-								<Separator />
+								<Separator className="border-border" />
 
 								<div className="flex items-center justify-between text-sm">
-									<span className="font-medium">Total Duration:</span>
-									<span className="text-muted-foreground">{currentTest.test_duration} minutes</span>
+									<span className="font-medium text-card-foreground font-sans">Total Duration:</span>
+									<span className="text-muted-foreground font-sans">{currentTest.test_duration} minutes</span>
 								</div>
 
-								<div className="bg-blue-50 p-3 rounded-md">
-									<p className="text-xs text-blue-800">
+								<div className="bg-accent p-3 rounded-md">
+									<p className="text-xs text-accent-foreground font-sans">
 										<strong>Note:</strong> In full test mode, you'll complete all sections in order with the standard time allocation.
 									</p>
 								</div>
@@ -262,7 +249,7 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 				<div className="flex justify-start">
 					<Button
 						size="lg"
-						className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+						className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 font-sans"
 						disabled={!hasSelectedParts}
 						onClick={handleStartTest}
 					>

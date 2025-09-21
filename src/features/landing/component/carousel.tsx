@@ -44,7 +44,7 @@ export function LandingCarousel() {
 	}, [api])
 
 	return (
-		<div className="w-full">
+		<div className="w-full font-sans">
 			<Carousel
 				setApi={setApi}
 				className="w-full"
@@ -56,22 +56,17 @@ export function LandingCarousel() {
 				<CarouselContent>
 					{carouselItems.map((item, index) => (
 						<CarouselItem key={index}>
-							<Card className={`relative h-96 overflow-hidden rounded-3xl bg-gradient-to-br ${item.gradient} shadow-2xl border-0`}>
-								{/* Background decorative elements */}
-								<div className="absolute inset-0 bg-black/10"></div>
-								<div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-								<div className="absolute bottom-4 left-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
-								<div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full blur-xl"></div>
+							<Card className="h-96 bg-primary">
 
-								<CardContent className="relative z-10 h-full flex items-center justify-center p-8">
-									<div className="text-center text-white space-y-6">
+								<CardContent className="z-10 h-full flex items-center justify-center p-8">
+									<div className="text-center text-primary-foreground space-y-6">
 										<div className="text-6xl mb-4 animate-pulse">{item.image}</div>
 
 										<div className="space-y-4">
-											<h3 className="text-4xl font-bold leading-tight">
+											<h3 className="text-4xl font-bold leading-tight font-serif">
 												{item.title}
 											</h3>
-											<p className="text-xl opacity-90 leading-relaxed max-w-2xl">
+											<p className="text-xl opacity-90 leading-relaxed max-w-2xl font-sans">
 												{item.subtitle}
 											</p>
 										</div>
@@ -94,8 +89,8 @@ export function LandingCarousel() {
 						key={index}
 						onClick={() => api?.scrollTo(index)}
 						className={`w-3 h-3 rounded-full transition-all duration-300 ${index + 1 === current
-							? 'bg-blue-600 scale-125 shadow-lg'
-							: 'bg-gray-300 hover:bg-gray-400'
+							? 'bg-primary scale-125 shadow-lg'
+							: 'bg-muted-foreground/20 hover:bg-muted-foreground/50'
 							}`}
 						aria-label={`Go to slide ${index + 1}`}
 					/>

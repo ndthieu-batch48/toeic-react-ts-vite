@@ -1,11 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getHistoryResultDetail, getHistoryResultList, getSaveProgressHistory } from "../services/historyService";
 
-// export const createHistoryMutation = useMutation({
-//   mutationFn: createHistory,
-// });
-
-export const useGetSaveHistoryProgress = (id: string) => {
+export const useGetSaveHistoryProgress = (id: number) => {
   return useQuery({
     queryKey: ['historyProgress'],
     queryFn: () => getSaveProgressHistory(id),
@@ -20,10 +16,10 @@ export const useGetHistoryResultList = () => {
   });
 };
 
-export const useGetHistoryResultDetail = (testId: string) => {
+export const useGetHistoryResultDetail = (historyId: number) => {
   return useQuery({
     queryKey: ['historyDetail'],
-    queryFn: () => getHistoryResultDetail(testId),
-    enabled: !!testId,
+    queryFn: () => getHistoryResultDetail(historyId),
+    enabled: !!historyId,
   });
 };

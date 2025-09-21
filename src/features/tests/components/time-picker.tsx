@@ -9,16 +9,16 @@ type TimePickerComponentProps = {
 
 export function TimePickerComponent({ timeLimit, onTimeLimitChange }: TimePickerComponentProps) {
 	return (
-		<Card>
+		<Card className="bg-card border-border">
 			<CardContent className="pt-6">
 				<div className="space-y-4">
 					<div className="flex flex-col space-y-2">
-						<label className="text-sm font-medium">
+						<label className="text-sm font-medium text-card-foreground font-sans">
 							Time Limit <span className="text-muted-foreground">(Don't choose unless you want to set):</span>
 						</label>
 						<div className="flex items-center gap-2">
 							<Select value={timeLimit} onValueChange={onTimeLimitChange}>
-								<SelectTrigger className="w-[180px]">
+								<SelectTrigger className="w-[180px] border-border">
 									<SelectValue placeholder="-- Pick time --" />
 								</SelectTrigger>
 								<SelectContent>
@@ -32,10 +32,10 @@ export function TimePickerComponent({ timeLimit, onTimeLimitChange }: TimePicker
 									<SelectItem value="180">180</SelectItem>
 								</SelectContent>
 							</Select>
-							<span className="text-sm text-muted-foreground">minutes</span>
+							<span className="text-sm text-muted-foreground font-sans">minutes</span>
 						</div>
 						{timeLimit && (
-							<p className="text-xs text-muted-foreground">
+							<p className="text-xs text-muted-foreground font-sans">
 								Time limit: {timeLimit} minutes
 							</p>
 						)}

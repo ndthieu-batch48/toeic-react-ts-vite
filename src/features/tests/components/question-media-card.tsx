@@ -7,106 +7,143 @@ import { Separator } from '@/components/ui/separator'
 import { MainParagraph } from './main-paragraph'
 import type { Question } from '../types/test'
 import { TranslationCard } from './translation-card'
+import { useTestContext } from '../context/TestContext'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
+	translateScript?: string
 	questionData: Question[],
-	selectedAnswers?: Record<string, string> // questionId -> answerId
-	onAnswerChange?: (questionId: string, answerId: string) => void
 }
 
 export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	mediaName,
 	paragraphMain,
+	translateScript,
 	questionData,
-	selectedAnswers = {},
-	onAnswerChange
 }) => {
 
-	const handleValueChange = (questionId: string) => (value: string) => {
-		onAnswerChange?.(questionId, value)
+	const {
+		selectedAnswers,
+		setSelectedAnswer
+	} = useTestContext()
+
+	// Check if paragraphMain contains an image
+	const hasImage = paragraphMain && paragraphMain.includes('<img')
+
+	//TODO: Trigger active question 
+	const handleSelectAnswer = (data: string) => {
+		const [questionId, answerId] = data.split('-');
+		setSelectedAnswer({
+			...selectedAnswers,
+			[questionId]: answerId
+		});
+	}
+
+	// Helper function to get current answer value for a question
+	const getCurrentAnswerValue = (questionId: number) => {
+		const selectedAnswer = selectedAnswers[String(questionId)] || '';
+		return `${String(questionId)}-${selectedAnswer}`;
+	}
+
+	// Helper function to get answer option value
+	const getAnswerValue = (questionId: number, answerId: number) => {
+		return `${String(questionId)}-${String(answerId)}`;
+	}
+
+	// Helper function to check if answer is selected
+	const isAnswerSelected = (questionId: number, answerId: number) => {
+		return getCurrentAnswerValue(questionId) === getAnswerValue(questionId, answerId);
+	}
+
+	// Helper function for answer option styling
+	const getAnswerOptionClass = (questionId: number, answerId: number) => {
+		const baseClass = "flex items-start gap-3 p-3 rounded-lg border cursor-pointer";
+		return isAnswerSelected(questionId, answerId)
+			? `${baseClass} border-primary bg-primary-foreground`
+			: `${baseClass} hover:border-primary/50 hover:bg-primary-foreground`;
 	}
 
 	return (
-		<Card className="w-full mx-auto">
-			<CardHeader className="flex pb-4">
-				<div className="flex flex-col mb-2 space-y-2">
-					<Badge variant="default" className="text-sm font-medium w-fit">
-						Questions {mediaName} refer to the following
-					</Badge>
-					<h2 className="text-lg font-semibold text-gray-900">
-						Reading Comprehension
-					</h2>
-				</div>
-				<TranslationCard mediaId={'11'} />
+		<Card className="w-full mx-auto mb-3">
+			<CardHeader className="pb-2">
+				<Badge>
+					Questions {mediaName} refer to the following
+				</Badge>
 			</CardHeader>
 
 			<CardContent className="flex gap-6">
-				{/* Left side - Main Paragraph */}
-				<div className="w-[400px] flex-shrink-0">
-					<MainParagraph paragraphMain={paragraphMain} />
-				</div>
-
-				{/* Vertical Separator */}
-				<Separator orientation="vertical" className="h-auto" />
+				{hasImage && (
+					<>
+						{/* Left side - Main Paragraph */}
+						<div className="w-2/3 flex-shrink-0">
+							<MainParagraph paragraphMain={paragraphMain} />
+						</div>
+					</>
+				)}
 
 				{/* Right side - Questions */}
-				<div className="flex-1 space-y-6">
+				<div className={`space-y-6 ${hasImage ? 'w-1/3' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
 
 							{/* Question Block */}
-							<div className="space-y-4">
+							<div className="flex flex-col space-y-4">
 
 								{/* Question Header */}
-								<div className="flex items-center gap-3">
-									<Badge variant="secondary" className="text-xs bg-primary-foreground">
+								<div className="flex items-start gap-3">
+									<Badge variant='secondary' className="bg-primary/20">
 										Question {question.question_number}
 									</Badge>
-									<h3 className="text-base font-medium text-gray-900">
+									<Label>
 										{question.question_content}
-									</h3>
+									</Label>
 								</div>
 
-								{/* Answer Options */}
-								<RadioGroup
-									value={selectedAnswers[String(question.question_id)] || ''}
-									onValueChange={handleValueChange(String(question.question_id))}
-								>
-									{question.answer_list.map((answer, answerIndex) => (
-										<div
-											key={answer.answer_id || answerIndex}
-											className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${selectedAnswers[String(question.question_id)] === String(answer.answer_id)
-												? "border-blue-200 bg-blue-50"
-												: "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-												} cursor-pointer`}
-										>
-											<RadioGroupItem
-												value={String(answer.answer_id)}
-												id={`question-${question.question_id}-answer-${answer.answer_id}`}
-												className="mt-0.5"
-											/>
-											<div className="flex-1 min-w-0">
-												<Label
-													htmlFor={`question-${question.question_id}-answer-${answer.answer_id}`}
-													className="text-sm font-medium text-gray-900 cursor-pointer flex items-start gap-2"
-												>
-													{/* Answer Content */}
-													<span className="leading-relaxed">
-														{answer.content}
-													</span>
+								<TranslationCard
+									translateScript={translateScript || ''}
+									selectedLanguage={''}
+									isExpanded={false} onToggle={function (): void {
+										throw new Error('Function not implemented.')
+									}}
+									onLanguageChange={function (lang: string): void {
+										console.log(lang);
+										throw new Error('Function not implemented.')
+									}}
+								/>
 
-												</Label>
-											</div>
-										</div>
-									))}
-								</RadioGroup>
+								<div className="mt-3">
+									<Label className="mb-2">
+										Select your answer:
+									</Label>
+
+									{/* Refactored Answer Options */}
+									<RadioGroup
+										value={getCurrentAnswerValue(question.question_id)}
+										onValueChange={handleSelectAnswer}
+									>
+										{question.answer_list.map((answer, answerIndex) => (
+											<Label
+												key={answer.answer_id || answerIndex}
+												htmlFor={`question-${question.question_id}-answer-${answer.answer_id}`}
+												className={getAnswerOptionClass(question.question_id, answer.answer_id)}
+											>
+												<RadioGroupItem
+													id={`question-${question.question_id}-answer-${answer.answer_id}`}
+													value={getAnswerValue(question.question_id, answer.answer_id)}
+													className="mt-0.5"
+												/>
+												{answer.content}
+											</Label>
+										))}
+									</RadioGroup>
+
+								</div>
 							</div>
 
 							{/* Separator between questions (except for the last one) */}
 							{index < questionData.length - 1 && (
-								<Separator className="my-6" />
+								<Separator className="my-6 border-border" />
 							)}
 						</div>
 					))}

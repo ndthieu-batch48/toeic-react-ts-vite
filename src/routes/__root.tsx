@@ -1,17 +1,17 @@
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { Toaster } from "@/components/ui/sonner"
 import type { AuthContext } from '@/contexts/AuthContext'
 import type { QueryClient } from '@tanstack/react-query'
+import { MainFooter } from '@/components/shared/main-footer'
+import { MainNavigationMenu } from '@/components/shared/main-navigation-menu'
 
 
 export const RootComponent = () => {
 	return (
-		<>
+		<div className="h-screen">
+			<MainNavigationMenu />
 			<Outlet />
-			<Toaster />
-			<TanStackRouterDevtools />
-		</>
+			<MainFooter />
+		</div>
 	)
 }
 

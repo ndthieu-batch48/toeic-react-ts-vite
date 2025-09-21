@@ -77,7 +77,7 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 	const progressValue = duration ? (currentTime / duration) * 100 : 0
 
 	return (
-		<Card className="w-full">
+		<Card className="w-full bg-card border-border">
 			<CardContent className="flex items-start gap-4">
 				<audio ref={audioRef} src={audio} preload="metadata" />
 
@@ -87,7 +87,7 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 						variant="outline"
 						size="icon"
 						onClick={togglePlayPause}
-						className="h-12 w-12 rounded-full"
+						className="h-12 w-12 rounded-full border-border hover:bg-accent hover:text-accent-foreground"
 					>
 						{isPlaying ? (
 							<LucidePause className="h-6 w-6" />
@@ -107,7 +107,7 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 						/>
 
 						{/* Time Display */}
-						<div className="text-sm text-muted-foreground">
+						<div className="text-sm text-muted-foreground font-sans">
 							<span>{formatTime(currentTime)} / {formatTime(duration)}</span>
 						</div>
 					</div>
@@ -119,7 +119,7 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 						variant="ghost"
 						size="icon"
 						onClick={toggleMute}
-						className="h-8 w-8"
+						className="h-8 w-8 hover:bg-accent hover:text-accent-foreground"
 					>
 						{isMuted || volume === 0 ? (
 							<LucideVolumeX className="h-4 w-4" />
@@ -135,7 +135,7 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 						onValueChange={handleVolumeChange}
 						className="w-26"
 					/>
-					<span className="text-sm text-muted-foreground w-8 text-right">
+					<span className="text-sm text-muted-foreground font-sans w-8 text-right">
 						{isMuted ? 0 : volume}
 					</span>
 				</div>

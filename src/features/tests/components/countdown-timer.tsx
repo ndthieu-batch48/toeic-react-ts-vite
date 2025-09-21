@@ -5,17 +5,19 @@ import { Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type CountDownTimerProps = {
-	duration: number
+	duration?: number | null
 	className?: string
 }
 
 export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className, duration }) => {
-	const [timeLeft, setTimeLeft] = useState(duration)
+	const [timeLeft, setTimeLeft] = useState(duration || 0)
 	const [isRunning, setIsRunning] = useState(false)
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
+	const hasTimeLimit = duration != null && duration > 0
+
 	useEffect(() => {
-		if (isRunning && timeLeft > 0) {
+		if (hasTimeLimit && isRunning && timeLeft > 0) {
 			intervalRef.current = setInterval(() => {
 				setTimeLeft((prev) => {
 					if (prev <= 1) {
@@ -37,7 +39,7 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className, durat
 				clearInterval(intervalRef.current)
 			}
 		}
-	}, [isRunning, timeLeft])
+	}, [isRunning, timeLeft, hasTimeLimit])
 
 	const formatTime = (seconds: number): string => {
 		const hours = Math.floor(seconds / 3600)
@@ -50,31 +52,33 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className, durat
 		return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
 	}
 
-	const progressValue = ((duration - timeLeft) / duration) * 100
-	const isExpired = timeLeft === 0
+	const progressValue = hasTimeLimit && duration ? ((duration - timeLeft) / duration) * 100 : 0
+	const isExpired = hasTimeLimit && timeLeft === 0
 
 	return (
-		<Card className={cn("w-full h-auto p-3", className)}>
-			<CardContent className="">
+		<Card className={cn("w-full h-auto p-3 bg-card border-border", className)}>
+			<CardContent className="font-sans">
 				{/* Progress Bar */}
 				<div>
 					<div className="flex gap-2 mb-2">
-						<Clock />
-						<span className={`${isExpired ? 'text-destructive' : ''}`}>
-							{formatTime(timeLeft)}
+						<Clock className="text-foreground" />
+						<span className={`font-serif ${isExpired ? 'text-destructive' : 'text-foreground'}`}>
+							{hasTimeLimit ? formatTime(timeLeft) : 'No limit'}
 						</span>
 					</div>
 
-					<Progress
-						value={progressValue}
-						className={`h-2 ${isExpired ? '[&>div]:bg-destructive' : ''}`}
-					/>
+					{hasTimeLimit && (
+						<Progress
+							value={progressValue}
+							className={`h-2 ${isExpired ? '[&>div]:bg-destructive' : ''}`}
+						/>
+					)}
 				</div>
 
 				{/* Status Message */}
 				{isExpired && (
 					<div className="text-center">
-						<p className="text-destructive font-medium">Time's Up!</p>
+						<p className="text-destructive font-medium font-sans">Time's Up!</p>
 					</div>
 				)}
 			</CardContent>

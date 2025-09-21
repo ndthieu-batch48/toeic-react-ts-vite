@@ -19,8 +19,8 @@ function TestPracticePage() {
 	const { selectedParts, timeLimit } = Route.useSearch();
 	const { data, isLoading, error } = useGetTestDetail(Number(testId));
 
-	if (isLoading) return <div>Loading...</div>;
-	if (error) return <div>Error: {error.message}</div>;
+	if (isLoading) return <div className="text-center text-foreground font-sans">Loading...</div>;
+	if (error) return <div className="text-center text-destructive font-sans">Error: {error.message}</div>;
 
 	console.log("SEARCHHH", { selectedParts, timeLimit })
 
@@ -29,7 +29,7 @@ function TestPracticePage() {
 			<TestPractice
 				testData={data!}
 				testTitle={data?.test_title || "TMA TOEIC"}
-				testDuration={data!.test_duration} />
+				testDuration={timeLimit} />
 		</>
 	)
 }

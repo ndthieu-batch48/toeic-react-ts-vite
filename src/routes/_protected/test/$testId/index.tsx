@@ -14,16 +14,16 @@ function TestSetupPage() {
 
 	if (status === 'pending') {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center">Loading tests...</div>
+			<div className="container mx-auto p-6 font-sans">
+				<div className="text-center text-foreground">Loading tests...</div>
 			</div>
 		)
 	}
 
 	if (isError) {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-red-500">
+			<div className="container mx-auto p-6 font-sans">
+				<div className="text-center text-destructive">
 					Error loading tests: {error?.message}
 				</div>
 			</div>

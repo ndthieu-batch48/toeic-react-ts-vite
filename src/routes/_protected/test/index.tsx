@@ -27,16 +27,16 @@ function TestDashBoardComponent() {
 
 	if (testsStatus === 'pending' || historyStatus === 'pending') {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center">Loading...</div>
+			<div className="container mx-auto p-6 font-sans">
+				<div className="text-center text-foreground">Loading...</div>
 			</div>
 		)
 	}
 
 	if (isTestsError) {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-red-500">
+			<div className="container mx-auto p-6 font-sans">
+				<div className="text-center text-destructive">
 					Error loading tests: {testsError?.message}
 				</div>
 			</div>
@@ -45,8 +45,8 @@ function TestDashBoardComponent() {
 
 	if (isHistoryError) {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-red-500">
+			<div className="container mx-auto p-6 font-sans">
+				<div className="text-center text-destructive">
 					Error loading history: {historyError?.message}
 				</div>
 			</div>
@@ -55,12 +55,12 @@ function TestDashBoardComponent() {
 
 
 	return (
-		<div className="container mx-auto p-6 space-y-8">
-			<Separator className="my-8" />
+		<div className="container mx-auto p-6 space-y-8 font-sans bg-background">
+			<Separator className="my-8 border-border" />
 
 			<AllTestsSection availableTests={testData || []} />
 
-			<Separator className="my-8" />
+			<Separator className="my-8 border-border" />
 
 			<AllHistorySection historyResultList={historyData || []} />
 		</div>

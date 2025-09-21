@@ -16,13 +16,15 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, User, LogOut, History } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { cn } from "@/lib/utils"
 import { TmaLogo } from "./tma-logo"
+import { APP_INFO, TMA_INFO } from "../consts/tmaInfo"
+
 
 export function MainNavigationMenu() {
 	const router = useRouter()
@@ -45,11 +47,7 @@ export function MainNavigationMenu() {
 		<>
 			<NavigationMenuItem>
 				<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-					<Link
-						to='/'
-						className="transition-colors hover:text-foreground/80 text-foreground/60"
-						activeProps={{ className: "text-foreground" }}
-					>
+					<Link to='/'>
 						Home
 					</Link>
 				</NavigationMenuLink>
@@ -57,11 +55,7 @@ export function MainNavigationMenu() {
 
 			<NavigationMenuItem>
 				<NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-					<Link
-						to='/test'
-						className="transition-colors hover:text-foreground/80 text-foreground/60"
-						activeProps={{ className: "text-foreground" }}
-					>
+					<Link to='/test'>
 						Test
 					</Link>
 				</NavigationMenuLink>
@@ -69,37 +63,39 @@ export function MainNavigationMenu() {
 
 			{/* Features Dropdown - Example of structured navigation */}
 			<NavigationMenuItem>
-				<NavigationMenuTrigger>Features</NavigationMenuTrigger>
+				<NavigationMenuTrigger>About Us</NavigationMenuTrigger>
 				<NavigationMenuContent>
 					<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-						<ListItem to="/dashboard" title="Dashboard">
-							Overview and analytics for your account
+
+						<ListItem to={TMA_INFO.HOME_PAGE} title="Visit Our Website">
+							Learn more about our company and services
 						</ListItem>
-						<ListItem to="/reports" title="Reports">
-							View detailed reports and analytics
+
+						<ListItem to={TMA_INFO.CONTACT_PAGE} title="Contact & Support">
+							Get in touch with our team for assistance
 						</ListItem>
-						<ListItem to="/help" title="Help & Support">
-							Get help and contact support
-						</ListItem>
+
 					</ul>
 				</NavigationMenuContent>
 			</NavigationMenuItem>
+
 		</>
 	)
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+		<header className="sticky bg-sidebar top-0 z-50 w-full border p-2">
 			<div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4">
+
 				{/* Logo/Brand */}
 				<div className="flex items-center space-x-4">
 					<Link to="/" className="flex items-center space-x-2">
 						<TmaLogo className="w-15 h-15" />
-						<div className="font-bold text-xl">YourApp</div>
+						<div className="font-bold text-xl">{APP_INFO.APP_NAME}</div>
 					</Link>
 				</div>
 
 				{/* Desktop Navigation */}
-				<NavigationMenu className="hidden md:flex">
+				<NavigationMenu>
 					<NavigationMenuList>
 						<NavigationItems />
 					</NavigationMenuList>
@@ -245,21 +241,40 @@ function ListItem({
 	title: string
 	children: React.ReactNode
 }) {
+	const isExternal = to.startsWith('http://') || to.startsWith('https://')
+
 	return (
 		<li {...props}>
 			<NavigationMenuLink asChild>
-				<Link
-					to={to}
-					className={cn(
-						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-						className
-					)}
-				>
-					<div className="text-sm font-medium leading-none">{title}</div>
-					<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-						{children}
-					</p>
-				</Link>
+				{isExternal ? (
+					<a
+						href={to}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={cn(
+							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							className
+						)}
+					>
+						<div className="text-sm font-medium leading-none">{title}</div>
+						<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+							{children}
+						</p>
+					</a>
+				) : (
+					<Link
+						to={to}
+						className={cn(
+							"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+							className
+						)}
+					>
+						<div className="text-sm font-medium leading-none">{title}</div>
+						<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+							{children}
+						</p>
+					</Link>
+				)}
 			</NavigationMenuLink>
 		</li>
 	)
