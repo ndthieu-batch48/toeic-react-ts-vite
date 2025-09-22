@@ -15,10 +15,7 @@ type PartTabsProps = {
 const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 	const {
 		activeQuestion,
-		// setActiveQuestion,
 		setActivePart,
-		// selectedAnswers,
-		// setSelectedAnswer
 	} = useTestContext()
 
 	const tabValue = `part-${activeQuestion.part_id}`
@@ -73,8 +70,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 										questionData={media.question_list[0]}
 										paragraphMain={media.media_paragraph_main}
 										translateScript={media.media_translate_script}
-									// selectedAnswers={selectedAnswers}
-									// onSelectedAnswer={setSelectedAnswer}
 									/>
 								) : (
 									<QuestionMediaCard
@@ -83,8 +78,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 										paragraphMain={media.media_paragraph_main}
 										questionData={media.question_list}
 										translateScript={media.media_translate_script}
-									// selectedAnswers={selectedAnswers}
-									// onSelectedAnswer={setSelectedAnswer}
 									/>
 								)
 							)}

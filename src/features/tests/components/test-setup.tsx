@@ -7,12 +7,14 @@ import { Clock, BookOpen, Info } from 'lucide-react'
 import type { Test, Part } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
 import { TimePickerComponent } from './time-picker'
+import type { HistoryResponse } from '@/features/history/types/history'
 
 interface TestDetailProps {
 	currentTest: Test
+	saveHistoryData?: HistoryResponse 
 }
 
-const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
+const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData }) => {
 	const navigate = useNavigate();
 
 	const [isPracticeTest, setIsPracticeTest] = useState<boolean>(true)
@@ -34,7 +36,7 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 	const hasSelectedParts = isPracticeTest ? selectedPartIds.size > 0 : true
 
 	// Lấy danh sách các parts đã được chọn
-	const getSelectedPartIds = (): Part[] => {
+	const getSelectedParts = (): Part[] => {
 		if (isPracticeTest) {
 			return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
 		}
@@ -43,14 +45,15 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 
 	// Tính tổng số câu hỏi của các parts đã chọn
 	const getTotalQuestions = (): number => {
-		return getSelectedPartIds().reduce((total, part) => total + part.total_question, 0)
+		return getSelectedParts().reduce((total, part) => total + part.total_question, 0)
 	}
 
 	const handleStartTest = () => {
-		const selectedParts = getSelectedPartIds()
+		const selectedParts = getSelectedParts()
 		const testSetup = {
 			testId: String(currentTest.test_id),
-			selectedParts: selectedParts.map(p => p.part_id),
+			type: isPracticeTest ? "Practice" : "FullTest",
+			selectedPartIds: selectedParts.map(p => p.part_id),
 			timeLimit: isPracticeTest
 				? (timeLimit ? parseInt(timeLimit) : 0)
 				: currentTest.test_duration,
@@ -60,8 +63,33 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 			to: '/test/$testId/practice',
 			params: { testId: testSetup.testId },
 			search: {
-				selectedParts: testSetup.selectedParts,
+				type: isPracticeTest ? "Practice" : "FullTest",
+				selectedPartIds: testSetup.selectedPartIds,
 				timeLimit: testSetup.timeLimit,
+			}
+		})
+	}
+
+	const handleContinueTest = () => {
+		if (!saveHistoryData) return;
+
+		const saveTestSetup = {
+			testId: String(saveHistoryData.test_id),
+			selectedPartIds: saveHistoryData.part,
+			selectedAnswers: saveHistoryData.dataprogress,
+			timeLimit: isPracticeTest
+				? (timeLimit ? parseInt(timeLimit) : 0)
+				: currentTest.test_duration,
+		}
+
+		navigate({
+			to: '/test/$testId/practice',
+			params: { testId: saveTestSetup.testId },
+			search: {
+				type: saveHistoryData.type,
+				selectedPartIds: saveTestSetup.selectedPartIds.map(Number),
+				selectedAnswers: saveTestSetup.selectedAnswers,
+				timeLimit: saveTestSetup.timeLimit,
 			}
 		})
 	}
@@ -124,10 +152,6 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 						onClick={() => { handlePracticeToggle(false) }}>
 						Full test
 					</Button>
-					{/* <Button
-						className="px-6 border-border text-foreground hover:bg-secondary font-sans">
-						Answer
-					</Button> */}
 				</div>
 
 				{/* Main Content Section - Always maintain the same height */}
@@ -246,15 +270,27 @@ const TestSetupComponent: React.FC<TestDetailProps> = ({ currentTest }) => {
 				</section>
 
 				{/* Start Practice Button */}
-				<div className="flex justify-start">
+				<div className="flex justify-start gap-3">
 					<Button
 						size="lg"
-						className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 font-sans"
+						variant="default"
+						className="hover:bg-primary/80 text-primary-foreground px-8 cursor-pointer"
 						disabled={!hasSelectedParts}
 						onClick={handleStartTest}
 					>
 						Start {isPracticeTest ? 'Practice' : 'Full Test'}
 					</Button>
+
+					{saveHistoryData && (
+						<Button
+							size="lg"
+							variant="secondary"
+							className="hover:bg-primary/20 px-8 cursor-pointer"
+							onClick={handleContinueTest}
+						>
+							Continue Saved Test
+						</Button>
+					)}
 				</div>
 
 			</div>

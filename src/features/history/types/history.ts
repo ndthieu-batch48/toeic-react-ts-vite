@@ -13,7 +13,7 @@ export interface HistoryResponse {
 
 export interface HistoryCreateRequest {
   dataprogress: Record<string, string>;
-  type: "Practice" | "FullTest";
+  type: string;
   part: string[];
   time: number;
   test_id: number;

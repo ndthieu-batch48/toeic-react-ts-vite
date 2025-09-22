@@ -1,3 +1,4 @@
+import { useGetSaveHistoryProgress } from '@/features/history/hooks/useHistoryApi';
 import TestSetupComponent from '@/features/tests/components/test-setup'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
@@ -10,6 +11,7 @@ function TestSetupPage() {
 	const { testId } = Route.useParams();
 
 	const { status, data, isError, error } = useGetAllTests();
+	const { data: historyData } = useGetSaveHistoryProgress(Number(testId));
 
 
 	if (status === 'pending') {
@@ -32,10 +34,11 @@ function TestSetupPage() {
 
 	const currentTest = data.find(test => test.test_id === Number(testId));
 
-
 	return (
 		<>
-			<TestSetupComponent currentTest={currentTest!} />
+			<TestSetupComponent
+				currentTest={currentTest!}
+				saveHistoryData={historyData} />
 		</>
 	)
 }
