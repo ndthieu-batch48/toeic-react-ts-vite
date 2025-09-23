@@ -6,6 +6,7 @@ import type { Question } from '../types/test'
 import { MainParagraph } from './main-paragraph'
 import { TranslationCard } from './translation-card'
 import { useTestContext } from '../context/TestContext'
+import { useTranslationCard } from '../hooks/useTranslationCard'
 
 export interface QuestionCardProps {
 	paragraphMain: string
@@ -18,13 +19,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	translateScript,
 	questionData,
 }) => {
-	const {
-		selectedAnswers,
-		setSelectedAnswer
-	} = useTestContext()
 
 	const { question_id, question_number, question_content, answer_list } = questionData
-
+	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { 
+		translateScript: newTranslateScript, 
+		isTranslateCardExpanded, 
+		toggleTranslateCardExpanded, 
+		getSelectedLanguage, 
+		handleSelectLanguage,
+		handleManualTranslate,
+		isTranslating
+	} = useTranslationCard()
+	
 	// Check if paragraphMain contains an image
 	const hasImage = paragraphMain && paragraphMain.includes('<img')
 
@@ -53,19 +60,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 				</div>
 
 				<TranslationCard
-					translateScript={translateScript || ''}
-					selectedLanguage={''}
-					isExpanded={false} onToggle={function (): void {
-						throw new Error('Function not implemented.')
-					}}
-					onLanguageChange={function (lang: string): void {
-						console.log(lang);
-						throw new Error('Function not implemented.')
-					}}
+					translateScript={newTranslateScript[question_id]}
+					selectedLanguage={getSelectedLanguage(question_id)}
+					isExpanded={isTranslateCardExpanded(question_id)}
+					onToggle={() => toggleTranslateCardExpanded(question_id)}
+					onLanguageChange={(lang: string) => handleSelectLanguage(question_id, lang)}
+					onTranslate={() => handleManualTranslate(question_id)}
+					isTranslating={isTranslating}
+					questionId={question_id}
 				/>
 			</CardHeader>
-
-
 
 			<CardContent className="flex px-2 gap-4">
 				{hasImage && (

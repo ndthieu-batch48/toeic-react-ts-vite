@@ -1,5 +1,5 @@
 import { axiosBase } from "@/lib/axios";
-import type { Test } from "../types/test";
+import type { Test, TranslateQuestionRequest, TranslateQuestionResponse } from "../types/test";
 
 export const getAllTests = async (): Promise<Test[]> => {
   const url = 'tests/all';
@@ -12,3 +12,10 @@ export const getTestDetail = async (id: number): Promise<Test> => {
   const res = await axiosBase.get(url);
   return res.data;
 };
+
+
+export const geminiTranslateQuestion = async (request: TranslateQuestionRequest): Promise<TranslateQuestionResponse> => {
+  const url = 'gemini/translate/question';
+  const res = await axiosBase.post(url, request);
+  return res.data;
+}

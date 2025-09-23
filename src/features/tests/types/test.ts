@@ -41,4 +41,17 @@ export interface Test {
 }
 
 
+export interface TranslateQuestionResponse {
+  question_id: number;
+  question_content: string;
+  answer_list: string[];
+  language_id: number;
+}
+
+export interface TranslateQuestionRequest {
+  question_id: number;
+  language_id: number;
+}
+
+
 

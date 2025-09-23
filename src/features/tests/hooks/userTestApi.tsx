@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { getAllTests, getTestDetail } from "../services/testService"
+import { useQuery, useMutation } from "@tanstack/react-query"
+import { getAllTests, getTestDetail, geminiTranslateQuestion } from "../services/testService"
 
 export const useGetAllTests = () => {
 	return useQuery({
@@ -13,5 +13,11 @@ export const useGetTestDetail = (id: number) => {
 		queryKey: ['test', id],
 		queryFn: () => getTestDetail(id),
 		enabled: !!id,
+	});
+}
+
+export const useGeminiTranslateQuestion = () => {
+	return useMutation({
+		mutationFn: geminiTranslateQuestion,
 	});
 }

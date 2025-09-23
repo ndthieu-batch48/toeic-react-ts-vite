@@ -2,14 +2,18 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Globe, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import type { TranslateQuestionResponse } from '../types/test';
 
 type TranslationCardProps = {
-	translateScript?: string,
+	translateScript?: TranslateQuestionResponse,
 	isExpanded: boolean,
 	onToggle: () => void,
 	selectedLanguage: string,
-	onLanguageChange: (lang: string) => void
+	onLanguageChange: (lang: string) => void,
+	onTranslate: () => void,
+	isTranslating: boolean,
+	questionId: number,
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -17,20 +21,11 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 	isExpanded,
 	onToggle,
 	selectedLanguage = 'vi',
-	onLanguageChange
+	onLanguageChange,
+	onTranslate,
+	isTranslating,
+	questionId
 }) => {
-
-	// const getCurrentTranslation = () => {
-	// 	return question.translations?.[selectedLanguage] || question.translations?.['vi'];
-	// };
-
-	// const getLanguageName = (langCode) => {
-	// 	const languages = {
-	// 		vi: 'Vietnamese',
-	// 		ja: 'Japanese'
-	// 	};
-	// 	return languages[langCode] || 'Vietnamese';
-	// };
 
 	return (
 		<div className="space-y-4">
@@ -59,7 +54,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 								<div className="flex items-center gap-3">
 									<h4 className="text-sm font-semibold text-primary">Translation</h4>
 									<Select value={selectedLanguage} onValueChange={onLanguageChange}>
-										<SelectTrigger className="w-[140px] h-8">
+										<SelectTrigger className="w-[160px] h-8">
 											<SelectValue placeholder="Select language" />
 										</SelectTrigger>
 										<SelectContent>
@@ -69,11 +64,20 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 									</Select>
 								</div>
 								<Button
-									variant="ghost"
+									variant="default"
 									size="sm"
-									onClick={onToggle}
+									onClick={onTranslate}
+									disabled={isTranslating || !selectedLanguage}
+									className="ml-2"
 								>
-									<X className="h-4 w-4" />
+									{isTranslating ? (
+										<>
+											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+											Translating...
+										</>
+									) : (
+										'Translate'
+									)}
 								</Button>
 							</div>
 
@@ -81,23 +85,41 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 							<div className="space-y-3">
 								<div className="p-3 bg-background rounded-lg border">
-									{/* <p className="text-sm font-medium">{getCurrentTranslation()?.question_content}</p> */}
-									<p className="text-sm font-medium">{translateScript}</p>
-
+									{isTranslating ? (
+										<div className="flex items-center gap-2">
+											<div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+											<p className="text-sm text-muted-foreground">Translating question...</p>
+										</div>
+									) : translateScript?.question_content ? (
+										<p className="text-sm font-medium">{translateScript.question_content}</p>
+									) : (
+										<p className="text-sm text-muted-foreground">Select a language and click translate to see the translation</p>
+									)}
 								</div>
 
 								<div className="space-y-2">
 									<h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Answer Options</h5>
 									<div className="space-y-1">
-										<p className="text-sm font-medium">{translateScript}</p>
-
-										{/* {question.answer_list?.map((answer, idx) => (
-											<div key={idx} className="p-2 bg-background rounded border">
+										{isTranslating ? (
+											<div className="flex items-center gap-2 p-2 bg-background rounded border">
+												<div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+												<p className="text-xs text-muted-foreground">Translating answers...</p>
+											</div>
+										) : translateScript?.answer_list && translateScript.answer_list.length > 0 ? (
+											translateScript.answer_list.map((answer, idx) => (
+												<div key={idx} className="p-2 bg-background rounded border">
+													<p className="text-xs text-muted-foreground">
+														{answer}
+													</p>
+												</div>
+											))
+										) : (
+											<div className="p-2 bg-background rounded border">
 												<p className="text-xs text-muted-foreground">
-													<span className="font-medium text-primary">{String.fromCharCode(65 + idx)}.</span> {answer.translations?.[selectedLanguage]}
+													No translated answers available
 												</p>
 											</div>
-										))} */}
+										)}
 									</div>
 								</div>
 							</div>

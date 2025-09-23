@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
@@ -8,6 +7,7 @@ import { MainParagraph } from './main-paragraph'
 import type { Question } from '../types/test'
 import { TranslationCard } from './translation-card'
 import { useTestContext } from '../context/TestContext'
+import { useTranslationCard } from '../hooks/useTranslationCard'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
@@ -23,11 +23,9 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	questionData,
 }) => {
 
-	const {
-		selectedAnswers,
-		setSelectedAnswer
-	} = useTestContext()
-
+	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { isTranslateCardExpanded, toggleTranslateCardExpanded } = useTranslationCard()
+	
 	// Check if paragraphMain contains an image
 	const hasImage = paragraphMain && paragraphMain.includes('<img')
 
@@ -103,9 +101,8 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								<TranslationCard
 									translateScript={translateScript || ''}
 									selectedLanguage={''}
-									isExpanded={false} onToggle={function (): void {
-										throw new Error('Function not implemented.')
-									}}
+									isExpanded={isTranslateCardExpanded(question.question_id)}
+									onToggle={() => toggleTranslateCardExpanded(question.question_id)}
 									onLanguageChange={function (lang: string): void {
 										console.log(lang);
 										throw new Error('Function not implemented.')
