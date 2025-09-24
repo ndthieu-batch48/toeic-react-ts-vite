@@ -16,13 +16,13 @@ export const getSaveProgressHistory = async (testId: number): Promise<HistorySav
 };
 
 export const getHistoryResultList = async (): Promise<HistoryResultListResponse[]> => {
-  const url = 'history/result/list'
+  const url = 'history/v2/result/list'
   const response = await axiosJWT.get(url);
   return response.data;
 }
 
 export const getHistoryResultDetail = async (historyId: number): Promise<HistoryResultDetailResponse> => {
-  const url = 'history/result/detail'
+  const url = 'history/v2/result/detail'
   const response = await axiosJWT.get<HistoryResultDetailResponse>(url,
     { params: { history_id: historyId } },
   );

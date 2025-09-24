@@ -33,6 +33,7 @@ export interface HistoryResultDetailResponse {
   create_at: string;
   duration: number;
   dataprogress: Record<string, string>
+  part_list: string[];
 }
 
 export interface HistoryResultListResponse {

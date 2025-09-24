@@ -65,7 +65,6 @@ export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyRes
 									search={{
 										isFailed: isFailed,
 										belongToTestId: String(history.test_id),
-										hasPartIdList: history.part_list.map(part => Number(part)),
 									}}
 								>
 									View Details Result

@@ -7,15 +7,15 @@ import type { HistoryResultDetailResponse } from '../types/history';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 
-type DetailResultProps = {
+type ResultPageProps = {
+	historyId: string
 	detailResult: HistoryResultDetailResponse;
 	belongToTestId: string
 	hasPartIdList: number[]
 	isFailed: boolean;
 };
 
-const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed, belongToTestId, hasPartIdList }) => {
-	// Convert duration from seconds to minutes
+const ResultPage: React.FC<ResultPageProps> = ({ historyId, detailResult, isFailed, belongToTestId }) => {
 	const durationMinutes = Math.floor(detailResult.duration / 60);
 	const durationSeconds = detailResult.duration % 60;
 
@@ -231,13 +231,11 @@ const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed, bel
 					asChild
 				>
 					<Link
-						to='/test/$testId/practice'
-						params={{ testId: belongToTestId }}
+						to='/history/$historyId/solution'
+						params={{ historyId: historyId  }}
 						search={{
-							selectedPartIds: hasPartIdList,
-							selectedAnswers: detailResult.dataprogress,
-							timeLimit: 0,
-							type: ''
+							belongToTestId: belongToTestId,
+							isFailed: isFailed,
 						}}
 					>
 						<Eye className="h-5 w-5 mr-2" />
@@ -250,4 +248,4 @@ const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed, bel
 	);
 };
 
-export default DetailResult;
+export default ResultPage;

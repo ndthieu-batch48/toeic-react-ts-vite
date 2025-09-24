@@ -51,7 +51,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 											isActive
 												? "bg-primary text-primary-foreground"
 												: isAnswered
-													? "bg-green-500 text-white hover:bg-green-600"
+													? "bg-constructive text-white hover:bg-constructive/30"
 													: "bg-muted hover:bg-primary/20 text-muted-foreground"
 										)}
 										key={`${mediaIndex}-${questionIndex}`}

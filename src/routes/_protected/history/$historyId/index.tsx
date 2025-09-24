@@ -1,4 +1,4 @@
-import DetailResult from '@/features/history/components/detail-result'
+import ResultPage from '@/features/history/pages/result-page'
 import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -7,17 +7,16 @@ import z from 'zod';
 const searchSchema = z.object({
 	isFailed: z.boolean(),
 	belongToTestId: z.string(),
-	hasPartIdList: z.array(z.number()),
 })
 
-export const Route = createFileRoute('/_protected/history/$historyId')({
+export const Route = createFileRoute('/_protected/history/$historyId/')({
 	validateSearch: searchSchema,
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const { historyId } = Route.useParams();
-	const { isFailed, belongToTestId, hasPartIdList } = Route.useSearch();
+	const { isFailed, belongToTestId } = Route.useSearch();
 
 	const { data: historyResultDetail, status, isError, error } = useGetHistoryResultDetail(Number(historyId));
 
@@ -41,11 +40,13 @@ function RouteComponent() {
 
 	return (
 		<div>
-			<DetailResult
+			<ResultPage
 				isFailed={isFailed}
-				detailResult={historyResultDetail}
+				historyId={historyId}
 				belongToTestId={belongToTestId}
-				hasPartIdList={hasPartIdList} />
+				detailResult={historyResultDetail}
+				hasPartIdList={historyResultDetail.part_list.map(part => Number(part))}
+			/>
 		</div>
 
 

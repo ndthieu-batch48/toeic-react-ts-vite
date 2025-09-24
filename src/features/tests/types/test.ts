@@ -19,7 +19,7 @@ export interface MediaQuestion {
   media_audio_script: string;
   media_paragraph_main: string;
   media_explain_question: string;
-  media_translate_script: string;
+  media_translate_script: TranslateQuestionResponse;
   question_list: Question[]
 }
 

@@ -15,7 +15,7 @@ type TestPracticeProps = {
 	partData: Part[],
 }
 
-export const TestPractice: React.FC<TestPracticeProps> = ({ testId, testTitle, testDuration, partData }) => {
+export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDuration, partData }) => {
 
 	return (
 		<>
@@ -26,13 +26,11 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testId, testTitle, t
 					variant="outline"
 					asChild>
 					<Link
-						to="/test/$testId"
-						params={{
-							testId: String(testId) 
-						}}
-						replace={true}
+							to=".."
+							replace={true}
 					>
-						Exit</Link>
+						Exit
+					</Link>
 				</Button>
 			</div>
 
@@ -45,8 +43,7 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testId, testTitle, t
 				<div className="flex flex-col gap-3 md:sticky md:top-32 self-start md:w-80 h-150">
 					<CreateSubmit />
 					<CountDownTimer className="mb-1 h-20" duration={testDuration} />
-					<QuestionTab partData={partData}>
-					</QuestionTab>
+					<QuestionTab partData={partData}></QuestionTab>
 				</div>
 
 			</div>

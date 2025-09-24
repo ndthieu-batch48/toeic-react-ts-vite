@@ -44,7 +44,7 @@ export function LandingCarousel() {
 	}, [api])
 
 	return (
-		<div className="w-full font-sans">
+		<div className="w-full">
 			<Carousel
 				setApi={setApi}
 				className="w-full"
@@ -66,7 +66,7 @@ export function LandingCarousel() {
 											<h3 className="text-4xl font-bold leading-tight font-serif">
 												{item.title}
 											</h3>
-											<p className="text-xl opacity-90 leading-relaxed max-w-2xl font-sans">
+											<p className="text-xl opacity-90 leading-relaxed max-w-2xl ">
 												{item.subtitle}
 											</p>
 										</div>
