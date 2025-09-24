@@ -34,7 +34,7 @@ function TestPracticePage() {
 			...part,
 			media_list: part.media_list ? mediaQuestionSorter(part.media_list) : []
 		}))
-	
+
 	const initialActive = (() => {
 		const part = sortedParts[0]
 		const questionId = part?.media_list?.[0]?.question_list?.[0]?.question_id ?? 0
@@ -58,7 +58,7 @@ function TestPracticePage() {
 				testTitle={testData!.test_title || "TMA TOEIC"}
 				partData={sortedParts}
 				testDuration={timeLimit}
-			/>	
+			/>
 		</TestProvider>
 	)
 }

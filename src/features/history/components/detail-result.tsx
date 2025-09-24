@@ -5,13 +5,16 @@ import { Separator } from '@/components/ui/separator';
 import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye } from 'lucide-react';
 import type { HistoryResultDetailResponse } from '../types/history';
 import { Button } from '@/components/ui/button';
+import { Link } from '@tanstack/react-router';
 
 type DetailResultProps = {
 	detailResult: HistoryResultDetailResponse;
+	belongToTestId: string
+	hasPartIdList: number[]
 	isFailed: boolean;
 };
 
-const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed }) => {
+const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed, belongToTestId, hasPartIdList }) => {
 	// Convert duration from seconds to minutes
 	const durationMinutes = Math.floor(detailResult.duration / 60);
 	const durationSeconds = detailResult.duration % 60;
@@ -225,9 +228,21 @@ const DetailResult: React.FC<DetailResultProps> = ({ detailResult, isFailed }) =
 				<Button
 					className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-lg font-semibold"
 					size="lg"
+					asChild
 				>
-					<Eye className="h-5 w-5 mr-2" />
-					View Detail Solution
+					<Link
+						to='/test/$testId/practice'
+						params={{ testId: belongToTestId }}
+						search={{
+							selectedPartIds: hasPartIdList,
+							selectedAnswers: detailResult.dataprogress,
+							timeLimit: 0,
+							type: ''
+						}}
+					>
+						<Eye className="h-5 w-5 mr-2" />
+						View Detail Solution
+					</Link>
 				</Button>
 			</div>
 

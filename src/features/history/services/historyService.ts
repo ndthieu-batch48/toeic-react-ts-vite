@@ -1,5 +1,5 @@
 import { axiosJWT } from "@/lib/axios";
-import type { HistoryCreateRequest, HistoryResponse, HistoryResultDetailResponse, HistoryResultListResponse, } from "../types/history";
+import type { HistoryCreateRequest, HistoryResponse as HistorySaveProgressResponse, HistoryResultDetailResponse, HistoryResultListResponse, } from "../types/history";
 
 export const createHistory = async (request: HistoryCreateRequest) => {
   const url = 'history'
@@ -7,9 +7,9 @@ export const createHistory = async (request: HistoryCreateRequest) => {
   return response.data;
 }
 
-export const getSaveProgressHistory = async (testId: number): Promise<HistoryResponse> => {
+export const getSaveProgressHistory = async (testId: number): Promise<HistorySaveProgressResponse> => {
   const url = 'history/save';
-  const response = await axiosJWT.get<HistoryResponse>(url, {
+  const response = await axiosJWT.get<HistorySaveProgressResponse>(url, {
     params: { test_id: testId },
   });
   return response.data;

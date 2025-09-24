@@ -6,6 +6,8 @@ import z from 'zod';
 
 const searchSchema = z.object({
 	isFailed: z.boolean(),
+	belongToTestId: z.string(),
+	hasPartIdList: z.array(z.number()),
 })
 
 export const Route = createFileRoute('/_protected/history/$historyId')({
@@ -15,7 +17,7 @@ export const Route = createFileRoute('/_protected/history/$historyId')({
 
 function RouteComponent() {
 	const { historyId } = Route.useParams();
-	const { isFailed } = Route.useSearch();
+	const { isFailed, belongToTestId, hasPartIdList } = Route.useSearch();
 
 	const { data: historyResultDetail, status, isError, error } = useGetHistoryResultDetail(Number(historyId));
 
@@ -39,7 +41,11 @@ function RouteComponent() {
 
 	return (
 		<div>
-			<DetailResult detailResult={historyResultDetail} isFailed={isFailed} />
+			<DetailResult
+				isFailed={isFailed}
+				detailResult={historyResultDetail}
+				belongToTestId={belongToTestId}
+				hasPartIdList={hasPartIdList} />
 		</div>
 
 

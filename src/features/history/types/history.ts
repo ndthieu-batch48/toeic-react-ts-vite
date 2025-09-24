@@ -32,6 +32,7 @@ export interface HistoryResultDetailResponse {
   accuracy: number;
   create_at: string;
   duration: number;
+  dataprogress: Record<string, string>
 }
 
 export interface HistoryResultListResponse {

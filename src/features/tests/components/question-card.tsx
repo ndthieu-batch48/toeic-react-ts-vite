@@ -2,15 +2,16 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import type { Question } from '../types/test'
+import type { Question, TranslateQuestionResponse } from '../types/test'
 import { MainParagraph } from './main-paragraph'
 import { TranslationCard } from './translation-card'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
+import type { LANGUAGE_ID } from '../constants/const'
 
 export interface QuestionCardProps {
 	paragraphMain: string
-	translateScript?: string
+	translateScript?: TranslateQuestionResponse
 	questionData: Question,
 }
 
@@ -22,16 +23,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	const { question_id, question_number, question_content, answer_list } = questionData
 	const { selectedAnswers, setSelectedAnswer } = useTestContext()
-	const { 
-		translateScript: newTranslateScript, 
-		isTranslateCardExpanded, 
-		toggleTranslateCardExpanded, 
-		getSelectedLanguage, 
+	const {
+		translateScript: newTranslateScript,
+		isTranslateCardExpanded,
+		toggleTranslateCardExpanded,
+		getSelectedLanguage,
 		handleSelectLanguage,
-		handleManualTranslate,
-		isTranslating
+		handleTranslation,
+		isTranslatePending,
+		isTranslateError
 	} = useTranslationCard()
-	
+
 	// Check if paragraphMain contains an image
 	const hasImage = paragraphMain && paragraphMain.includes('<img')
 
@@ -64,10 +66,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 					selectedLanguage={getSelectedLanguage(question_id)}
 					isExpanded={isTranslateCardExpanded(question_id)}
 					onToggle={() => toggleTranslateCardExpanded(question_id)}
-					onLanguageChange={(lang: string) => handleSelectLanguage(question_id, lang)}
-					onTranslate={() => handleManualTranslate(question_id)}
-					isTranslating={isTranslating}
-					questionId={question_id}
+					onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question_id, lang)}
+					onTranslate={() => handleTranslation(question_id)}
+					isTranslatePending={isTranslatePending}
+					isTranslateError={isTranslateError}
 				/>
 			</CardHeader>
 

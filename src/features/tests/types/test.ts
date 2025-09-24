@@ -1,3 +1,5 @@
+import type { LANGUAGE_ID } from "../constants/const";
+
 export interface Answer {
   answer_id: number;
   content: string;
@@ -45,12 +47,12 @@ export interface TranslateQuestionResponse {
   question_id: number;
   question_content: string;
   answer_list: string[];
-  language_id: number;
+  language_id: LANGUAGE_ID;
 }
 
 export interface TranslateQuestionRequest {
   question_id: number;
-  language_id: number;
+  language_id: LANGUAGE_ID;
 }
 
 

@@ -62,7 +62,11 @@ export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyRes
 								asChild>
 								<Link to="/history/$historyId"
 									params={{ historyId: String(history.history_id) }}
-									search={{ isFailed: isFailed }}
+									search={{
+										isFailed: isFailed,
+										belongToTestId: String(history.test_id),
+										hasPartIdList: history.part_list.map(part => Number(part)),
+									}}
 								>
 									View Details Result
 								</Link>

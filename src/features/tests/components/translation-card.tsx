@@ -4,16 +4,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Globe, ChevronDown, ChevronUp } from 'lucide-react';
 import type { TranslateQuestionResponse } from '../types/test';
+import { LANGUAGE_MAP, type LANGUAGE_ID } from '../constants/const';
 
 type TranslationCardProps = {
 	translateScript?: TranslateQuestionResponse,
 	isExpanded: boolean,
 	onToggle: () => void,
-	selectedLanguage: string,
-	onLanguageChange: (lang: string) => void,
+	selectedLanguage: LANGUAGE_ID,
+	onLanguageChange: (lang: LANGUAGE_ID) => void,
 	onTranslate: () => void,
-	isTranslating: boolean,
-	questionId: number,
+	isTranslatePending: boolean,
+	isTranslateError: boolean,
 }
 
 export const TranslationCard: React.FC<TranslationCardProps> = ({
@@ -23,8 +24,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 	selectedLanguage = 'vi',
 	onLanguageChange,
 	onTranslate,
-	isTranslating,
-	questionId
+	isTranslatePending,
+	isTranslateError,
 }) => {
 
 	return (
@@ -58,8 +59,11 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 											<SelectValue placeholder="Select language" />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="vi">🇻🇳 Vietnamese</SelectItem>
-											<SelectItem value="ja">🇯🇵 Japanese</SelectItem>
+											{Object.entries(LANGUAGE_MAP).map(([langId, langName]) => (
+												<SelectItem key={langId} value={langId}>
+													{langName}
+												</SelectItem>
+											))}
 										</SelectContent>
 									</Select>
 								</div>
@@ -67,10 +71,10 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 									variant="default"
 									size="sm"
 									onClick={onTranslate}
-									disabled={isTranslating || !selectedLanguage}
+									disabled={isTranslatePending || !selectedLanguage}
 									className="ml-2"
 								>
-									{isTranslating ? (
+									{isTranslatePending ? (
 										<>
 											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
 											Translating...
@@ -85,7 +89,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 							<div className="space-y-3">
 								<div className="p-3 bg-background rounded-lg border">
-									{isTranslating ? (
+									{isTranslatePending ? (
 										<div className="flex items-center gap-2">
 											<div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
 											<p className="text-sm text-muted-foreground">Translating question...</p>
@@ -100,7 +104,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 								<div className="space-y-2">
 									<h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Answer Options</h5>
 									<div className="space-y-1">
-										{isTranslating ? (
+										{isTranslatePending ? (
 											<div className="flex items-center gap-2 p-2 bg-background rounded border">
 												<div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
 												<p className="text-xs text-muted-foreground">Translating answers...</p>

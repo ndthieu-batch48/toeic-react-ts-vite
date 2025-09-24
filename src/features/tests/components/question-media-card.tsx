@@ -4,15 +4,16 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { MainParagraph } from './main-paragraph'
-import type { Question } from '../types/test'
+import type { Question, TranslateQuestionResponse } from '../types/test'
 import { TranslationCard } from './translation-card'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
+import type { LANGUAGE_ID } from '../constants/const'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
-	translateScript?: string
+	translateScript?: TranslateQuestionResponse
 	questionData: Question[],
 }
 
@@ -24,8 +25,17 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 }) => {
 
 	const { selectedAnswers, setSelectedAnswer } = useTestContext()
-	const { isTranslateCardExpanded, toggleTranslateCardExpanded } = useTranslationCard()
-	
+	const {
+		translateScript: newTranslateScript,
+		isTranslateCardExpanded,
+		toggleTranslateCardExpanded,
+		getSelectedLanguage,
+		handleSelectLanguage,
+		handleTranslation,
+		isTranslatePending,
+		isTranslateError
+	} = useTranslationCard()
+
 	// Check if paragraphMain contains an image
 	const hasImage = paragraphMain && paragraphMain.includes('<img')
 
@@ -70,18 +80,18 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				</Badge>
 			</CardHeader>
 
-			<CardContent className="flex gap-6">
+			<CardContent className="flex flex-col md:flex-row gap-6">
 				{hasImage && (
 					<>
 						{/* Left side - Main Paragraph */}
-						<div className="w-2/3 flex-shrink-0">
+						<div className="w-full md:w-2/3 flex-shrink-0">
 							<MainParagraph paragraphMain={paragraphMain} />
 						</div>
 					</>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasImage ? 'w-1/3' : 'w-full'}`}>
+				<div className={`space-y-6 w-full ${hasImage ? 'md:w-1/3' : ''}`}>
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
 
@@ -99,14 +109,14 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								</div>
 
 								<TranslationCard
-									translateScript={translateScript || ''}
-									selectedLanguage={''}
+									translateScript={newTranslateScript[question.question_id]}
+									selectedLanguage={getSelectedLanguage(question.question_id)}
 									isExpanded={isTranslateCardExpanded(question.question_id)}
 									onToggle={() => toggleTranslateCardExpanded(question.question_id)}
-									onLanguageChange={function (lang: string): void {
-										console.log(lang);
-										throw new Error('Function not implemented.')
-									}}
+									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.question_id, lang)}
+									onTranslate={() => handleTranslation(question.question_id)}
+									isTranslatePending={isTranslatePending}
+									isTranslateError={isTranslateError}
 								/>
 
 								<div className="mt-3">
