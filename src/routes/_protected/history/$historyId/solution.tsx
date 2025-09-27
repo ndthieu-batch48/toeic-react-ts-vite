@@ -1,44 +1,36 @@
-import { SolutionPage } from '@/features/history/pages/solution-page';
-import { SolutionProvider ,type SolutionState } from '@/features/history/context/SolutionContext';
+import { SolutionPage } from '@/features/history/pages/SolutionPage';
+import { SolutionProvider, type SolutionState } from '@/features/history/context/SolutionContext';
 import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
-import z from 'zod'
 import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
 
-const searchSchema = z.object({
-	belongToTestId: z.string(),
-	isFailed: z.boolean(),
-})
-
 export const Route = createFileRoute('/_protected/history/$historyId/solution')({
-		validateSearch: searchSchema,
-    component: SolutionRoute,
-  })
+	component: SolutionRoute,
+})
 
 function SolutionRoute() {
 	const { historyId } = Route.useParams();
-	const { belongToTestId, isFailed } = Route.useSearch();
 	const { data: historyData, isLoading: historyLoading, error: historyError } = useGetHistoryResultDetail(Number(historyId))
-	const { data: testData, isLoading: testLoading, error: testError } = useGetTestDetail(Number(belongToTestId));
-	
+	const { data: testData, isLoading: testLoading, error: testError } = useGetTestDetail(Number(historyData?.test_id));
+
 	// Show loading if either request is loading
 	if (historyLoading || testLoading) {
-		return <div className="text-center text-foreground font-sans">Loading...</div>;
+		return <div className="text-center text-foreground">Loading...</div>;
 	}
-	
+
 	// Show error if either request has an error
 	if (historyError) {
-		return <div className="text-center text-destructive font-sans">Error loading history: {historyError.message}</div>;
+		return <div className="text-center text-destructive">Error loading history: {historyError.message}</div>;
 	}
-	
+
 	if (testError) {
-		return <div className="text-center text-destructive font-sans">Error loading test: {testError.message}</div>;
+		return <div className="text-center text-destructive">Error loading test: {testError.message}</div>;
 	}
 
 	// Check if data exists
 	if (!historyData || !testData) {
-		return <div className="text-center text-foreground font-sans">No data available</div>;
+		return <div className="text-center text-foreground">No data available</div>;
 	}
 
 	const selectedPartIds = historyData.part_list.map((part) => Number(part))
@@ -53,7 +45,7 @@ function SolutionRoute() {
 
 	// Check if sortedParts is empty
 	if (sortedParts.length === 0) {
-		return <div className="text-center text-foreground font-sans">No test parts found</div>;
+		return <div className="text-center text-foreground">No test parts found</div>;
 	}
 
 	const initialActive = (() => {
@@ -63,7 +55,7 @@ function SolutionRoute() {
 	})()
 
 	const initialState: SolutionState = {
-		testId: Number(belongToTestId),
+		testId: historyData.test_id,
 		activePart: initialActive.part_id,
 		activeQuestion: initialActive,
 		selectedAnswers: historyData.dataprogress ?? {},
@@ -73,9 +65,8 @@ function SolutionRoute() {
 	return (
 		<SolutionProvider initialState={initialState}>
 			<SolutionPage
-				testTitle={testData.test_title}
+				detailHistory={historyData}
 				partData={sortedParts}
-				isFailed={isFailed}
 			/>
 		</SolutionProvider>
 	)

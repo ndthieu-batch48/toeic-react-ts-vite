@@ -1,13 +1,13 @@
 import { useGetSaveHistoryProgress } from '@/features/history/hooks/useHistoryApi';
-import TestSetupComponent from '@/features/tests/components/test-setup'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi';
+import TestSetupPage from '@/features/tests/pages/TestSetupPage';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/test/$testId/')({
-	component: TestSetupPage,
+	component: TestSetupRoute,
 })
 
-function TestSetupPage() {
+function TestSetupRoute() {
 	const { testId } = Route.useParams();
 
 	const { status, data, isError, error } = useGetAllTests();
@@ -16,7 +16,7 @@ function TestSetupPage() {
 
 	if (status === 'pending') {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-foreground">Loading tests...</div>
 			</div>
 		)
@@ -24,7 +24,7 @@ function TestSetupPage() {
 
 	if (isError) {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-destructive">
 					Error loading tests: {error?.message}
 				</div>
@@ -36,7 +36,7 @@ function TestSetupPage() {
 
 	return (
 		<>
-			<TestSetupComponent
+			<TestSetupPage
 				currentTest={currentTest!}
 				saveHistoryData={historyData} />
 		</>

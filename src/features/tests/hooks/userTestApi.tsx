@@ -5,7 +5,13 @@ export const useGetAllTests = () => {
 	return useQuery({
 		queryKey: ['tests'],
 		queryFn: getAllTests,
+
 	});
+};
+
+export const getAllTestsQuery = {
+	queryKey: ['tests'],
+	queryFn: getAllTests,
 };
 
 export const useGetTestDetail = (id: number) => {

@@ -1,15 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { LandingMainContent } from '@/features/landing/component/main-content'
+import { LandingPage } from '@/features/landing/pages/LandingPage'
 
 export const Route = createFileRoute('/')({
-	component: LandingComponent,
+	component: LandingRoute,
 })
 
-
-export default function LandingComponent() {
+export default function LandingRoute() {
 	return (
-		<div className="bg-primary-foreground">
-			<LandingMainContent />
+		<div className="bg-background">
+			<LandingPage />
 		</div>
 	)
 }

@@ -1,28 +1,19 @@
-import ResultPage from '@/features/history/pages/result-page'
+import ResultPage from '@/features/history/pages/ResultPage'
 import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
 import { createFileRoute } from '@tanstack/react-router'
 
-import z from 'zod';
-
-const searchSchema = z.object({
-	isFailed: z.boolean(),
-	belongToTestId: z.string(),
-})
-
 export const Route = createFileRoute('/_protected/history/$historyId/')({
-	validateSearch: searchSchema,
-	component: RouteComponent,
+	component: ResultRoute,
 })
 
-function RouteComponent() {
+function ResultRoute() {
 	const { historyId } = Route.useParams();
-	const { isFailed, belongToTestId } = Route.useSearch();
 
 	const { data: historyResultDetail, status, isError, error } = useGetHistoryResultDetail(Number(historyId));
 
 	if (status === 'pending') {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-foreground">Loading history detail...</div>
 			</div>
 		)
@@ -30,7 +21,7 @@ function RouteComponent() {
 
 	if (isError) {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-destructive">
 					Error loading history detail: {error?.message}
 				</div>
@@ -40,15 +31,7 @@ function RouteComponent() {
 
 	return (
 		<div>
-			<ResultPage
-				isFailed={isFailed}
-				historyId={historyId}
-				belongToTestId={belongToTestId}
-				detailResult={historyResultDetail}
-				hasPartIdList={historyResultDetail.part_list.map(part => Number(part))}
-			/>
+			<ResultPage detailResult={historyResultDetail} />
 		</div>
-
-
 	)
 }

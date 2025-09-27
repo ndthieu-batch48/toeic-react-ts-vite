@@ -1,5 +1,5 @@
 import { axiosBase } from '@/lib/axios';
-import type { LoginRequest, UserResponse, RegisterRequest, RegisterResponse, OtpRequest, OtpVerifyRequest, ResetPassswordRequest } from '../types/user';
+import type { LoginRequest, UserResponse, RegisterRequest, RegisterResponse, OtpRequest, OtpVerifyRequest, ResetPassswordRequest } from '../types/authType';
 
 export const login = async (request: LoginRequest): Promise<UserResponse> => {
   const url = 'auth/login';

@@ -1,5 +1,5 @@
 import { refreshTokenService } from '@/features/auth/services/authService';
-import type { UserResponse } from '@/features/auth/types/user';
+import type { UserResponse } from '@/features/auth/types/authType';
 import { clearUserSession, getUserSession, saveUserSession } from '@/features/auth/helper/authHelper';
 import { isTokenExpired } from '@/utils/jwtUtil';
 import * as React from 'react'

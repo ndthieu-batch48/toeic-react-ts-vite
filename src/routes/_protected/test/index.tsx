@@ -1,16 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Separator } from '@/components/ui/separator'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi'
-import { AllTestsSection } from '@/features/tests/components/all-tests-section'
-import { AllHistorySection } from '@/features/history/components/all-history-section'
 import { useGetHistoryResultList } from '@/features/history/hooks/useHistoryApi'
+import { TestDashBoardPage } from '@/features/tests/pages/TestDashBoardPage'
 
 export const Route = createFileRoute('/_protected/test/')({
-	component: TestDashBoardComponent,
+	component: TestDashBoardRoute,
 })
 
-
-function TestDashBoardComponent() {
+function TestDashBoardRoute() {
 	const {
 		status: testsStatus,
 		data: testData,
@@ -27,7 +24,7 @@ function TestDashBoardComponent() {
 
 	if (testsStatus === 'pending' || historyStatus === 'pending') {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-foreground">Loading...</div>
 			</div>
 		)
@@ -35,7 +32,7 @@ function TestDashBoardComponent() {
 
 	if (isTestsError) {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-destructive">
 					Error loading tests: {testsError?.message}
 				</div>
@@ -45,7 +42,7 @@ function TestDashBoardComponent() {
 
 	if (isHistoryError) {
 		return (
-			<div className="container mx-auto p-6 font-sans">
+			<div className="container mx-auto p-6">
 				<div className="text-center text-destructive">
 					Error loading history: {historyError?.message}
 				</div>
@@ -53,16 +50,7 @@ function TestDashBoardComponent() {
 		)
 	}
 
-
 	return (
-		<div className="container mx-auto p-6 space-y-8 font-sans bg-background">
-			<Separator className="my-8 border-border" />
-
-			<AllTestsSection availableTests={testData || []} />
-
-			<Separator className="my-8 border-border" />
-
-			<AllHistorySection historyResultList={historyData || []} />
-		</div>
+		<TestDashBoardPage testData={testData} historyData={historyData} />
 	)
 }

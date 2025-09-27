@@ -22,27 +22,30 @@ export interface HistoryCreateRequest {
 }
 
 export interface HistoryResultDetailResponse {
-  total_question: number;
+  history_id: number;
+  test_id: number;
   test_type: string;
+  test_name: string;
   correct_count: number;
   incorrect_count: number;
   correct_listening: number;
   correct_reading: number;
   no_answer: number;
+  total_question: number;
   accuracy: number;
-  create_at: string;
   duration: number;
+  create_at: string;
   dataprogress: Record<string, string>
   part_list: string[];
 }
 
 export interface HistoryResultListResponse {
   history_id: number;
+  score: string;
   test_id: number;
   test_type: string;
-  create_at: string;
+  test_name: string;
   duration: number;
-  testname: string;
-  score: string;
   part_list: string[];
+  create_at: string;
 }

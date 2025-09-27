@@ -1,4 +1,4 @@
-import { TestPractice } from '@/features/tests/components/test-practice';
+import { TestPractice } from '@/features/tests/pages/TestPracticePage';
 import { TestProvider, type TestState } from '@/features/tests/context/TestContext';
 import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
@@ -23,8 +23,8 @@ function TestPracticePage() {
 	const { selectedAnswers, selectedPartIds, timeLimit, type } = Route.useSearch();
 	const { data: testData, isLoading, error } = useGetTestDetail(Number(testId));
 
-	if (isLoading) return <div className="text-center text-foreground font-sans">Loading...</div>;
-	if (error) return <div className="text-center text-destructive font-sans">Error: {error.message}</div>;
+	if (isLoading) return <div className="text-center text-foreground">Loading...</div>;
+	if (error) return <div className="text-center text-destructive">Error: {error.message}</div>;
 
 
 	// Filter parts based on selectedPartIds, then sort the media_list
