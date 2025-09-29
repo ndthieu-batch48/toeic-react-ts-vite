@@ -13,7 +13,6 @@ function TestSetupRoute() {
 	const { status, data, isError, error } = useGetAllTests();
 	const { data: historyData } = useGetSaveHistoryProgress(Number(testId));
 
-
 	if (status === 'pending') {
 		return (
 			<div className="container mx-auto p-6">

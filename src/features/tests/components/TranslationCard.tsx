@@ -36,13 +36,13 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 				variant="outline"
 				size="sm"
 				onClick={onToggle}
-				className="flex items-center gap-2"
+				className="flex items-center gap-2 text-base"
 			>
-				<Globe className="h-4 w-4" />
+				<Globe/>
 				Translate
 				{isExpanded ?
-					<ChevronUp className="h-4 w-4" /> :
-					<ChevronDown className="h-4 w-4" />
+					<ChevronUp/> :
+					<ChevronDown/>
 				}
 			</Button>
 
@@ -53,7 +53,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 						<div className="space-y-4">
 							<div className="flex items-center justify-between">
 								<div className="flex items-center gap-3">
-									<h4 className="text-sm font-semibold text-primary">Translation</h4>
+									<h4 className="text-base font-semibold text-primary">Translation</h4>
 									<Select value={selectedLanguage} onValueChange={onLanguageChange}>
 										<SelectTrigger className="w-[160px] h-8">
 											<SelectValue placeholder="Select language" />
@@ -72,11 +72,11 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 									size="sm"
 									onClick={onTranslate}
 									disabled={isTranslatePending || !selectedLanguage}
-									className="ml-2"
+									className="ml-2 font-bold text-base"
 								>
 									{isTranslatePending ? (
 										<>
-											<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+											<div className="w-4 h-4 border-2 rounded-2xl animate-spin mr-2" />
 											Translating...
 										</>
 									) : (
@@ -91,28 +91,28 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 								<div className="p-3 bg-background rounded-lg border">
 									{isTranslatePending ? (
 										<div className="flex items-center gap-2">
-											<div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-											<p className="text-sm text-muted-foreground">Translating question...</p>
+											<div className="w-4 h-4 border border-primary border-t-transparent rounded-2xl animate-spin" />
+											<p className="text-base">Translating question...</p>
 										</div>
 									) : translateScript?.question_content ? (
-										<p className="text-sm font-medium">{translateScript.question_content}</p>
+										<p className="text-lg font-medium">{translateScript.question_content}</p>
 									) : (
-										<p className="text-sm text-muted-foreground">Select a language and click translate to see the translation</p>
+										<p className="text-lg font-medium">Select a language and click translate to see the translation</p>
 									)}
 								</div>
 
 								<div className="space-y-2">
-									<h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Answer Options</h5>
+									<h5 className="text-sm font-semibold text-muted-foreground uppercase">Answer Options</h5>
 									<div className="space-y-1">
 										{isTranslatePending ? (
 											<div className="flex items-center gap-2 p-2 bg-background rounded border">
-												<div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-												<p className="text-xs text-muted-foreground">Translating answers...</p>
+												<div className="w-3 h-3 border border-primary border-t-transparent rounded-2xl animate-spin" />
+												<p className="text-base text-muted-foreground">Translating answers...</p>
 											</div>
 										) : translateScript?.answer_list && translateScript.answer_list.length > 0 ? (
 											translateScript.answer_list.map((answer, idx) => (
 												<div key={idx} className="p-2 bg-background rounded border">
-													<p className="text-xs text-muted-foreground">
+													<p className="text-base">
 														{answer}
 													</p>
 												</div>

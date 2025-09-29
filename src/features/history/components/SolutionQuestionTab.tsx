@@ -25,7 +25,7 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 	}
 
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean | undefined, isSelected: boolean) => {
-		const baseClass = "flex items-center border border-border justify-center min-w-[37px] h-10 rounded-full text-sm font-medium cursor-pointer";
+		const baseClass = "flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-sm font-medium cursor-pointer";
 		const correctBorder = `${baseClass} bg-positive/30 border-positive/30`
 		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30`
 
@@ -58,8 +58,6 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 								const selectedAnswer = isSelected
 									? question.answer_list.find(answer => String(answer.answer_id) === String(answerId))
 									: undefined
-
-								console.log('Question:', question.question_number, 'AnswerId:', answerId, 'Selected Answer:', selectedAnswer, 'Is Correct:', selectedAnswer?.is_correct)
 
 								return (
 									<Label

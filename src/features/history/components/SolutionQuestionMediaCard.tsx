@@ -93,7 +93,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 					<>
 						{/* Left side - Main Paragraph */}
 						<div className="w-full md:w-2/3 flex-shrink-0">
-							<MainParagraph paragraphMain={paragraphMain} />
+							<MainParagraph mainParagraph={paragraphMain} />
 						</div>
 					</>
 				)}

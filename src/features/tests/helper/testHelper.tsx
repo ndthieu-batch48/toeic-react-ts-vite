@@ -12,3 +12,18 @@ export const mediaQuestionSorter = (mediaQuestion: MediaQuestion[]) => {
 		return aNumber - bNumber
 	})
 }
+
+export const isMainParagraphHasContent = (mainParagraph: string): boolean => {
+	if (!mainParagraph || mainParagraph.trim() === '') {
+		return false;
+	}
+
+	// Check if content is just a paragraph with number ranges or single numbers
+	// Pattern matches: <p>number</p>, <p>number-number</p>, <p>number - number</p>, etc.
+	const numberRangePattern = /^<p>\s*\d+(\s*-\s*\d+)?\s*<\/p>$/i;
+	if (numberRangePattern.test(mainParagraph.trim())) {
+		return false;
+	}
+
+	return true;
+}

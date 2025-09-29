@@ -29,10 +29,10 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	}
 
 	return (
-		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-6 bg-background", className)} >
+		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-6 bg-background shadow-md", className)} >
 			{partData.map((part, index) => (
-				<div key={index} className="flex flex-col mt-5">
-					<Label className="font-bold text-foreground mb-2">{part.part_order}</Label>
+				<div key={index} className="flex flex-col mb-5">
+					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
 
 					<div className="flex flex-wrap gap-1 border border-border rounded-md p-2">
 						{part.media_list?.map((media, mediaIndex) => (
@@ -47,7 +47,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 											question_id: question.question_id
 										})}
 										className={cn(
-											"flex items-center border border-border justify-center min-w-[37px] h-10 rounded-full text-sm font-medium cursor-pointer transition-colors",
+											"flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-base font-semibold cursor-pointer",
 											isActive
 												? "bg-primary text-primary-foreground"
 												: isAnswered

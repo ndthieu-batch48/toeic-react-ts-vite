@@ -22,7 +22,7 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDurat
 			<div className="flex justify-center items-center w-full h-32 gap-2">
 				<Label className="text-xl font-bold text-foreground">{testTitle}</Label>
 				<Button
-					className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+					className="border-destructive text-destructive hover:bg-destructive hover:text-primary-foreground text-lg"
 					variant="outline"
 					asChild>
 					<Link
@@ -36,11 +36,11 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDurat
 
 			<div className="flex flex-col md:flex-row gap-4 px-2">
 				<PartTab
-					className="flex-1"
+					className="md:max-w-7xl"
 					partData={partData}
-				/>
-
-				<div className="flex flex-col gap-3 md:sticky md:top-32 self-start md:w-80 h-150">
+				/>	
+				
+				<div className="flex flex-col gap-3 md:sticky md:top-32 self-start md:w-80 md:h-80">
 					<CreateSubmit />
 					<CountDownTimer className="mb-1 h-20" duration={testDuration} />
 					<QuestionTab partData={partData}></QuestionTab>

@@ -83,7 +83,7 @@ export function MainNavigationMenu() {
 	)
 
 	return (
-		<header className="sticky bg-sidebar top-0 z-50 w-full border p-2">
+		<header className="bg-sidebar top-0 z-50 w-full border p-2">
 			<div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4">
 
 				{/* Logo/Brand */}
@@ -107,8 +107,8 @@ export function MainNavigationMenu() {
 					{auth.isAuthenticated ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" className="relative h-8 w-8 rounded-full">
-									<Avatar className="h-8 w-8">
+								<Button variant="outline" className="w-15 h-15 rounded-full">
+									<Avatar className="bg-transparent object-fill">
 										<AvatarImage src={auth.user?.avatar} alt={auth.user?.username || 'User'} />
 										<AvatarFallback>
 											{auth.user?.username?.charAt(0) || 'U'}
@@ -116,40 +116,40 @@ export function MainNavigationMenu() {
 									</Avatar>
 								</Button>
 							</DropdownMenuTrigger>
-							<DropdownMenuContent className="w-56" align="end" forceMount>
-								<DropdownMenuLabel className="font-normal">
+							<DropdownMenuContent className="w-100" align="end" forceMount>
+								<DropdownMenuLabel>
 									<div className="flex flex-col space-y-1">
-										<p className="text-sm font-medium leading-none">
+										<p className="text-lg font-semibold">
 											{auth.user?.username || 'User'}
 										</p>
-										<p className="text-xs leading-none text-muted-foreground">
+										<p className="text-lg font-medium text-muted-foreground">
 											{auth.user?.email}
 										</p>
 									</div>
 								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem asChild>
+								<DropdownMenuItem asChild className="font-medium text-lg">
 									<Link to="/profile" className="flex items-center">
-										<User className="mr-2 h-4 w-4" />
+										<User/>
 										Profile
 									</Link>
 								</DropdownMenuItem>
-								<DropdownMenuItem asChild>
+								<DropdownMenuItem asChild className="font-medium text-lg">
 									<Link to="/history" className="flex items-center">
-										<History className="mr-2 h-4 w-4" />
+										<History/>
 										History
 									</Link>
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem onClick={handleLogout}>
-									<LogOut className="mr-2 h-4 w-4" />
+								<DropdownMenuItem onClick={handleLogout} className="font-medium text-lg">
+									<LogOut/>
 									Log out
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (
 						<div className="flex items-center space-x-2">
-							<Button asChild>
+							<Button asChild className="font-semibold text-lg">
 								<Link to="/login">Login</Link>
 							</Button>
 						</div>
@@ -206,7 +206,7 @@ function MobileNav() {
 				{auth.isAuthenticated && (
 					<>
 						<div className="border-t pt-2 mt-2">
-							<p className="font-medium text-sm mb-2">Account</p>
+							<p className="font-medium text-base mb-2">Account</p>
 							<Link
 								to="/profile"
 								className="text-foreground/60 transition-colors hover:text-foreground block py-1"
@@ -256,8 +256,8 @@ function ListItem({
 							className
 						)}
 					>
-						<div className="text-sm font-medium leading-none">{title}</div>
-						<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+						<div className="text-base font-medium leading-none">{title}</div>
+						<p className="line-clamp-2 text-base leading-snug text-muted-foreground">
 							{children}
 						</p>
 					</a>
@@ -269,8 +269,8 @@ function ListItem({
 							className
 						)}
 					>
-						<div className="text-sm font-medium leading-none">{title}</div>
-						<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+						<div className="text-base font-medium leading-none">{title}</div>
+						<p className="line-clamp-2 text-base leading-snug text-muted-foreground">
 							{children}
 						</p>
 					</Link>

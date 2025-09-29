@@ -18,8 +18,8 @@ export function FeaturesSection() {
 							<div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
 								<feature.icon className="w-8 h-8 text-primary-foreground" />
 							</div>
-							<h3 className="text-xl font-semibold mb-3 text-card-foreground ">{feature.title}</h3>
-							<p className="text-muted-foreground leading-relaxed ">{feature.description}</p>
+							<h3 className="text-xl font-semibold mb-3 text-card-foreground">{feature.title}</h3>
+							<p className="text-muted-foreground leading-relaxed">{feature.description}</p>
 						</CardContent>
 					</Card>
 				))}

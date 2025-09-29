@@ -7,8 +7,9 @@
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);	
+  --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -24,6 +25,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+	--color-rating: var(--rating);
 	--color-positive: var(--positive);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -72,6 +74,7 @@
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
+	--rating: oklch(0.86 0.17 92);
 	--positive: oklch(0.45 0.11 151);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
@@ -119,6 +122,7 @@
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+	--rating: oklch(0.86 0.17 92);
 	--positive: oklch(0.45 0.11 151);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);

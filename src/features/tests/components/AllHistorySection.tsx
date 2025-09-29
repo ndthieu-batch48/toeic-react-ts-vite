@@ -15,11 +15,11 @@ type AllHistorySectionProps = {
 export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyResultList }) => (
 	<section className="space-y-4">
 		<div className="flex items-center gap-2">
-			<History className="h-6 w-6 text-primary" />
+			<History className="text-primary" />
 			<h2 className="text-3xl font-bold text-foreground">Test History</h2>
 		</div>
 
-		<p className="text-muted-foreground">Review your previous test attempts and results</p>
+		<p className="text-xl text-muted-foreground">Review your previous test attempts and results</p>
 
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 			{historyResultList.map((history) => {
@@ -28,11 +28,11 @@ export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyRes
 				const isFailed = Number(currentScore) <= Number(totalScore) / 2;
 
 				return (
-					<Card key={history.history_id} className="hover:shadow-md transition-shadow bg-card border-border md:max-w-[350px]">
+					<Card key={history.history_id} className="hover:shadow-lg hover:cursor-pointer transition-shadow md:max-w-[400px]">
 						<CardHeader>
-							<CardTitle className="text-lg text-card-foreground">{history.test_name}</CardTitle>
+							<CardTitle className="text-2xl">{history.test_name}</CardTitle>
 							<div className="flex justify-between items-center">
-								<Badge variant={isFailed ? 'destructive' : 'default'}>
+								<Badge variant={isFailed ? 'destructive' : 'default'} className="text-lg">
 									{isFailed ? "Failed" : "Passed"}
 								</Badge>
 								<Label className={`text-lg font-semibold ${isFailed ? 'text-destructive' : 'text-primary'}`}>Overall score: {history.score}</Label>
@@ -40,16 +40,16 @@ export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyRes
 						</CardHeader>
 
 						<CardContent className="flex flex-col gap-2">
-							<div className="flex gap-1 flex-wrap">
+							<div className="flex gap-2 flex-wrap">
 								{history.part_list.map((part, key) => (
-									<Badge key={key} variant="secondary" className="bg-secondary text-secondary-foreground">
+									<Badge key={key} variant="outline" className="text-base">
 										{part}
 									</Badge>
 								))}
 							</div>
 
-							<div className="flex items-center gap-2 text-sm text-muted-foreground">
-								<Calendar className="h-4 w-4" />
+							<div className="flex items-center gap-2 text-base text-muted-foreground">
+								<Calendar/>
 								Completed at: {formatDateTime(history.create_at)}
 							</div>
 
@@ -58,7 +58,7 @@ export const AllHistorySection: React.FC<AllHistorySectionProps> = ({ historyRes
 						<CardFooter>
 							<Button
 								variant="outline"
-								className="w-full border-border text-foreground hover:bg-secondary"
+								className="w-full hover:bg-secondary font-semibold text-xl rounded-2xl"
 								asChild>
 								<Link to="/history/$historyId"
 									params={{ historyId: String(history.history_id) }}

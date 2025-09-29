@@ -90,7 +90,7 @@ export function LandingCarousel() {
 							<button
 								key={index}
 								onClick={() => api?.scrollTo(index)}
-								className={`w-3 h-3 rounded-full transition-all duration-300 ${index + 1 === current
+								className={`w-3 h-3 rounded-2xl transition-all duration-300 ${index + 1 === current
 									? 'bg-primary scale-125 shadow-lg'
 									: 'bg-muted-foreground/20 hover:bg-muted-foreground/50'
 									}`}

@@ -60,30 +60,58 @@ export const CreateSubmit: React.FC = () => {
 			<CardContent className="flex flex-col gap-2">
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
-						<Button variant="default">
+						<Button className="font-bold text-xl h-10" variant="default">
 							Submit
 						</Button>
 					</AlertDialogTrigger>
 					<AlertDialogContent>
 						<AlertDialogHeader>
-							<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-							<AlertDialogDescription>
+							<AlertDialogTitle className="text-lg">Are you absolutely sure?</AlertDialogTitle>
+							<AlertDialogDescription className="text-base">
 								You are going to submit your test. This action cannot be undone.
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={handleSubmitTest}>Submit Test</AlertDialogAction>
+							<AlertDialogCancel className="text-base">Cancel</AlertDialogCancel>
+							<AlertDialogAction
+								className="text-base"
+								onClick={handleSubmitTest}
+								disabled={createHistoryMutation.isPending}
+							>
+								{createHistoryMutation.isPending ? 'Submitting...' : 'Confirm'}
+							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
 				
-				<Button
-					variant="secondary"
-					onClick={handleSaveTest}
-					disabled={createHistoryMutation.isPending}>
-					{createHistoryMutation.isPending ? 'Saving...' : 'Save'}
-				</Button>
+
+				<AlertDialog>
+					<AlertDialogTrigger asChild>
+						<Button
+							className="font-bold text-xl h-10"
+							variant="outline">
+							Save
+						</Button>
+					</AlertDialogTrigger>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle className="text-lg">Do you want to save your progress?</AlertDialogTitle>
+							<AlertDialogDescription className="text-base">
+								You can continue your test later.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogAction
+								className="text-base"
+								onClick={handleSaveTest}
+								disabled={createHistoryMutation.isPending}
+							>
+								{createHistoryMutation.isPending ? 'Saving...' : 'Confirm'}
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
 
 			</CardContent>
 		</Card>

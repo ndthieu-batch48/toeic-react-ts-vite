@@ -17,20 +17,20 @@ export function TestimonialsSection() {
 							<CardContent className="p-8">
 								<div className="flex mb-4">
 									{[...Array(5)].map((_, i) => (
-										<Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+										<Star key={i} className="w-5 h-5 text-rating fill-rating"/>
 									))}
 								</div>
-								<blockquote className="text-lg text-card-foreground mb-6 italic leading-relaxed ">
+								<blockquote className="text-lg text-card-foreground mb-6 italic leading-relaxed">
 									"{testimonial.quote}"
 								</blockquote>
 								<div className="flex items-center justify-between">
 									<div>
-										<p className="font-semibold text-card-foreground ">{testimonial.name}</p>
-										<p className="text-sm text-muted-foreground ">TOEIC Student</p>
+										<p className="font-semibold text-card-foreground">{testimonial.name}</p>
+										<p className="text-sm text-muted-foreground">TOEIC Student</p>
 									</div>
 									<div className="text-right">
-										<p className="text-2xl font-bold text-primary ">{testimonial.score}</p>
-										<p className="text-sm text-muted-foreground ">TOEIC Score</p>
+										<p className="text-2xl font-bold text-primary">{testimonial.score}</p>
+										<p className="text-sm text-muted-foreground">TOEIC Score</p>
 									</div>
 								</div>
 							</CardContent>

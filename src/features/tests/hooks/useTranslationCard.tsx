@@ -55,7 +55,6 @@ export const useTranslationCard = () => {
 			question_id: questionId,
 			language_id: selectedLang
 		});
-		console.log(questionId, selectedLang)
 		setTranslateScript(prev => ({
 			...prev,
 			[questionId]: translation

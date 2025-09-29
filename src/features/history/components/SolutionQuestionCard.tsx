@@ -93,7 +93,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 			<CardContent className="flex px-2 gap-4">
 				{hasImage && (
 					<div className="w-2/3">
-						<MainParagraph paragraphMain={paragraphMain} />
+						<MainParagraph mainParagraph={paragraphMain} />
 					</div>
 				)}
 

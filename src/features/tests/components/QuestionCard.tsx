@@ -8,6 +8,7 @@ import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
 import type { LANGUAGE_ID } from '../constants/const'
+import { isMainParagraphHasContent } from '../helper/testHelper'
 
 export interface QuestionCardProps {
 	paragraphMain: string
@@ -34,8 +35,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 		isTranslateError
 	} = useTranslationCard()
 
-	// Check if paragraphMain contains an image
-	const hasImage = paragraphMain && paragraphMain.includes('<img')
+	const hasContent = isMainParagraphHasContent(paragraphMain);	
 
 	//TODO: Trigger active question 
 	const handleSelectAnswer = (answerId: string) => {
@@ -49,14 +49,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
 
 	return (
-		<Card className="w-full mx-auto mb-3 bg-card border-border">
+		<Card className="w-full mx-auto mb-3 shadow-md">
 			<CardHeader className="mb-3">
 
 				<div className="flex items-center gap-2 mb-2">
-					<Badge className="">
+					<Badge className="text-base font-semibold">
 						Question {question_number}
 					</Badge>
-					<Label className="">
+					<Label className="text-lg font-semibold">
 						{question_content}
 					</Label>
 				</div>
@@ -74,14 +74,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 			</CardHeader>
 
 			<CardContent className="flex px-2 gap-4">
-				{hasImage && (
-					<div className="w-2/3">
-						<MainParagraph paragraphMain={paragraphMain} />
+				{hasContent && (
+					<div className="flex-1 min-w-0">
+						<MainParagraph mainParagraph={paragraphMain} />
 					</div>
 				)}
 
 				{/* Radio Group for Answer Options */}
-				<div className={`space-y-4 ${hasImage ? 'w-1/3' : 'w-full'}`}>
+				<div className={`space-y-4 ${hasContent ? 'flex-shrink-0 w-auto' :'w-full'}`}>
 					<Label>
 						Select your answer:
 					</Label>
@@ -91,7 +91,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 							<Label
 								key={answer.answer_id || index}
 								htmlFor={`question-${question_id}-option-${answer.answer_id}`}
-								className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${currentSelectedAnswer === String(answer.answer_id)
+								className={`flex items-start gap-3 p-3 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base ${currentSelectedAnswer === String(answer.answer_id)
 									? "border-primary bg-primary-foreground"
 									: "hover:border-primary/50 hover:bg-primary-foreground"
 									}`}
