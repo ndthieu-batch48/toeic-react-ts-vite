@@ -232,6 +232,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<Link
 						to='/history/$historyId/solution'
 						params={{ historyId: String(detailResult.history_id) }}
+						search={{ testId: detailResult.test_id }}
 					>
 						<Eye className="h-5 w-5 mr-2" />
 						View Detail Solution

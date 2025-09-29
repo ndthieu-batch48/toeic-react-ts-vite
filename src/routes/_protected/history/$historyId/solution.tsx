@@ -4,15 +4,22 @@ import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
 import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
+import z from 'zod';
 
+const searchSchema = z.object({
+	testId: z.number(),
+	
+})
 export const Route = createFileRoute('/_protected/history/$historyId/solution')({
+	validateSearch: searchSchema,
 	component: SolutionRoute,
 })
 
 function SolutionRoute() {
 	const { historyId } = Route.useParams();
+	const { testId } = Route.useSearch();
 	const { data: historyData, isLoading: historyLoading, error: historyError } = useGetHistoryResultDetail(Number(historyId))
-	const { data: testData, isLoading: testLoading, error: testError } = useGetTestDetail(Number(historyData?.test_id));
+	const { data: testData, isLoading: testLoading, error: testError } = useGetTestDetail(testId);
 
 	// Show loading if either request is loading
 	if (historyLoading || testLoading) {
