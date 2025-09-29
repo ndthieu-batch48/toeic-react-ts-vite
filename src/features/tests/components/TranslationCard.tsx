@@ -33,16 +33,16 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 			{/* Translation Toggle Button */}
 			<Button
-				variant="outline"
+				variant="default"
 				size="sm"
 				onClick={onToggle}
-				className="flex items-center gap-2 text-base"
+				className="flex items-center gap-2 text-base font-semibold cursor-pointer"
 			>
-				<Globe/>
+				<Globe />
 				Translate
 				{isExpanded ?
-					<ChevronUp/> :
-					<ChevronDown/>
+					<ChevronUp /> :
+					<ChevronDown />
 				}
 			</Button>
 
@@ -51,37 +51,28 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 				<Card className="bg-primary/5 border-primary/20">
 					<CardContent className="p-4">
 						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<div className="flex items-center gap-3">
-									<h4 className="text-base font-semibold text-primary">Translation</h4>
-									<Select value={selectedLanguage} onValueChange={onLanguageChange}>
-										<SelectTrigger className="w-[160px] h-8">
-											<SelectValue placeholder="Select language" />
-										</SelectTrigger>
-										<SelectContent>
-											{Object.entries(LANGUAGE_MAP).map(([langId, langName]) => (
-												<SelectItem key={langId} value={langId}>
-													{langName}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-								</div>
+							<div className="flex">
+								<Select value={selectedLanguage} onValueChange={onLanguageChange}>
+									<SelectTrigger className="w-[130px] h-8">
+										<SelectValue placeholder="Select language" />
+									</SelectTrigger>
+									<SelectContent>
+										{Object.entries(LANGUAGE_MAP).map(([langId, langName]) => (
+											<SelectItem key={langId} value={langId}>
+												{langName}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+
 								<Button
 									variant="default"
 									size="sm"
 									onClick={onTranslate}
 									disabled={isTranslatePending || !selectedLanguage}
-									className="ml-2 font-bold text-base"
+									className="ml-2 font-bold text-base cursor-pointer"
 								>
-									{isTranslatePending ? (
-										<>
-											<div className="w-4 h-4 border-2 rounded-2xl animate-spin mr-2" />
-											Translating...
-										</>
-									) : (
-										'Translate'
-									)}
+									Translate
 								</Button>
 							</div>
 
@@ -111,14 +102,14 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 											</div>
 										) : translateScript?.answer_list && translateScript.answer_list.length > 0 ? (
 											translateScript.answer_list.map((answer, idx) => (
-												<div key={idx} className="p-2 bg-background rounded border">
+												<div key={idx} className="p-2 bg-background rounded-xl border">
 													<p className="text-base">
 														{answer}
 													</p>
 												</div>
 											))
 										) : (
-											<div className="p-2 bg-background rounded border">
+											<div className="p-2 bg-background rounded-xl border">
 												<p className="text-xs text-muted-foreground">
 													No translated answers available
 												</p>

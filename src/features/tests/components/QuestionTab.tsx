@@ -29,7 +29,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	}
 
 	return (
-		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-6 bg-background shadow-md", className)} >
+		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)} >
 			{partData.map((part, index) => (
 				<div key={index} className="flex flex-col mb-5">
 					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>

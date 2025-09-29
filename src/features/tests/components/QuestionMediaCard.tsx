@@ -75,7 +75,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	return (
 		<Card className="w-full mx-auto mb-3">
 			<CardHeader className="pb-2">
-				<Badge	className="text-lg font-semibold">
+				<Badge className="text-lg font-semibold">
 					Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
 				</Badge>
 			</CardHeader>
@@ -91,7 +91,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-70' :'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-70' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
 
@@ -99,11 +99,11 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 							<div className="flex flex-col space-y-4">
 
 								{/* Question Header */}
-								<div className="flex items-start gap-3">
-									<Badge variant='secondary' className="bg-primary/20 text-lg font-medium">
+								<div className="flex flex-col gap-2 mb-5">
+									<Badge variant='secondary' className="bg-primary/20 text-lg font-medium flex-shrink-0">
 										Question {question.question_number}
 									</Badge>
-									<Label className="text-lg font-medium">
+									<Label className="text-lg font-medium flex-1 min-w-0" style={{ marginLeft: '-100%', paddingLeft: '100%' }}>
 										{question.question_content}
 									</Label>
 								</div>

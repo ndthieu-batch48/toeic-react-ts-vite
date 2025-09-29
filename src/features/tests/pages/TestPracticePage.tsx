@@ -36,11 +36,11 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDurat
 
 			<div className="flex flex-col md:flex-row gap-4 px-2">
 				<PartTab
-					className="md:max-w-7xl"
+					className="flex-1 min-w-0"
 					partData={partData}
-				/>	
-				
-				<div className="flex flex-col gap-3 md:sticky md:top-32 self-start md:w-80 md:h-80">
+				/>
+
+				<div className="flex flex-col gap-3 md:sticky md:top-32 self-start flex-shrink-0 md:w-70 md:h-80">
 					<CreateSubmit />
 					<CountDownTimer className="mb-1 h-20" duration={testDuration} />
 					<QuestionTab partData={partData}></QuestionTab>
