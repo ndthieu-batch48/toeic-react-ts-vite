@@ -64,7 +64,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 	}
 
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean, isSelected: boolean) => {
-		const baseClass = "flex items-start gap-3 p-3 rounded-lg cursor-pointer";
+		const baseClass = "flex items-start gap-3 p-3 border border-border shadow-xs bg-background rounded-lg cursor-pointer text-base";
 		const correctBorder = `${baseClass} bg-positive/30 border-positive/30 border`
 		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30 border`
 		const defaultClass = `${baseClass} bg-card border-border border`
@@ -83,8 +83,8 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 	return (
 		<Card className="w-full mx-auto mb-3">
 			<CardHeader className="pb-2">
-				<Badge>
-					Questions {mediaName} refer to the following
+				<Badge className="text-lg font-semibold">
+					Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
 				</Badge>
 			</CardHeader>
 
@@ -92,31 +92,29 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 				{hasImage && (
 					<>
 						{/* Left side - Main Paragraph */}
-						<div className="w-full md:w-2/3 flex-shrink-0">
+						<div className="flex-1 min-w-0">
 							<MainParagraph mainParagraph={paragraphMain} />
 						</div>
 					</>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 w-full ${hasImage ? 'md:w-1/3' : ''}`}>
+				<div className={`space-y-6 ${hasImage ? 'flex-shrink-0 md:w-70' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
 
 							{/* Question Block */}
 							<div className="flex flex-col space-y-4">
 
-								{/* Question Header */}
-								<div className="flex items-start gap-3">
-									<Badge variant='secondary' className="bg-primary/20">
-										Question {question.question_number}
-									</Badge>
-									<Label>
-										{question.question_content}
-									</Label>
-								</div>
-
-								<TranslationCard
+							{/* Question Header */}
+							<div className="flex flex-col gap-2 mb-5">
+								<Badge variant='secondary' className="bg-primary/20 text-lg font-medium flex-shrink-0">
+									Question {question.question_number}
+								</Badge>
+								<Label className="text-lg font-medium flex-1 min-w-0" style={{ marginLeft: '-100%', paddingLeft: '100%' }}>
+									{question.question_content}
+								</Label>
+							</div>								<TranslationCard
 									translateScript={newTranslateScript[question.question_id]}
 									selectedLanguage={getSelectedLanguage(question.question_id)}
 									isExpanded={isTranslateCardExpanded(question.question_id)}

@@ -15,7 +15,7 @@ export function HeroContent() {
 					{HERO_CONTENT.description}
 				</p>
 				<div className="flex gap-4 justify-center items-center">
-					<Button size="lg" className="cursor-pointer">
+					<Button size="lg">
 						{HERO_CONTENT.buttonText}
 						<ArrowRight className="ml-2 w-5 h-5" />
 					</Button>

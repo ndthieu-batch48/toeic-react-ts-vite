@@ -16,7 +16,7 @@ export const useCreateHistory = () => {
 
 export const useGetSaveHistoryProgress = (testId: number) => {
   return useQuery({
-    queryKey: ['historyProgress'],
+    queryKey: ['historyProgress', testId],
     queryFn: () => getSaveProgressHistory(testId),
     enabled: !!testId,
   });
@@ -31,7 +31,7 @@ export const useGetHistoryResultList = () => {
 
 export const useGetHistoryResultDetail = (historyId: number) => {
   return useQuery({
-    queryKey: ['historyDetail'],
+    queryKey: ['historyDetail', historyId],
     queryFn: () => getHistoryResultDetail(historyId),
     enabled: !!historyId,
   });

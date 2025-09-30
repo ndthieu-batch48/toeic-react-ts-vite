@@ -3,7 +3,7 @@ import type { Part } from "../types/test"
 import { PartTab } from "../components/PartTabs"
 import { QuestionTab } from "../components/QuestionTab"
 import { CountDownTimer } from "../components/CountdownTimer"
-import { Link } from "@tanstack/react-router"
+import { Link, useParams } from "@tanstack/react-router"
 import { CreateSubmit } from "../components/SubmitTestButton"
 import { Label } from "@radix-ui/react-dropdown-menu"
 
@@ -16,7 +16,8 @@ type TestPracticeProps = {
 }
 
 export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDuration, partData }) => {
-
+	const params = useParams({ from: '/_protected/test/$testId/practice' })
+	
 	return (
 		<>
 			<div className="flex justify-center items-center w-full h-32 gap-2">
@@ -26,8 +27,9 @@ export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDurat
 					variant="outline"
 					asChild>
 					<Link
-						to=".."
+						to="/test/$testId"
 						replace={true}
+						params={{ testId: params.testId }}
 					>
 						Exit
 					</Link>

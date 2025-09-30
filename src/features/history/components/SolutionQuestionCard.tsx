@@ -49,7 +49,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
 
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean, isSelected: boolean) => {
-		const baseClass = "flex items-start gap-3 p-3 rounded-lg cursor-pointer";
+		const baseClass = "flex items-start gap-3 p-3 rounded-lg border border-border shadow-xs bg-background cursor-pointer text-base";
 		const correctBorder = `${baseClass} bg-positive/30 border-positive/30 border`
 		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30 border`
 		const defaultClass = `${baseClass} bg-card border-border border`
@@ -66,14 +66,14 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 	}
 
 	return (
-		<Card className="w-full mx-auto mb-3 bg-card border-border">
+		<Card className="w-full mx-auto mb-3 shadow-md">
 			<CardHeader className="mb-3">
 
 				<div className="flex items-center gap-2 mb-2">
-					<Badge className="">
+					<Badge className="text-base font-semibold">
 						Question {question_number}
 					</Badge>
-					<Label className="">
+					<Label className="text-lg font-semibold">
 						{question_content}
 					</Label>
 				</div>
@@ -92,13 +92,13 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 
 			<CardContent className="flex px-2 gap-4">
 				{hasImage && (
-					<div className="w-2/3">
+					<div className="flex-1 min-w-0">
 						<MainParagraph mainParagraph={paragraphMain} />
 					</div>
 				)}
 
 				{/* Radio Group for Answer Options */}
-				<div className={`space-y-4 ${hasImage ? 'w-1/3' : 'w-full'}`}>
+				<div className={`space-y-4 ${hasImage ? 'flex-shrink-0 w-auto' :'w-full'}`}>
 					<Label>
 						Select your answer:
 					</Label>

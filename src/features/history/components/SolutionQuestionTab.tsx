@@ -25,7 +25,7 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 	}
 
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean | undefined, isSelected: boolean) => {
-		const baseClass = "flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-sm font-medium cursor-pointer";
+		const baseClass = "flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-base font-semibold cursor-pointer";
 		const correctBorder = `${baseClass} bg-positive/30 border-positive/30`
 		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30`
 
@@ -44,10 +44,10 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 	}
 
 	return (
-		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-6 bg-background", className)} >
+		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)} >
 			{partData.map((part, index) => (
-				<div key={index} className="flex flex-col mt-5">
-					<Label className="font-bold text-foreground mb-2">{part.part_order}</Label>
+				<div key={index} className="flex flex-col mb-5">
+					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
 
 					<div className="flex flex-wrap gap-1 border border-border rounded-md p-2">
 						{part.media_list?.map((media, mediaIndex) => (
