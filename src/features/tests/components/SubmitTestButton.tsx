@@ -4,22 +4,22 @@ import { useTestContext } from "../context/TestContext"
 import type { HistoryCreateRequest } from "@/features/history/types/history"
 import { useCreateHistory } from "@/features/history/hooks/useHistoryApi"
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useEffect } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
 export const CreateSubmit: React.FC = () => {
 	const navigate = useNavigate()
- 	const {  testId, testType, selectedAnswers, selectedParts } = useTestContext()
+	const { testId, testType, selectedAnswers, selectedParts } = useTestContext()
 	const { createHistoryMutation } = useCreateHistory()
 
 	// Calculate elapsed time in minutes
@@ -27,7 +27,7 @@ export const CreateSubmit: React.FC = () => {
 
 	const handleSubmitTest = () => {
 		const submitPayload: HistoryCreateRequest = {
-			test_id: testId, 
+			test_id: testId,
 			type: testType,
 			dataprogress: selectedAnswers,
 			part: selectedParts,
@@ -39,7 +39,7 @@ export const CreateSubmit: React.FC = () => {
 
 	const handleSaveTest = () => {
 		const savePayload: HistoryCreateRequest = {
-			test_id: testId, 
+			test_id: testId,
 			type: testType,
 			dataprogress: selectedAnswers,
 			part: selectedParts,
@@ -48,19 +48,19 @@ export const CreateSubmit: React.FC = () => {
 		}
 		createHistoryMutation.mutateAsync(savePayload)
 	}
-	
+
 	useEffect(() => {
-		if (createHistoryMutation.isSuccess) { 
+		if (createHistoryMutation.isSuccess) {
 			navigate({ to: "/test", replace: true })
 		}
-	},[createHistoryMutation.isSuccess, navigate])
+	}, [createHistoryMutation.isSuccess, navigate])
 
 	return (
-		<Card>
-			<CardContent className="flex flex-col gap-2">
+		<Card className="p-1">
+			<CardContent className="flex gap-1 p-1">
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
-						<Button className="font-bold text-xl h-10" variant="default">
+						<Button className="font-bold text-lg h-10 flex-1" variant="default">
 							Submit
 						</Button>
 					</AlertDialogTrigger>
@@ -83,12 +83,12 @@ export const CreateSubmit: React.FC = () => {
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
-				
+
 
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
 						<Button
-							className="font-bold text-xl h-10"
+							className="font-bold text-xl h-10 flex-1"
 							variant="outline">
 							Save
 						</Button>

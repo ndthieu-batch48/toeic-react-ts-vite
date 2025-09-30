@@ -8,11 +8,13 @@ import React from "react"
 type QuestionTabProps = {
 	partData: Part[]
 	className?: string,
+	onQuestionActive?: (mediaId: number) => void
 }
 
 const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	className,
 	partData,
+	onQuestionActive
 }) => {
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useTestContext()
 
@@ -42,10 +44,14 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 								return (
 									<Label
-										onClick={() => toggleActive({
-											part_id: part.part_id,
-											question_id: question.question_id
-										})}
+										onClick={() => {
+											onQuestionActive?.(media.media_id)
+
+											toggleActive({
+												part_id: part.part_id,
+												question_id: question.question_id
+											})
+										}}
 										className={cn(
 											"flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-base font-semibold cursor-pointer",
 											isActive

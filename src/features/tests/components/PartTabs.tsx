@@ -9,10 +9,12 @@ import React from "react"
 
 type PartTabsProps = {
 	partData: Part[]
-	className?: string
+	className?: string,
+	scrollRef: React.RefObject<HTMLDivElement | null> | null
+	pageRef: React.RefObject<Record<number, HTMLElement | null>>
 }
 
-const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
+const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef }) => {
 	const {
 		activeQuestion,
 		setActivePart,
@@ -57,6 +59,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 			{
 				partData.map((part, index) => (
 					<TabsContent
+						ref={scrollRef}
 						key={part.part_id || index}
 						value={`part-${part.part_id}`}
 						className="mt-6"
@@ -65,20 +68,24 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 						<div>
 							{part.media_list?.map((media, key) =>
 								media.question_list.length === 1 ? (
-									<QuestionCard
-										key={key}
-										questionData={media.question_list[0]}
-										paragraphMain={media.media_paragraph_main}
-										translateScript={media.media_translate_script}
-									/>
+									<div key={media.media_id}
+										ref={(el: HTMLDivElement | null) => { pageRef.current[media.media_id] = el }}>
+										<QuestionCard
+											questionData={media.question_list[0]}
+											paragraphMain={media.media_paragraph_main}
+											translateScript={media.media_translate_script}
+										/>
+									</div>
 								) : (
-									<QuestionMediaCard
-										key={key}
-										mediaName={media.media_name}
-										paragraphMain={media.media_paragraph_main}
-										questionData={media.question_list}
-										translateScript={media.media_translate_script}
-									/>
+									<div key={key}
+										ref={(el: HTMLDivElement | null) => { pageRef.current[media.media_id] = el }}>
+										<QuestionMediaCard
+											mediaName={media.media_name}
+											paragraphMain={media.media_paragraph_main}
+											questionData={media.question_list}
+											translateScript={media.media_translate_script}
+										/>
+									</div>
 								)
 							)}
 						</div>
