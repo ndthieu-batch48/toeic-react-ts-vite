@@ -10,6 +10,8 @@ import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
 import type { LANGUAGE_ID } from '../constants/const'
 import { isMainParagraphHasContent } from '../helper/testHelper'
+import { Button } from '@/components/ui/button'
+import { Flag } from 'lucide-react'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
@@ -100,9 +102,12 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 
 								{/* Question Header */}
 								<div className="flex flex-col gap-2 mb-5">
-									<Badge variant='secondary' className="bg-primary/20 text-lg font-medium flex-shrink-0">
-										Question {question.question_number}
-									</Badge>
+									<Button
+										variant="outline"
+										className="absolute top-0 right-2 hover:bg-background" >
+										<Flag className="fill-marker text-marker" />
+									</Button>
+
 									<Label className="text-lg font-medium flex-1 min-w-0" style={{ marginLeft: '-100%', paddingLeft: '100%' }}>
 										{question.question_content}
 									</Label>

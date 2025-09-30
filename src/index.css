@@ -37,6 +37,7 @@ button {
   --color-destructive: var(--destructive);
 	--color-rating: var(--rating);
 	--color-positive: var(--positive);
+	--color-marker: var(--marker);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -86,6 +87,7 @@ button {
   --destructive: oklch(0.577 0.245 27.325);
 	--rating: oklch(0.86 0.17 92);
 	--positive: oklch(0.45 0.11 151);
+	--marker: oklch(0.76 0.16 56);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.623 0.214 259.815);
@@ -134,6 +136,7 @@ button {
   --destructive: oklch(0.704 0.191 22.216);
 	--rating: oklch(0.86 0.17 92);
 	--positive: oklch(0.45 0.11 151);
+	--marker: oklch(0.76 0.16 56);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.488 0.243 264.376);

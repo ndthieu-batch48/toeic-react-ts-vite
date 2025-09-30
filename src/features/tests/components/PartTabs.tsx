@@ -40,14 +40,14 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 			className={cn("w-full ml-5", className)}
 		>
 			<TabsList
-				className="h-auto w-full p-0 grid gap-5 bg-background"
+				className="h-auto w-full p-0 grid gap-5 bg-transparent"
 				style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
 			>
 				{partData.map((part, index) => (
 					<TabsTrigger
 						key={part.part_id || index}
 						value={`part-${part.part_id}`}
-						className="h-[50px] text-lg font-bold cursor-pointer border border-border shadow hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+						className="h-[50px] text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
 					>
 						{part.part_order || index + 1}
 					</TabsTrigger>

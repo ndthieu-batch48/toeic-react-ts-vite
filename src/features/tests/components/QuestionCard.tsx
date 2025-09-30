@@ -9,6 +9,8 @@ import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
 import type { LANGUAGE_ID } from '../constants/const'
 import { isMainParagraphHasContent } from '../helper/testHelper'
+import { Flag } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export interface QuestionCardProps {
 	paragraphMain: string
@@ -35,7 +37,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 		isTranslateError
 	} = useTranslationCard()
 
-	const hasContent = isMainParagraphHasContent(paragraphMain);	
+	const hasContent = isMainParagraphHasContent(paragraphMain);
 
 	//TODO: Trigger active question 
 	const handleSelectAnswer = (answerId: string) => {
@@ -50,16 +52,24 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	return (
 		<Card className="w-full mx-auto mb-3 shadow-md">
-			<CardHeader className="mb-3">
+			<CardHeader className="mb-3 relative">
 
-				<div className="flex items-center gap-2 mb-2">
+				<Button
+					variant="outline"
+					className="absolute top-0 right-2 hover:bg-background" >
+					<Flag className="fill-marker text-marker" />
+				</Button>
+
+				<div className="flex items-start gap-2 mb-2">
 					<Badge className="text-base font-semibold">
 						Question {question_number}
 					</Badge>
-					<Label className="text-lg font-semibold">
+					<Label className="text-lg font-semibold pr-5	">
 						{question_content}
 					</Label>
 				</div>
+
+
 
 				<TranslationCard
 					translateScript={newTranslateScript[question_id]}
@@ -81,7 +91,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 				)}
 
 				{/* Radio Group for Answer Options */}
-				<div className={`space-y-4 ${hasContent ? 'flex-shrink-0 w-auto' :'w-full'}`}>
+				<div className={`space-y-4 ${hasContent ? 'flex-shrink-0 w-auto' : 'w-full'}`}>
 					<Label>
 						Select your answer:
 					</Label>
