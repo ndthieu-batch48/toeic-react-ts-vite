@@ -10,14 +10,14 @@ import { useScrollControl } from "@/hook/useScrollControl"
 import { useRef } from "react"
 
 
-type TestPracticeProps = {
+type TestPracticePageProps = {
 	testId: number
 	testTitle: string
 	testDuration: number
 	partData: Part[],
 }
 
-export const TestPractice: React.FC<TestPracticeProps> = ({ testTitle, testDuration, partData }) => {
+export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, testDuration, partData }) => {
 	const params = useParams({ from: '/_protected/test/$testId/practice' })
 
 	const { ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');

@@ -25,7 +25,6 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 	onLanguageChange,
 	onTranslate,
 	isTranslatePending,
-	isTranslateError,
 }) => {
 
 	return (
@@ -34,9 +33,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 			{/* Translation Toggle Button */}
 			<Button
 				variant="default"
-				size="sm"
 				onClick={onToggle}
-				className="flex items-center gap-2 text-base font-semibold cursor-pointer"
+				className="flex items-center gap-2 text-base font-semibold bg-primary/60"
 			>
 				<Globe />
 				Translate
@@ -67,10 +65,9 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 								<Button
 									variant="default"
-									size="sm"
 									onClick={onTranslate}
 									disabled={isTranslatePending || !selectedLanguage}
-									className="ml-2 font-bold text-base cursor-pointer"
+									className="ml-2 font-bold text-base bg-primary/60"
 								>
 									Translate
 								</Button>

@@ -1,7 +1,7 @@
-import { TestPractice } from '@/features/tests/pages/TestPracticePage';
 import { TestProvider, type TestState } from '@/features/tests/context/TestContext';
 import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
+import { TestPracticePage } from '@/features/tests/pages/TestPracticePage';
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod';
 
@@ -14,10 +14,10 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute('/_protected/test/$testId/practice')({
 	validateSearch: searchSchema,
-	component: TestPracticePage,
+	component: TestPracticeRoute,
 })
 
-function TestPracticePage() {
+function TestPracticeRoute() {
 
 	const { testId } = Route.useParams();
 	const { selectedAnswers, selectedPartIds, timeLimit, type } = Route.useSearch();
@@ -53,7 +53,7 @@ function TestPracticePage() {
 
 	return (
 		<TestProvider initialState={initialState}>
-			<TestPractice
+			<TestPracticePage
 				testId={Number(testId)}
 				testTitle={testData!.test_title || "TMA TOEIC"}
 				partData={sortedParts}

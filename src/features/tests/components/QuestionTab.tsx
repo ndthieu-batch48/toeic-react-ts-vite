@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import type { Part } from "../types/test"
 import { Label } from "@/components/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 type QuestionTabProps = {
 	partData: Part[]
@@ -14,9 +14,12 @@ type QuestionTabProps = {
 const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	className,
 	partData,
-	onQuestionActive
+	onQuestionActive,
 }) => {
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useTestContext()
+
+	const scrollAreaRef = useRef<HTMLDivElement>(null);
+	const questionRefs = useRef<Record<string, HTMLElement | null>>({});
 
 	const toggleActive = (newSelectedQuestion: ActiveQuestion) => {
 		setActiveQuestion(newSelectedQuestion)
@@ -30,8 +33,40 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 		return selectedAnswers[String(questionId)] !== undefined
 	}
 
+	useEffect(() => {
+		if (scrollAreaRef.current && activeQuestion) {
+			// Find the scrollable viewport element
+			const scrollViewport = scrollAreaRef.current.querySelector(
+				'[data-radix-scroll-area-viewport]'
+			);
+
+			if (scrollViewport) {
+				// Get the active question element
+				const questionKey = `${activeQuestion.part_id}-${activeQuestion.question_id}`;
+				const activeQuestionElement = questionRefs.current[questionKey];
+
+				if (activeQuestionElement) {
+					// Calculate the scroll position to center the active question
+					const elementTop = activeQuestionElement.offsetTop;
+					const elementHeight = activeQuestionElement.offsetHeight;
+					const viewportHeight = scrollViewport.clientHeight;
+
+					// Center the element in the viewport
+					const scrollTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
+
+					// Apply the calculated scroll position
+					scrollViewport.scrollTo({ left: 0, top: Math.max(0, scrollTop + 100), behavior: "smooth" });
+
+					console.log('Scrolling to active question:', questionKey, 'scrollTop:', scrollTop);
+				}
+			}
+		}
+	}, [activeQuestion]); // Trigger when activeQuestion changes
+
 	return (
-		<ScrollArea className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)} >
+		<ScrollArea ref={scrollAreaRef}
+			className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)}
+		>
 			{partData.map((part, index) => (
 				<div key={index} className="flex flex-col mb-5">
 					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
@@ -41,9 +76,13 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 							media.question_list.map((question, questionIndex) => {
 								const isActive = isQuestionActive(part.part_id, question.question_id)
 								const isAnswered = isQuestionAnswered(question.question_id)
+								const questionKey = `${part.part_id}-${question.question_id}`;
 
 								return (
 									<Label
+										ref={(el: HTMLLabelElement | null) => {
+											questionRefs.current[questionKey] = el;
+										}}
 										onClick={() => {
 											onQuestionActive?.(media.media_id)
 

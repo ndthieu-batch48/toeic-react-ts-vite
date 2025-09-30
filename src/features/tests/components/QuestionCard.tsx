@@ -20,7 +20,6 @@ export interface QuestionCardProps {
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
 	paragraphMain,
-	translateScript,
 	questionData,
 }) => {
 
