@@ -10,11 +10,16 @@ import React from "react"
 type PartTabsProps = {
 	partData: Part[]
 	className?: string,
+	isScrolling: boolean,
+	scrollPosition: {
+		x: number;
+		y: number;
+	}
 	scrollRef: React.RefObject<HTMLDivElement | null> | null
 	pageRef: React.RefObject<Record<number, HTMLElement | null>>
 }
 
-const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef }) => {
+const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef, isScrolling, scrollPosition }) => {
 	const {
 		activeQuestion,
 		setActivePart,
@@ -37,24 +42,31 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 		<Tabs
 			value={tabValue}
 			onValueChange={handleTabChange}
-			className={cn("w-full ml-5", className)}
+			className={cn("w-full ml-5 mb-50", className)}
 		>
-			<TabsList
-				className="h-auto w-full p-0 grid gap-5 bg-transparent"
-				style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
+			<div
+				className={`${scrollPosition.y > 200 ? 'bg-background fixed top-0 z-5 w-5xl' : 'bg-transparent w-5xl'}`}
+				style={{
+					transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
+				}}
 			>
-				{partData.map((part, index) => (
-					<TabsTrigger
-						key={part.part_id || index}
-						value={`part-${part.part_id}`}
-						className="h-[50px] text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-					>
-						{part.part_order || index + 1}
-					</TabsTrigger>
-				))}
-			</TabsList>
+				<TabsList
+					className="h-auto w-full grid gap-5 bg-transparent"
+					style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
+				>
+					{partData.map((part, index) => (
+						<TabsTrigger
+							key={part.part_id || index}
+							value={`part-${part.part_id}`}
+							className="h-[50px] text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+						>
+							{part.part_order || index + 1}
+						</TabsTrigger>
+					))}
+				</TabsList>
 
-			<Audio audio={"this-is-just-a-text"} />
+				<Audio audio={"this-is-just-a-text"} />
+			</div>
 
 			{
 				partData.map((part, index) => (
@@ -64,7 +76,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 						value={`part-${part.part_id}`}
 						className="mt-6"
 					>
-
 						<div>
 							{part.media_list?.map((media, key) =>
 								media.question_list.length === 1 ? (

@@ -77,22 +77,22 @@ export const Audio: React.FC<AudioProps> = ({ audio }) => {
 	const progressValue = duration ? (currentTime / duration) * 100 : 0
 
 	return (
-		<Card className="w-full border border-border">
+		<Card className="w-full max-h-20 border border-border">
 			<CardContent className="flex items-start gap-4">
 				<audio ref={audioRef} src={audio} preload="metadata" />
 
 				{/* Main Controls */}
-				<div className="flex flex-1 items-center gap-4">
+				<div className="flex flex-1 gap-4">
 					<Button
 						variant="outline"
 						size="icon"
 						onClick={togglePlayPause}
-						className="h-16 w-16 rounded-2xl hover:bg-accent"
+						className="h-10 w-10 rounded-2xl hover:bg-accent"
 					>
 						{isPlaying ? (
-							<LucidePause/>
+							<LucidePause />
 						) : (
-							<LucidePlay/>
+							<LucidePlay />
 						)}
 					</Button>
 

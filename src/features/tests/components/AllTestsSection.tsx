@@ -14,28 +14,28 @@ export function AllTestsSection({ availableTests }: AllTestsSection) {
 	return (
 		<section className="space-y-4">
 			<div className="flex items-center gap-4">
-				<BookOpen className="text-primary"/>
+				<BookOpen className="text-primary" />
 				<h2 className="text-3xl font-bold text-foreground">Available Tests</h2>
 			</div>
 			<p className="text-xl text-muted-foreground">Choose from our comprehensive collection of assessments</p>
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{availableTests.map((test) => (
-					<Card key={test.test_id} className="hover:shadow-lg hover:cursor-pointer transition-shadow bg-card border-border">
+					<Card key={test.test_id} className="hover:shadow-lg hover:cursor-pointer transition-shadow bg-card border-border md:min-w-[350px]">
 
-						<CardHeader>	
+						<CardHeader>
 							<CardTitle className="text-xl">{test.test_title}</CardTitle>
 							<Badge variant="outline" className="text-xl">TOEIC</Badge>
 						</CardHeader>
 
 						<CardContent>
 							<div className="flex items-center gap-2 text-lg text-muted-foreground">
-								<Clock/>
+								<Clock />
 								{test.test_duration} minutes
 							</div>
 						</CardContent>
 
-						<CardFooter>
+						<CardFooter className="mt-auto">
 							<Button
 								className="w-full hover:bg-primary/90 font-semibold text-xl rounded-2xl"
 								variant="default"

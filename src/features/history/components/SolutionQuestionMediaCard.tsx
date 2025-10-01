@@ -106,15 +106,18 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 							{/* Question Block */}
 							<div className="flex flex-col space-y-4">
 
-							{/* Question Header */}
-							<div className="flex flex-col gap-2 mb-5">
-								<Badge variant='secondary' className="bg-primary/20 text-lg font-medium flex-shrink-0">
-									Question {question.question_number}
-								</Badge>
-								<Label className="text-lg font-medium flex-1 min-w-0" style={{ marginLeft: '-100%', paddingLeft: '100%' }}>
-									{question.question_content}
-								</Label>
-							</div>								<TranslationCard
+								{/* Question Header */}
+								<div className="flex flex-col gap-2 mb-5">
+									<Badge variant='outline'
+										className="text-base font-semibold bg-primary/80 border-primary text-primary-foreground">
+										Question {question.question_number}
+									</Badge>
+									<Label className="text-lg font-medium">
+										{question.question_content}
+									</Label>
+								</div>
+
+								<TranslationCard
 									translateScript={newTranslateScript[question.question_id]}
 									selectedLanguage={getSelectedLanguage(question.question_id)}
 									isExpanded={isTranslateCardExpanded(question.question_id)}

@@ -18,7 +18,6 @@ export interface HistoryCreateRequest {
   time: number;
   test_id: number;
   status?: "save" | "submit";           // default = "save"
-  time_left?: number | null;            // default = 0 in backend
 }
 
 export interface HistoryResultDetailResponse {
@@ -36,7 +35,7 @@ export interface HistoryResultDetailResponse {
   duration: number;
   create_at: string;
   dataprogress: Record<string, string>
-  part_list: string[];
+  part_id_list: string[];
 }
 
 export interface HistoryResultListResponse {
@@ -46,6 +45,7 @@ export interface HistoryResultListResponse {
   test_type: string;
   test_name: string;
   duration: number;
-  part_list: string[];
+  part_id_list: string[];
+  part_order_list: string[];
   create_at: string;
 }

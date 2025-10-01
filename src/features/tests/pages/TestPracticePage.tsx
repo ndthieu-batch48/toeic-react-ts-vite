@@ -9,15 +9,13 @@ import { Label } from "@radix-ui/react-dropdown-menu"
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useRef } from "react"
 
-
 type TestPracticePageProps = {
 	testId: number
 	testTitle: string
-	testDuration: number
 	partData: Part[],
 }
 
-export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, testDuration, partData }) => {
+export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, partData }) => {
 	const params = useParams({ from: '/_protected/test/$testId/practice' })
 
 	const { ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');
@@ -29,7 +27,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, t
 
 			if (questionCard) {
 				const elementTop = questionCard.offsetTop;
-				scrollTo(0, elementTop - 10);
+				scrollTo(0, elementTop - 140);
 			}
 		}, 100);
 	}
@@ -52,13 +50,16 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, t
 				</Button>
 			</div>
 
-			<div className="flex flex-col md:flex-row gap-4 px-2">
+			<div className="flex flex-col md:flex-row gap-4">
 				<PartTab
 					scrollRef={ref}
 					pageRef={pageRef}
 					className="flex-1 min-w-0"
-					partData={partData} />
+					partData={partData} isScrolling={isScrolling}
+					scrollPosition={scrollPosition}
+				/>
 
+				{/* Question Tab Div */}
 				<div
 					className="flex flex-col gap-1 self-start flex-shrink-0 md:w-70 md:h-90 md:sticky md:top-4"
 					style={{
@@ -67,7 +68,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, t
 					}}
 				>
 					<CreateSubmit />
-					<CountDownTimer className="h-20" duration={testDuration} />
+					<CountDownTimer className="h-20" />
 					<QuestionTab
 						partData={partData}
 						onQuestionActive={handleScrollPartTab}

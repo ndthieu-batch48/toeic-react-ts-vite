@@ -48,7 +48,7 @@ function TestPracticeRoute() {
 		activeQuestion: initialActive,
 		selectedAnswers: selectedAnswers ?? {},
 		selectedParts: type === "Practice" ? selectedPartIds.map(String) : [],
-		timeRemaining: timeLimit * 60,
+		remainingDuration: timeLimit,
 	}
 
 	return (
@@ -57,7 +57,6 @@ function TestPracticeRoute() {
 				testId={Number(testId)}
 				testTitle={testData!.test_title || "TMA TOEIC"}
 				partData={sortedParts}
-				testDuration={timeLimit}
 			/>
 		</TestProvider>
 	)

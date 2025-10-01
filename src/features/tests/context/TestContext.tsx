@@ -12,7 +12,7 @@ export type TestState = {
 	activeQuestion: ActiveQuestion
 	selectedAnswers: Record<string, string> // { questionId: answerId }
 	selectedParts: string[]
-	timeRemaining: number
+	remainingDuration: number
 }
 
 type TestAction =
@@ -22,7 +22,7 @@ type TestAction =
 	| { type: 'SET_ACTIVE_QUESTION', payload: ActiveQuestion }
 	| { type: 'SET_SELECTED_ANSWERS', payload: Record<string, string> }
 	| { type: 'SET_SELECTED_PARTS', payload: string[] }
-	| { type: 'SET_TIME_REMAINING'; payload: number }
+	| { type: 'SET_REMAINING_DURATION'; payload: number }
 
 const testReducer = (state: TestState, action: TestAction): TestState => {
 	let newState: TestState
@@ -52,8 +52,8 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_SELECTED_PARTS':
 			newState = { ...state, selectedParts: action.payload }
 			break
-		case 'SET_TIME_REMAINING':
-			newState = { ...state, timeRemaining: action.payload }
+		case 'SET_REMAINING_DURATION':
+			newState = { ...state, remainingDuration: action.payload }
 			break
 		default:
 			newState = state
@@ -70,7 +70,7 @@ type TestContextType = {
 	activeQuestion: ActiveQuestion
 	selectedAnswers: Record<string, string>
 	selectedParts: string[]
-	timeRemaining: number
+	remainingDuration: number
 
 	// Actions
 	setTestId: (testId: number) => void
@@ -79,7 +79,7 @@ type TestContextType = {
 	setActiveQuestion: (activeQuestion: ActiveQuestion) => void
 	setSelectedAnswer: (answers: Record<string, string>) => void
 	setSelectedParts: (parts: string[]) => void
-	setTimeRemaining: (time: number) => void
+	setRemainingDuration: (duration: number) => void
 }
 
 const TestContext = createContext<TestContextType | null>(null)
@@ -101,7 +101,7 @@ export const TestProvider = ({
 		activeQuestion: state.activeQuestion,
 		selectedAnswers: state.selectedAnswers,
 		selectedParts: state.selectedParts,
-		timeRemaining: state.timeRemaining,
+		remainingDuration: state.remainingDuration,
 
 		// Actions
 		setTestId: (testId: number) =>
@@ -122,8 +122,8 @@ export const TestProvider = ({
 		setSelectedParts: (parts: string[]) =>
 			dispatch({ type: 'SET_SELECTED_PARTS', payload: parts }),
 
-		setTimeRemaining: (time: number) =>
-			dispatch({ type: 'SET_TIME_REMAINING', payload: time }),
+		setRemainingDuration: (duration: number) =>
+			dispatch({ type: 'SET_REMAINING_DURATION', payload: duration }),
 
 	}), [state])
 

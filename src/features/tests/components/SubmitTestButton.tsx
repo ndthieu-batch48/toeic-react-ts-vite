@@ -19,11 +19,8 @@ import { useNavigate } from "@tanstack/react-router"
 
 export const CreateSubmit: React.FC = () => {
 	const navigate = useNavigate()
-	const { testId, testType, selectedAnswers, selectedParts } = useTestContext()
+	const { testId, testType, selectedAnswers, selectedParts, remainingDuration } = useTestContext()
 	const { createHistoryMutation } = useCreateHistory()
-
-	// Calculate elapsed time in minutes
-	const elapsedTime = 0
 
 	const handleSubmitTest = () => {
 		const submitPayload: HistoryCreateRequest = {
@@ -31,7 +28,7 @@ export const CreateSubmit: React.FC = () => {
 			type: testType,
 			dataprogress: selectedAnswers,
 			part: selectedParts,
-			time: elapsedTime,
+			time: remainingDuration / 60,
 			status: 'submit'
 		}
 		createHistoryMutation.mutateAsync(submitPayload)
@@ -43,7 +40,7 @@ export const CreateSubmit: React.FC = () => {
 			type: testType,
 			dataprogress: selectedAnswers,
 			part: selectedParts,
-			time: elapsedTime,
+			time: remainingDuration / 60,
 			status: 'save'
 		}
 		createHistoryMutation.mutateAsync(savePayload)

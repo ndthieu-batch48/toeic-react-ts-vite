@@ -1,36 +1,50 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useTestContext } from "../context/TestContext"
 
 type CountDownTimerProps = {
-	duration?: number | null
 	className?: string
 }
 
-export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className, duration }) => {
-	const [timeLeft, setTimeLeft] = useState(duration || 0)
-	const [isRunning, setIsRunning] = useState(false)
+export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => {
+	const { remainingDuration, setRemainingDuration } = useTestContext()
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
+	const [seconds, setSeconds] = useState<number>(0) // Track seconds within the current minute
+	const initialDurationRef = useRef<number>(remainingDuration) // Store initial duration to calculate progress
+	const [hasTimeLimit] = useState<boolean>(remainingDuration > 0) // Initialize hasTimeLimit and keep it constant
 
-	const hasTimeLimit = duration != null && duration > 0
+	// Convert minutes to total seconds for display
+	const totalSecondsLeft = (remainingDuration * 60) + seconds
 
+	// Set initial duration on first render
 	useEffect(() => {
-		if (hasTimeLimit && isRunning && timeLeft > 0) {
+		if (initialDurationRef.current === 0 && remainingDuration > 0) {
+			initialDurationRef.current = remainingDuration
+		}
+	}, [remainingDuration])
+
+	// Start the countdown timer (count down every second)
+	useEffect(() => {
+		if (hasTimeLimit) {
 			intervalRef.current = setInterval(() => {
-				setTimeLeft((prev) => {
-					if (prev <= 1) {
-						setIsRunning(false)
-						return 0
+				setSeconds(prevSeconds => {
+					if (prevSeconds > 0) {
+						// Decrement seconds
+						return prevSeconds - 1
+					} else if (remainingDuration > 0) {
+						// When seconds reach 0, decrement minutes and reset seconds to 59
+						setRemainingDuration(remainingDuration - 1)
+						return 59
 					}
-					return prev - 1
+					return 0
 				})
 			}, 1000)
 		} else {
 			if (intervalRef.current) {
 				clearInterval(intervalRef.current)
-				intervalRef.current = null
 			}
 		}
 
@@ -39,48 +53,55 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className, durat
 				clearInterval(intervalRef.current)
 			}
 		}
-	}, [isRunning, timeLeft, hasTimeLimit])
+	}, [hasTimeLimit, remainingDuration, setRemainingDuration])
 
-	const formatTime = (seconds: number): string => {
-		const hours = Math.floor(seconds / 3600)
-		const minutes = Math.floor((seconds % 3600) / 60)
-		const remainingSeconds = seconds % 60
+	const formatTime = (totalSeconds: number): string => {
+		const hours = Math.floor(totalSeconds / 3600)
+		const minutes = Math.floor((totalSeconds % 3600) / 60)
+		const seconds = totalSeconds % 60
 
-		if (hours > 0) {
-			return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-		}
-		return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 	}
 
-	const progressValue = hasTimeLimit && duration ? ((duration - timeLeft) / duration) * 100 : 0
-	const isExpired = hasTimeLimit && timeLeft === 0
+	// Calculate progress and expiration
+	const initialTotalSeconds = initialDurationRef.current * 60
+	const progressValue = initialTotalSeconds > 0
+		? ((initialTotalSeconds - totalSecondsLeft) / initialTotalSeconds) * 100
+		: 0
+	const isExpired = remainingDuration === 0 && seconds === 0
 
 	return (
 		<Card className={cn("w-full h-auto p-3 bg-card border-border", className)}>
 			<CardContent>
-				{/* Progress Bar */}
-				<div>
-					<div className="flex gap-2 mb-2">
-						<Clock className="text-foreground" />
-						<span className={`${isExpired ? 'text-destructive' : 'text-foreground'}`}>
-							{hasTimeLimit ? formatTime(timeLeft) : 'No limit'}
-						</span>
-					</div>
+				{hasTimeLimit ? (
+					<div>
+						<div className="flex gap-2 mb-2">
+							<Clock className="text-foreground" />
 
-					{hasTimeLimit && (
+							{isExpired ? (
+								<span className="text-destructive/80 font-semibold">
+									Time up!
+								</span>
+							) : (
+								<span className="text-foreground font-semibold">
+									{formatTime(totalSecondsLeft)}
+								</span>
+							)}
+
+						</div>
+
 						<Progress
 							value={progressValue}
-							className={`h-2 ${isExpired ? '[&>div]:bg-destructive' : ''}`}
+							className={`h-2 ${isExpired ? '[&>div]:bg-destructive/80' : ''}`}
 						/>
-					)}
-				</div>
-
-				{/* Status Message */}
-				{isExpired && (
-					<div className="text-center">
-						<p className="text-destructive font-medium">Time's Up!</p>
+					</div>
+				) : (
+					<div className="flex gap-2 items-center">
+						<Clock className="text-foreground" />
+						<span className="text-base text-foreground">No limit</span>
 					</div>
 				)}
+
 			</CardContent>
 		</Card>
 	)

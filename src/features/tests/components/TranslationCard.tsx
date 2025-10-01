@@ -34,7 +34,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 			<Button
 				variant="default"
 				onClick={onToggle}
-				className="flex items-center gap-2 text-base font-semibold bg-primary/60"
+				className="flex items-center gap-2 text-base font-semibold bg-primary/80"
 			>
 				<Globe />
 				Translate
@@ -67,7 +67,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 									variant="default"
 									onClick={onTranslate}
 									disabled={isTranslatePending || !selectedLanguage}
-									className="ml-2 font-bold text-base bg-primary/60"
+									className="ml-2 font-bold text-base bg-primary/80"
 								>
 									Translate
 								</Button>

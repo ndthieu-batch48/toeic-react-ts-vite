@@ -103,7 +103,9 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								<div className="flex flex-col gap-2 mb-5">
 
 									<div className="flex gap-2">
-										<Badge variant='outline' className="text-base font-semibold bg-primary/60 border-primary text-primary-foreground">
+										<Badge
+											variant='outline'
+											className="text-base font-semibold bg-primary/80 border-primary text-primary-foreground">
 											Question {question.question_number}
 										</Badge>
 

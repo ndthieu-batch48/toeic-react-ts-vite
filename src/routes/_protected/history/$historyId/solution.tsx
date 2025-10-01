@@ -8,7 +8,7 @@ import z from 'zod';
 
 const searchSchema = z.object({
 	testId: z.number(),
-	
+
 })
 export const Route = createFileRoute('/_protected/history/$historyId/solution')({
 	validateSearch: searchSchema,
@@ -40,7 +40,7 @@ function SolutionRoute() {
 		return <div className="text-center text-foreground">No data available</div>;
 	}
 
-	const selectedPartIds = historyData.part_list.map((part) => Number(part))
+	const selectedPartIds = historyData.part_id_list.map((part) => Number(part))
 
 	// Filter parts based on selectedPartIds, then sort the media_list
 	const sortedParts = testData.part_list
