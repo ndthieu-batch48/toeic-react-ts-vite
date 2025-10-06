@@ -65,13 +65,13 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)}
+			className={cn("h-full w-full rounded-md p-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
 				<div key={index} className="flex flex-col mb-5">
 					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
 
-					<div className="flex flex-wrap gap-1 border border-border rounded-md p-2">
+					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
 						{part.media_list?.map((media, mediaIndex) => (
 							media.question_list.map((question, questionIndex) => {
 								const isActive = isQuestionActive(part.part_id, question.question_id)

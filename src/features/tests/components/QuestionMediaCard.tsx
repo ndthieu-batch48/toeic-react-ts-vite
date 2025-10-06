@@ -67,7 +67,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 
 	// Helper function for answer option styling
 	const getAnswerOptionClass = (questionId: number, answerId: number) => {
-		const baseClass = "flex items-start gap-3 p-3 border border-border shadow-xs bg-background rounded-lg cursor-pointer text-base";
+		const baseClass = "flex items-center gap-2 p-1 border border-border shadow-xs bg-background rounded-lg cursor-pointer text-base";
 		return isAnswerSelected(questionId, answerId)
 			? `${baseClass} border-primary bg-primary-foreground`
 			: `${baseClass} hover:border-primary/50 hover:bg-primary-foreground`;
@@ -75,13 +75,13 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 
 	return (
 		<Card className="w-full mx-auto mb-3">
-			<CardHeader className="pb-2">
+			<CardHeader>
 				<Badge className="text-lg font-semibold">
 					Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
 				</Badge>
 			</CardHeader>
 
-			<CardContent className="flex flex-col md:flex-row gap-6">
+			<CardContent className="flex flex-col md:flex-row gap-2">
 				{hasContent && (
 					<>
 						{/* Left side - Main Paragraph */}
@@ -92,7 +92,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-70' : 'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div key={question.question_id || index}>
 
@@ -100,7 +100,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 							<div className="flex flex-col space-y-4">
 
 								{/* Question Header */}
-								<div className="flex flex-col gap-2 mb-5">
+								<div className="flex flex-col mb-5">
 
 									<div className="flex gap-2">
 										<Badge
@@ -115,7 +115,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 											<Flag className="fill-marker text-marker" />
 										</Button>
 									</div>
-
 
 									<Label className="text-lg font-medium flex-1 min-w-0">
 										{question.question_content}
@@ -133,13 +132,14 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 									isTranslateError={isTranslateError}
 								/>
 
-								<div className="mt-3">
+								<div>
 									<Label className="mb-2">
 										Select your answer:
 									</Label>
 
 									{/* Answer Options */}
 									<RadioGroup
+										className="gap-1"
 										value={getCurrentAnswerValue(question.question_id)}
 										onValueChange={handleSelectAnswer}
 									>
@@ -152,7 +152,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 												<RadioGroupItem
 													id={`question-${question.question_id}-answer-${answer.answer_id}`}
 													value={getAnswerValue(question.question_id, answer.answer_id)}
-													className="mt-0.5"
 												/>
 												{answer.content}
 											</Label>

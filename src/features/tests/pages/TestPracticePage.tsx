@@ -1,13 +1,11 @@
-import { Button } from "@/components/ui/button"
 import type { Part } from "../types/test"
 import { PartTab } from "../components/PartTabs"
 import { QuestionTab } from "../components/QuestionTab"
-import { CountDownTimer } from "../components/CountdownTimer"
-import { Link, useParams } from "@tanstack/react-router"
-import { CreateSubmit } from "../components/SubmitTestButton"
-import { Label } from "@radix-ui/react-dropdown-menu"
+import { Audio } from "../components/Audio"
+
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useRef } from "react"
+import { Card } from "@/components/ui/card"
 
 type TestPracticePageProps = {
 	testId: number
@@ -15,9 +13,7 @@ type TestPracticePageProps = {
 	partData: Part[],
 }
 
-export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, partData }) => {
-	const params = useParams({ from: '/_protected/test/$testId/practice' })
-
+export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) => {
 	const { ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');
 	const pageRef = useRef<Record<number, HTMLElement | null>>({});
 
@@ -27,54 +23,37 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, p
 
 			if (questionCard) {
 				const elementTop = questionCard.offsetTop;
-				scrollTo(0, elementTop - 140);
+				scrollTo(0, elementTop - 70);
 			}
 		}, 100);
 	}
 
-	return (
-		<div className="bg-primary/10">
-			<div className="flex justify-center items-center w-full h-32 gap-2">
-				<Label className="text-xl font-bold text-foreground">{testTitle}</Label>
-				<Button
-					className="border-destructive text-destructive hover:bg-destructive hover:text-primary-foreground text-lg"
-					variant="outline"
-					asChild>
-					<Link
-						to="/test/$testId"
-						replace={true}
-						params={{ testId: params.testId }}
-					>
-						Exit
-					</Link>
-				</Button>
-			</div>
 
-			<div className="flex flex-col md:flex-row gap-4">
+	return (
+		<div className="bg-primary/10 min-h-screen">
+
+			<div className="flex flex-col md:flex-row pt-15">
+
 				<PartTab
+					className="flex-1 min-w-0"
 					scrollRef={ref}
 					pageRef={pageRef}
-					className="flex-1 min-w-0"
-					partData={partData} isScrolling={isScrolling}
-					scrollPosition={scrollPosition}
+					partData={partData}
 				/>
 
 				{/* Question Tab Div */}
-				<div
-					className="flex flex-col gap-1 self-start flex-shrink-0 md:w-70 md:h-90 md:sticky md:top-4"
+				<Card
+					className="flex flex-col flex-shrink-0 md:w-70 md:h-105 md:sticky md:top-25 z-10 bg-background rounded-md shadow-md overflow-hidden"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
 						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'
 					}}
 				>
-					<CreateSubmit />
-					<CountDownTimer className="h-20" />
 					<QuestionTab
 						partData={partData}
 						onQuestionActive={handleScrollPartTab}
 					/>
-				</div>
-
+				</Card>
 			</div>
 		</div>
 	)

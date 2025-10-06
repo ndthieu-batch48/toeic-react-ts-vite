@@ -95,12 +95,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 						Select your answer:
 					</Label>
 
-					<RadioGroup value={currentSelectedAnswer} onValueChange={handleSelectAnswer}>
+					<RadioGroup
+						className="gap-1"
+						value={currentSelectedAnswer}
+						onValueChange={handleSelectAnswer}>
 						{answer_list.map((answer, index) => (
 							<Label
 								key={answer.answer_id || index}
 								htmlFor={`question-${question_id}-option-${answer.answer_id}`}
-								className={`flex items-start gap-3 p-3 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base ${currentSelectedAnswer === String(answer.answer_id)
+								className={`flex items-center gap-2 p-1 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base ${currentSelectedAnswer === String(answer.answer_id)
 									? "border-primary bg-primary-foreground"
 									: "hover:border-primary/50 hover:bg-primary-foreground"
 									}`}

@@ -2,24 +2,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { Part } from "../types/test"
 import { QuestionMediaCard } from "./QuestionMediaCard"
 import { QuestionCard } from "./QuestionCard"
+import { CountDownTimer } from "./CountdownTimer"
+import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/lib/utils"
-import { Audio } from "./Audio"
 import { useTestContext } from "../context/TestContext"
+import { Label } from "@/components/ui/label"
 import React from "react"
+import { Audio } from "../components/Audio"
+
 
 type PartTabsProps = {
 	partData: Part[]
 	className?: string,
-	isScrolling: boolean,
-	scrollPosition: {
-		x: number;
-		y: number;
-	}
 	scrollRef: React.RefObject<HTMLDivElement | null> | null
 	pageRef: React.RefObject<Record<number, HTMLElement | null>>
 }
 
-const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef, isScrolling, scrollPosition }) => {
+const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef }) => {
 	const {
 		activeQuestion,
 		setActivePart,
@@ -42,30 +41,38 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 		<Tabs
 			value={tabValue}
 			onValueChange={handleTabChange}
-			className={cn("w-full ml-5 mb-50", className)}
+			className={cn("w-full pb-20", className)}
 		>
-			<div
-				className={`${scrollPosition.y > 200 ? 'bg-background fixed top-0 z-5 w-5xl' : 'bg-transparent w-5xl'}`}
-				style={{
-					transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
-				}}
-			>
-				<TabsList
-					className="h-auto w-full grid gap-5 bg-transparent"
-					style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
-				>
-					{partData.map((part, index) => (
-						<TabsTrigger
-							key={part.part_id || index}
-							value={`part-${part.part_id}`}
-							className="h-[50px] text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-						>
-							{part.part_order || index + 1}
-						</TabsTrigger>
-					))}
-				</TabsList>
+			{/* Header with flex row layout */}
+			<div className="w-full flex flex-col fixed top-0 z-25 bg-background border-b">
+				<div className="flex items-center justify-between h-15 px-4">
 
-				<Audio audio={"this-is-just-a-text"} />
+					<Label className="text-xl font-bold text-foreground">TMA TOEIC</Label>
+
+					{/* TabsList */}
+					<TabsList
+						className="h-auto w-auto grid gap-2 bg-transparent p-1"
+						style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
+					>
+						{partData.map((part, index) => (
+							<TabsTrigger
+								key={part.part_id || index}
+								value={`part-${part.part_id}`}
+								className="h-10 text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+							>
+								{part.part_order || index + 1}
+							</TabsTrigger>
+						))}
+					</TabsList>
+
+					{/* Right side: Timer and Submit */}
+					<div className="flex items-center">
+						<CountDownTimer />
+						<SubmitTestButton />
+					</div>
+				</div>
+
+				<Audio />
 			</div>
 
 			{
@@ -74,7 +81,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 						ref={scrollRef}
 						key={part.part_id || index}
 						value={`part-${part.part_id}`}
-						className="mt-6"
+						className="pt-10"
 					>
 						<div>
 							{part.media_list?.map((media, key) =>

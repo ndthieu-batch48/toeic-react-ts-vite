@@ -1,4 +1,4 @@
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
+import { createRootRouteWithContext, Outlet, useRouter } from '@tanstack/react-router'
 import type { AuthContext } from '@/contexts/AuthContext'
 import type { QueryClient } from '@tanstack/react-query'
 import { MainFooter } from '@/components/shared/MainFooter'
@@ -17,6 +17,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootComponent() {
 	const { scrollPosition, scrollTo } = useScrollControl('window');
+	const router = useRouter();
 
 	const handleScrollToTop = () => {
 		scrollTo(0, 0);
@@ -24,11 +25,14 @@ function RootComponent() {
 
 	const isVisible = scrollPosition.y > 100;
 
+	// Check if current route contains "practice" to hide navigation and footer
+	const isPracticeRoute = router.state.location.pathname.includes('/practice');
+
 	return (
 		<div className="h-screen">
-			<MainNavigationMenu />
+			{!isPracticeRoute && <MainNavigationMenu />}
 			<main><Outlet /></main>
-			<MainFooter />
+			{!isPracticeRoute && <MainFooter />}
 			<ScrollToTop
 				isVisible={isVisible}
 				onScrollToTop={handleScrollToTop}

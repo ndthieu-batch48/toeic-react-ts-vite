@@ -1,7 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useEffect, useRef, useState } from "react"
-import { Clock } from "lucide-react"
+import { AlarmClock } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTestContext } from "../context/TestContext"
 
@@ -71,38 +70,33 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 	const isExpired = remainingDuration === 0 && seconds === 0
 
 	return (
-		<Card className={cn("w-full h-auto p-3 bg-card border-border", className)}>
-			<CardContent>
-				{hasTimeLimit ? (
-					<div>
-						<div className="flex gap-2 mb-2">
-							<Clock className="text-foreground" />
+		<div className={cn("w-full h-auto p-3 bg-transparent", className)}>
+			{hasTimeLimit ? (
+				<div>
+					<div className="flex gap-2 mb-2">
+						<AlarmClock className="text-primary" />
 
-							{isExpired ? (
-								<span className="text-destructive/80 font-semibold">
-									Time up!
-								</span>
-							) : (
-								<span className="text-foreground font-semibold">
-									{formatTime(totalSecondsLeft)}
-								</span>
-							)}
+						{isExpired ? (
+							<span className="text-destructive/80 font-semibold">
+								Time up!
+							</span>
+						) : (
+							<span className="text-primary font-semibold">
+								{formatTime(totalSecondsLeft)}
+							</span>
+						)}
 
-						</div>
-
-						<Progress
-							value={progressValue}
-							className={`h-2 ${isExpired ? '[&>div]:bg-destructive/80' : ''}`}
-						/>
 					</div>
-				) : (
-					<div className="flex gap-2 items-center">
-						<Clock className="text-foreground" />
-						<span className="text-base text-foreground">No limit</span>
-					</div>
-				)}
 
-			</CardContent>
-		</Card>
+					<Progress
+						value={progressValue}
+						className={`h-2 ${isExpired ? '[&>div]:bg-destructive/80' : ''}`}
+					/>
+				</div>
+			) : (
+				<>
+				</>
+			)}
+		</div>
 	)
 }
