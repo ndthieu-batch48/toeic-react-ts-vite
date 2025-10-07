@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { LucidePlay, LucidePause, RotateCcw, RotateCw } from "lucide-react"
+import { LucidePlay, LucidePause, LucideVolumeX, LucideVolume2 } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
-// import { useTestContext } from "../context/TestContext"
-// import { useQuery } from "@tanstack/react-query"
-// import { getPartAudioOption } from "../util/queryUtil"
-
+import { useTestContext } from "../context/TestContext"
+import { useQuery } from "@tanstack/react-query"
+import { getPartAudioUrlOption } from "../util/queryUtil"
 
 export const Audio: React.FC = () => {
-	// const { testId, activePart: partId } = useTestContext()
-	// const { data: audioResult, isLoading, error } = useQuery(getPartAudioOption(testId, partId));
+	const { testId, activePart: partId } = useTestContext()
+
+	const { data: audioUrl } = useQuery(getPartAudioUrlOption(testId, partId))
 
 	const [isPlaying, setIsPlaying] = useState<boolean>(false)
 	const [currentTime, setCurrentTime] = useState<number>(0)
@@ -19,35 +19,39 @@ export const Audio: React.FC = () => {
 	const [audioLoading, setAudioLoading] = useState<boolean>(false)
 	const audioRef = useRef<HTMLAudioElement>(null)
 
-	// Get the actual audio URL from API result
-	const audioUrl = '';//audioResult?.success ? audioResult.audioUrl : null;
 
 	useEffect(() => {
 		const audioElement = audioRef.current
 		if (!audioElement) return
 
-		const updateTime = () => setCurrentTime(audioElement.currentTime)
-		const updateDuration = () => setDuration(audioElement.duration)
-		const handleLoadStart = () => setAudioLoading(true)
-		const handleCanPlay = () => setAudioLoading(false)
-		const handleLoadError = () => setAudioLoading(false)
+		const updateTime = () => {
+			setCurrentTime(audioElement.currentTime);
+		}
+		const handleLoadStart = () => {
+			setAudioLoading(true);
+		}
+		const handleCanPlay = () => {
+			setAudioLoading(false);
+		}
+		const handleLoadError = () => {
+			setAudioLoading(false);
+		}
+		const handleEnded = () => setIsPlaying(false);
 
 		audioElement.addEventListener('timeupdate', updateTime)
-		audioElement.addEventListener('loadedmetadata', updateDuration)
-		audioElement.addEventListener('ended', () => setIsPlaying(false))
+		audioElement.addEventListener('ended', handleEnded)
 		audioElement.addEventListener('loadstart', handleLoadStart)
 		audioElement.addEventListener('canplay', handleCanPlay)
 		audioElement.addEventListener('error', handleLoadError)
 
 		return () => {
 			audioElement.removeEventListener('timeupdate', updateTime)
-			audioElement.removeEventListener('loadedmetadata', updateDuration)
-			audioElement.removeEventListener('ended', () => setIsPlaying(false))
+			audioElement.removeEventListener('ended', handleEnded)
 			audioElement.removeEventListener('loadstart', handleLoadStart)
 			audioElement.removeEventListener('canplay', handleCanPlay)
 			audioElement.removeEventListener('error', handleLoadError)
 		}
-	}, [])
+	}, [audioUrl])
 
 	useEffect(() => {
 		if (audioRef.current) {
@@ -57,12 +61,36 @@ export const Audio: React.FC = () => {
 
 	// Reset audio state when audio URL changes (switching parts)
 	useEffect(() => {
-		if (audioRef.current && audioUrl) {
+		console.log("Audio URL changed:", audioUrl);
+		const audioElement = audioRef.current;
+
+		if (audioElement && audioUrl) {
+			console.log("Resetting audio state and loading new URL");
+
+			// Reset all states
 			setIsPlaying(false);
 			setCurrentTime(0);
 			setDuration(0);
-			// Load the new audio
-			audioRef.current.load();
+			setAudioLoading(true);
+
+			// Explicitly set the src and reload
+			audioElement.src = audioUrl;
+			audioElement.load();
+
+			// Add a one-time listener for when metadata loads
+			const handleLoadedMetadata = () => {
+				console.log("Metadata loaded, duration:", audioElement.duration);
+				setDuration(audioElement.duration || 0);
+				setAudioLoading(false);
+			};
+
+			const handleError = () => {
+				console.error("Audio loading error");
+				setAudioLoading(false);
+			};
+
+			audioElement.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
+			audioElement.addEventListener('error', handleError, { once: true });
 		}
 	}, [audioUrl])
 
@@ -94,22 +122,6 @@ export const Audio: React.FC = () => {
 		setIsMuted(!isMuted)
 	}
 
-	const skipBackward = () => {
-		if (audioRef.current) {
-			const newTime = Math.max(0, currentTime - 10)
-			audioRef.current.currentTime = newTime
-			setCurrentTime(newTime)
-		}
-	}
-
-	const skipForward = () => {
-		if (audioRef.current) {
-			const newTime = Math.min(duration, currentTime + 10)
-			audioRef.current.currentTime = newTime
-			setCurrentTime(newTime)
-		}
-	}
-
 	const formatTime = (time: number): string => {
 		const minutes = Math.floor(time / 60)
 		const seconds = Math.floor(time % 60)
@@ -118,74 +130,36 @@ export const Audio: React.FC = () => {
 
 	const progressValue = duration ? (currentTime / duration) * 100 : 0
 
-	// // Show loading or error states
-	// if (isLoading) {
-	// 	return (
-	// 		<div className="flex flex-col items-center p-4">
-	// 			<div className="text-muted-foreground">Loading audio...</div>
-	// 		</div>
-	// 	);
-	// }
-
-	// if (error || (audioResult && !audioResult.success)) {
-	// 	return (
-	// 		<div className="flex flex-col items-center p-4">
-	// 			<div className="text-destructive">
-	// 				{audioResult?.error || "Failed to load audio"}
-	// 			</div>
-	// 		</div>
-	// 	);
-	// }
+	if (!audioUrl) {
+		return <></>
+	}
 
 	return (
-		<div className="flex items-center">
+		<div className="flex items-center gap-1">
 
 			<audio ref={audioRef} src={audioUrl} preload="metadata" />
 
-			<div className="flex items-center gap-2">
+			<Button
+				variant="outline"
+				size="icon"
+				onClick={togglePlayPause}
+				className="h-10 w-10 rounded-full hover:bg-accent"
+				disabled={audioLoading}
+			>
+				{audioLoading ? (
+					<div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
+				) : isPlaying ? (
+					<LucidePause />
+				) : (
+					<LucidePlay />
+				)}
+			</Button>
 
-				{/* Back 10s */}
-				<Button
-					variant="ghost"
-					size="icon"
-					onClick={skipBackward}
-					className="rounded-2xl hover:bg-accent"
-				>
-					<RotateCcw />
-				</Button>
-
-				<Button
-					variant="outline"
-					size="icon"
-					onClick={togglePlayPause}
-					className="h-10 w-10 rounded-full hover:bg-accent"
-					disabled={audioLoading}
-				>
-					{audioLoading ? (
-						<div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full" />
-					) : isPlaying ? (
-						<LucidePause />
-					) : (
-						<LucidePlay />
-					)}
-				</Button>
-
-				{/* Forward 10s */}
-				<Button
-					variant="ghost"
-					size="icon"
-					onClick={skipForward}
-					className="rounded-2xl hover:bg-accent"
-				>
-					<RotateCw />
-				</Button>
-
-			</div>
-
-			<div className="flex flex-col w-full gap-1 px-2">
+			{/* Progress div */}
+			<div className="flex w-full gap-2 items-center">
 
 				{/* Time Display */}
-				<div className="text-base text-muted-foreground">
+				<div className="text-xs text-muted-foreground whitespace-nowrap min-w-[70px]">
 					<span>{formatTime(currentTime)} / {formatTime(duration)}</span>
 				</div>
 
@@ -198,46 +172,34 @@ export const Audio: React.FC = () => {
 					className="w-full [&_[data-slot=slider-track]]:bg-primary/20"
 				/>
 
+			</div>
 
+			{/* Volume control */}
+			<div className="flex items-center min-w-[120px]">
+				<Button
+					variant="ghost"
+					onClick={toggleMute}
+					className="h-3 w-3"
+				>
+					{isMuted || volume === 0 ? (
+						<LucideVolumeX />
+					) : (
+						<LucideVolume2 />
+					)}
+				</Button>
+
+				<Slider
+					value={[isMuted ? 0 : volume]}
+					max={100}
+					step={1}
+					onValueChange={handleVolumeChange}
+				/>
+				<span className="text-xs text-muted-foreground w-8">
+					{isMuted ? 0 : volume}
+				</span>
 			</div>
 
 		</div>
 
-		// <div className="w-full max-h-20">
-		// 	<div className="flex  gap-4">
-
-
-		// 		{/* Main Controls */}
-
-
-		// 		{/* Volume Controls */}
-		// 		<div className="flex items-center gap-2 min-w-[120px]">
-		// 			<Button
-		// 				variant="ghost"
-		// 				size="icon"
-		// 				onClick={toggleMute}
-		// 				className="h-8 w-8"
-		// 			>
-		// 				{isMuted || volume === 0 ? (
-		// 					<LucideVolumeX />
-		// 				) : (
-		// 					<LucideVolume2 />
-		// 				)}
-		// 			</Button>
-
-		// 			<Slider
-		// 				value={[isMuted ? 0 : volume]}
-		// 				max={100}
-		// 				step={1}
-		// 				onValueChange={handleVolumeChange}
-		// 				className="w-26"
-		// 			/>
-		// 			<span className="text-base text-muted-foreground w-8 text-right">
-		// 				{isMuted ? 0 : volume}
-		// 			</span>
-		// 		</div>
-
-		// 	</div>
-		// </div>
 	)
 }

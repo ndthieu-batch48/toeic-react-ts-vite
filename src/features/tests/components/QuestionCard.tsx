@@ -51,24 +51,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	return (
 		<Card className="w-full mx-auto mb-3 shadow-md">
-			<CardHeader className="mb-3 relative">
+			<CardHeader className="mb-3">
 
-				<Button
-					variant="outline"
-					className="absolute top-0 right-2 hover:bg-background" >
-					<Flag className="fill-marker text-marker" />
-				</Button>
-
-				<div className="flex items-start gap-2 mb-2">
+				<div className="flex items-center gap-1">
+					<Button
+						size="icon"
+						variant="outline"
+						className="hover:bg-background" >
+						<Flag className="fill-marker text-marker" />
+					</Button>
 					<Badge className="text-base font-semibold">
 						Question {question_number}
 					</Badge>
-					<Label className="text-lg font-semibold pr-5	">
+					<Label className="text-base font-semibold self-start">
 						{question_content}
 					</Label>
 				</div>
-
-
 
 				<TranslationCard
 					translateScript={newTranslateScript[question_id]}

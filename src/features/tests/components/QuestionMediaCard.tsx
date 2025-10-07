@@ -102,23 +102,25 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								{/* Question Header */}
 								<div className="flex flex-col mb-5">
 
-									<div className="flex gap-2">
-										<Badge
-											variant='outline'
-											className="text-base font-semibold bg-primary/80 border-primary text-primary-foreground">
-											Question {question.question_number}
-										</Badge>
-
+									<div className="flex items-start gap-1">
 										<Button
+											size="icon"
 											variant="outline"
 											className="hover:bg-background" >
 											<Flag className="fill-marker text-marker" />
 										</Button>
+										<Badge
+											variant='outline'
+											className="text-base font-semibold border-primary">
+											{question.question_number}
+										</Badge>
+
+										<Label className="text-base font-medium flex-1 min-w-0">
+											{question.question_content}
+										</Label>
 									</div>
 
-									<Label className="text-lg font-medium flex-1 min-w-0">
-										{question.question_content}
-									</Label>
+
 								</div>
 
 								<TranslationCard

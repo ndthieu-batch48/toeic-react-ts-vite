@@ -28,16 +28,17 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 }) => {
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-1">
 
 			{/* Translation Toggle Button */}
 			<Button
-				variant="default"
+				size="sm"
+				variant="outline"
 				onClick={onToggle}
-				className="flex items-center gap-2 text-base font-semibold bg-primary/80"
+				className="flex items-center text-sm font-semibold"
 			>
 				<Globe />
-				Translate
+				{isExpanded ? 'Hide Translation' : 'Translate Question & Answers'}
 				{isExpanded ?
 					<ChevronUp /> :
 					<ChevronDown />
@@ -46,9 +47,9 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 			{/* Expandable Translation Card */}
 			{isExpanded && (
-				<Card className="bg-primary/5 border-primary/20">
-					<CardContent className="p-4">
-						<div className="space-y-4">
+				<Card className="bg-primary/5 border-primary/20 p-0">
+					<CardContent className="p-3">
+						<div className="space-y-2">
 							<div className="flex">
 								<Select value={selectedLanguage} onValueChange={onLanguageChange}>
 									<SelectTrigger className="w-[130px] h-8">
@@ -64,10 +65,11 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 								</Select>
 
 								<Button
-									variant="default"
+									size="sm"
+									variant="outline"
 									onClick={onTranslate}
 									disabled={isTranslatePending || !selectedLanguage}
-									className="ml-2 font-bold text-base bg-primary/80"
+									className="ml-1 text-sm font-semibold border border-primary"
 								>
 									Translate
 								</Button>
@@ -75,38 +77,38 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 
 							<Separator />
 
-							<div className="space-y-3">
-								<div className="p-3 bg-background rounded-lg border">
+							<div className="space-y-2">
+								<div className="p-2 bg-background rounded-lg border">
 									{isTranslatePending ? (
 										<div className="flex items-center gap-2">
 											<div className="w-4 h-4 border border-primary border-t-transparent rounded-2xl animate-spin" />
-											<p className="text-base">Translating question...</p>
+											<p className="text-sm">Translating question...</p>
 										</div>
 									) : translateScript?.question_content ? (
-										<p className="text-lg font-medium">{translateScript.question_content}</p>
+										<p className="text-sm font-medium">{translateScript.question_content}</p>
 									) : (
-										<p className="text-lg font-medium">Select a language and click translate to see the translation</p>
+										<p className="text-sm font-medium">Select a language and click translate to see the translation</p>
 									)}
 								</div>
 
-								<div className="space-y-2">
-									<h5 className="text-sm font-semibold text-muted-foreground uppercase">Answer Options</h5>
+								<div className="space-y-1">
+									<h5 className="text-sm font-semibold text-muted-foreground">Options</h5>
 									<div className="space-y-1">
 										{isTranslatePending ? (
-											<div className="flex items-center gap-2 p-2 bg-background rounded border">
+											<div className="flex items-center gap-2 p-2 bg-background rounded-lg border">
 												<div className="w-3 h-3 border border-primary border-t-transparent rounded-2xl animate-spin" />
-												<p className="text-base text-muted-foreground">Translating answers...</p>
+												<p className="text-sm text-muted-foreground">Translating answers...</p>
 											</div>
 										) : translateScript?.answer_list && translateScript.answer_list.length > 0 ? (
 											translateScript.answer_list.map((answer, idx) => (
-												<div key={idx} className="p-2 bg-background rounded-xl border">
-													<p className="text-base">
+												<div key={idx} className="p-2 bg-background rounded-lg border">
+													<p className="text-sm">
 														{answer}
 													</p>
 												</div>
 											))
 										) : (
-											<div className="p-2 bg-background rounded-xl border">
+											<div className="p-2 bg-background rounded-lg border">
 												<p className="text-xs text-muted-foreground">
 													No translated answers available
 												</p>

@@ -1,7 +1,6 @@
 import type { Part } from "../types/test"
 import { PartTab } from "../components/PartTabs"
 import { QuestionTab } from "../components/QuestionTab"
-import { Audio } from "../components/Audio"
 
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useRef } from "react"
@@ -32,7 +31,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) 
 	return (
 		<div className="bg-primary/10 min-h-screen">
 
-			<div className="flex flex-col md:flex-row pt-15">
+			<div className="flex flex-col md:flex-row pt-10 pb-50">
 
 				<PartTab
 					className="flex-1 min-w-0"
@@ -43,7 +42,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) 
 
 				{/* Question Tab Div */}
 				<Card
-					className="flex flex-col flex-shrink-0 md:w-70 md:h-105 md:sticky md:top-25 z-10 bg-background rounded-md shadow-md overflow-hidden"
+					className="flex flex-col flex-shrink-0 md:w-70 md:h-105 md:sticky md:top-0 z-10 bg-background rounded-md shadow-md overflow-hidden"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
 						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'

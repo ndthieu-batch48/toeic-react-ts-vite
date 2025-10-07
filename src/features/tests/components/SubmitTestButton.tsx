@@ -52,10 +52,10 @@ export const SubmitTestButton: React.FC = () => {
 	}, [createHistoryMutation.isSuccess, navigate])
 
 	return (
-		<div className="flex gap-1 px-2">
+		<div className="flex gap-1">
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
-					<Button className="font-bold text-lg h-10 w-20 flex-1" variant="destructive">
+					<Button className="font-bold h-8 text-sm w-15 flex-1" variant="destructive">
 						Submit
 					</Button>
 				</AlertDialogTrigger>
@@ -83,7 +83,7 @@ export const SubmitTestButton: React.FC = () => {
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
 					<Button
-						className="font-bold text-lg h-10 w-20 flex-1 bg-marker hover:bg-marker text-primary-foreground"
+						className="font-bold h-8 text-sm w-15 flex-1 bg-marker hover:bg-marker text-primary-foreground"
 						variant="default">
 						Save
 					</Button>

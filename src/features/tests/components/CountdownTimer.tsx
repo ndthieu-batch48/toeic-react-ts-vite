@@ -70,10 +70,10 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 	const isExpired = remainingDuration === 0 && seconds === 0
 
 	return (
-		<div className={cn("w-full h-auto p-3 bg-transparent", className)}>
+		<div className={cn("w-full h-auto bg-transparent", className)}>
 			{hasTimeLimit ? (
 				<div>
-					<div className="flex gap-2 mb-2">
+					<div className="flex gap-1 pb-1">
 						<AlarmClock className="text-primary" />
 
 						{isExpired ? (

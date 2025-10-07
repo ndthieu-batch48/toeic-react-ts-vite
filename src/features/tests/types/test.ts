@@ -55,5 +55,9 @@ export interface TranslateQuestionRequest {
   language_id: LANGUAGE_ID;
 }
 
+export interface GetPartAudioRequest {
+  testId: number;
+  partId: number;
+}
 
 

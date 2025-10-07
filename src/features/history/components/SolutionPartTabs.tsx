@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SolutionQuestionMediaCard } from "./SolutionQuestionMediaCard"
 import { SolutionQuestionCard } from "./SolutionQuestionCard"
-import { Audio } from "@/features/tests/components/Audio"
+// import { Audio } from "@/features/tests/components/Audio"
 import { cn } from "@/lib/utils"
 import React from "react"
 import type { Part } from "@/features/tests/types/test"
@@ -65,7 +65,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 					))}
 				</TabsList>
 
-				<Audio audio={"this-is-just-a-text"} />
+				{/* <Audio audio={"this-is-just-a-text"} /> */}
 			</div>
 
 			{

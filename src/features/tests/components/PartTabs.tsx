@@ -6,7 +6,6 @@ import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/lib/utils"
 import { useTestContext } from "../context/TestContext"
-import { Label } from "@/components/ui/label"
 import React from "react"
 import { Audio } from "../components/Audio"
 
@@ -41,38 +40,36 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 		<Tabs
 			value={tabValue}
 			onValueChange={handleTabChange}
-			className={cn("w-full pb-20", className)}
+			className={cn("w-full", className)}
 		>
 			{/* Header with flex row layout */}
-			<div className="w-full flex flex-col fixed top-0 z-25 bg-background border-b">
-				<div className="flex items-center justify-between h-15 px-4">
+			<div className="w-full flex items-center fixed bottom-0 z-25 bg-background p-1">
+				{/* TabsList - Compact */}
+				<TabsList
+					className="h-auto w-auto grid gap-1 bg-transparent p-0"
+					style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
+				>
+					{partData.map((part, index) => (
+						<TabsTrigger
+							key={part.part_id || index}
+							value={`part-${part.part_id}`}
+							className="h-10 text-sm font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+						>
+							{part.part_order || index + 1}
+						</TabsTrigger>
+					))}
+				</TabsList>
 
-					<Label className="text-xl font-bold text-foreground">TMA TOEIC</Label>
-
-					{/* TabsList */}
-					<TabsList
-						className="h-auto w-auto grid gap-2 bg-transparent p-1"
-						style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
-					>
-						{partData.map((part, index) => (
-							<TabsTrigger
-								key={part.part_id || index}
-								value={`part-${part.part_id}`}
-								className="h-10 text-lg font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-							>
-								{part.part_order || index + 1}
-							</TabsTrigger>
-						))}
-					</TabsList>
-
-					{/* Right side: Timer and Submit */}
-					<div className="flex items-center">
-						<CountDownTimer />
-						<SubmitTestButton />
-					</div>
+				{/* Audio - Takes maximum available space */}
+				<div className="flex-1 mx-2">
+					<Audio />
 				</div>
 
-				<Audio />
+				{/* Right side */}
+				<div className="flex flex-col items-start gap-2">
+					<CountDownTimer />
+					<SubmitTestButton />
+				</div>
 			</div>
 
 			{
@@ -81,7 +78,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 						ref={scrollRef}
 						key={part.part_id || index}
 						value={`part-${part.part_id}`}
-						className="pt-10"
 					>
 						<div>
 							{part.media_list?.map((media, key) =>
