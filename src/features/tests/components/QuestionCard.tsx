@@ -11,6 +11,7 @@ import type { LANGUAGE_ID } from '../constants/const'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Flag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useTestScrollContext } from '../context/TestScrollContext'
 
 export interface QuestionCardProps {
 	paragraphMain: string
@@ -22,6 +23,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	paragraphMain,
 	questionData,
 }) => {
+
+	// SCROLL LOGIC
+	const { setTargetQuestionCardRef } = useTestScrollContext()
+
 
 	const { question_id, question_number, question_content, answer_list } = questionData
 	const { selectedAnswers, setSelectedAnswer } = useTestContext()
@@ -38,7 +43,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
-	//TODO: Trigger active question 
 	const handleSelectAnswer = (answerId: string) => {
 		const updatedAnswers = {
 			...selectedAnswers,
@@ -50,7 +54,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
 
 	return (
-		<Card className="w-full mx-auto mb-3 shadow-md">
+		<Card
+			className="w-full mx-auto mb-3 shadow-md"
+			ref={(el: HTMLDivElement | null) => { setTargetQuestionCardRef(question_id, el) }}
+		>
 			<CardHeader className="mb-3">
 
 				<div className="flex items-center gap-1">

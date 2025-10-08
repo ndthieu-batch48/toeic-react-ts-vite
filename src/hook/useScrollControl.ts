@@ -3,11 +3,15 @@ import { useState, useRef, useEffect } from 'react';
 type ScrollTarget = 'window' | 'container';
 
 export const useScrollControl = (
-  target: ScrollTarget = 'container',
+  target: ScrollTarget,
   initialX = 0,
   initialY = 0
 ) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+  if (!target) {
+    throw new Error('useScrollControl: target parameter is required. Use "window" or "container".');
+  }
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [scrollPosition, setScrollPosition] = useState<{ x: number; y: number }>({
     x: initialX,
     y: initialY
@@ -21,8 +25,8 @@ export const useScrollControl = (
         top: y,
         behavior: "smooth"
       });
-    } else if (ref.current) {
-      ref.current.scrollTo({
+    } else if (containerRef.current) {
+      containerRef.current.scrollTo({
         left: x,
         top: y,
         behavior: "smooth"
@@ -37,8 +41,8 @@ export const useScrollControl = (
         top: deltaY,
         behavior: "smooth"
       });
-    } else if (ref.current) {
-      ref.current.scrollBy({
+    } else if (containerRef.current) {
+      containerRef.current.scrollBy({
         left: deltaX,
         top: deltaY,
         behavior: "smooth"
@@ -48,9 +52,9 @@ export const useScrollControl = (
 
   // Set initial scroll position for container
   useEffect(() => {
-    if (target === 'container' && ref.current) {
-      ref.current.scrollLeft = initialX;
-      ref.current.scrollTop = initialY;
+    if (target === 'container' && containerRef.current) {
+      containerRef.current.scrollLeft = initialX;
+      containerRef.current.scrollTop = initialY;
     }
   }, [initialX, initialY, target]);
 
@@ -65,7 +69,7 @@ export const useScrollControl = (
           y: window.scrollY
         });
       } else {
-        const element = ref.current;
+        const element = containerRef.current;
         if (!element) return;
 
         setScrollPosition({
@@ -90,7 +94,7 @@ export const useScrollControl = (
         clearTimeout(scrollTimeout);
       };
     } else {
-      const element = ref.current;
+      const element = containerRef.current;
       if (!element) return;
 
       element.addEventListener('scroll', handleScroll);
@@ -103,7 +107,7 @@ export const useScrollControl = (
   }, [target]);
 
   return {
-    ref: target === 'container' ? ref : null,
+    containerScrollRef: target === 'container' ? containerRef : null,
     scrollPosition,
     scrollTo,
     scrollBy,

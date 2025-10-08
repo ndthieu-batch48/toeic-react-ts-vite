@@ -111,8 +111,8 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 		<>
 			<div className="max-w-3xl mx-auto p-6 space-y-6">
 				{/* Header Section */}
-				<div className="text-center space-y-4">
-					<h1 className="text-3xl font-bold text-foreground">{currentTest.test_title}</h1>
+				<div className="flex flex-col items-start space-y-4">
+					<h1 className="text-3xl font-bold text-foreground self-center">{currentTest.test_title}</h1>
 
 					<div className="flex items-center justify-center gap-2 text-muted-foreground text-xl">
 						<Clock className="h-4 w-4" />
@@ -120,7 +120,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 					</div>
 
 					{/* Display info about selected parts */}
-					<div className="w-full h-5 flex items-center justify-center">
+					<div className="h-5 flex items-center justify-center">
 						{isPracticeTest && hasSelectedParts ? (
 							<Label className="text-lg text-muted-foreground">
 								<span>Selected: {selectedPartIds.size} part(s)</span>
@@ -140,7 +140,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 				</div>
 
 				{/* Action Buttons */}
-				<div className="flex flex-wrap gap-3 justify-center">
+				<div className="flex flex-wrap gap-3">
 					<Button
 						variant={isPracticeTest ? "default" : "outline"}
 						className={`${isPracticeTest ? "px-6 " : "px-6 "} text-lg font-bold`}
@@ -161,31 +161,31 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 						<>
 							{/* Test Parts Selection for Practice Mode */}
 							<Card className="shadow-md">
-								<CardHeader>
+								{/* <CardHeader>
 									<CardTitle className="flex items-center gap-2 text-xl">
 										<BookOpen className="h-5 w-5" />
 										Select Test Parts
 									</CardTitle>
-								</CardHeader>
+								</CardHeader> */}
 								<CardContent className="space-y-4">
 									{/* Select All / Deselect All */}
 									<div className="flex gap-2 pb-2">
 										<Button
-												variant="outline"
-												className="text-lg font-medium"
-												onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}
-											>
-												Select All
-											</Button>
-											<Button
-												variant="outline"
-												className="text-lg font-medium"	
-												onClick={() => setSelectedPartIds(new Set())}
-											>
-												Deselect All
-											</Button>
+											variant="outline"
+											className="text-lg font-medium"
+											onClick={() => setSelectedPartIds(new Set(currentTest.part_list.map(p => p.part_id)))}
+										>
+											Select All
+										</Button>
+										<Button
+											variant="outline"
+											className="text-lg font-medium"
+											onClick={() => setSelectedPartIds(new Set())}
+										>
+											Deselect All
+										</Button>
 									</div>
-									
+
 									<Separator />
 
 									{currentTest.part_list.map((part, index) => (
@@ -231,12 +231,12 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 									Full Test Overview
 								</CardTitle>
 							</CardHeader>
-								
+
 							<CardContent className="space-y-4">
 								<div className="text-lg text-muted-foreground mb-4">
 									You will take the complete test with all sections included.
 								</div>
-							
+
 								<Separator />
 
 								{/* Show all parts that will be included */}
@@ -258,7 +258,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 								</div>
 
 								<div className="flex gap-2 p-3">
-									<Info /> 
+									<Info />
 									<p className="gap-2 text-base text-accent-foreground">
 										<strong>Note:</strong> In full test mode, you'll complete all sections in order with the standard time allocation.
 									</p>

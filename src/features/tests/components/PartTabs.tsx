@@ -6,22 +6,21 @@ import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/lib/utils"
 import { useTestContext } from "../context/TestContext"
-import React from "react"
+import React, { useEffect } from "react"
 import { Audio } from "../components/Audio"
+import { useTestScrollContext } from "../context/TestScrollContext"
+import { useScrollControl } from "@/hook/useScrollControl"
 
 
 type PartTabsProps = {
 	partData: Part[]
 	className?: string,
-	scrollRef: React.RefObject<HTMLDivElement | null> | null
-	pageRef: React.RefObject<Record<number, HTMLElement | null>>
 }
 
-const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scrollRef, pageRef }) => {
-	const {
-		activeQuestion,
-		setActivePart,
-	} = useTestContext()
+const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
+
+	// TAB CHANGE LOGIC
+	const { activeQuestion, setActivePart } = useTestContext()
 
 	const tabValue = `part-${activeQuestion.part_id}`
 
@@ -36,15 +35,33 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 		}
 	}
 
+	const { getTargetQuestionCardRef } = useTestScrollContext()
+	const { scrollTo } = useScrollControl('window')
+
+	useEffect(() => {
+		if (activeQuestion) {
+			setTimeout(() => {
+				const questionElement = getTargetQuestionCardRef(activeQuestion.question_id);
+				if (questionElement) {
+					const elementTop = questionElement.offsetTop;
+					scrollTo(0, elementTop - 70);
+				}
+			}, 100);
+		}
+	}, [activeQuestion, getTargetQuestionCardRef, scrollTo])
+
+
 	return (
 		<Tabs
 			value={tabValue}
 			onValueChange={handleTabChange}
 			className={cn("w-full", className)}
 		>
-			{/* Header with flex row layout */}
-			<div className="w-full flex items-center fixed bottom-0 z-25 bg-background p-1">
-				{/* TabsList - Compact */}
+
+			{/* Full Part Tab control */}
+			<div className="w-full flex items-center fixed top-0 z-25 bg-background p-1">
+
+				{/* TabsList */}
 				<TabsList
 					className="h-auto w-auto grid gap-1 bg-transparent p-0"
 					style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
@@ -60,13 +77,13 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 					))}
 				</TabsList>
 
-				{/* Audio - Takes maximum available space */}
-				<div className="flex-1 mx-2">
+				{/* Audio Control */}
+				<div className="flex-1 mx-5">
 					<Audio />
 				</div>
 
 				{/* Right side */}
-				<div className="flex flex-col items-start gap-2">
+				<div className="flex items-center gap-2 md:max-w-60">
 					<CountDownTimer />
 					<SubmitTestButton />
 				</div>
@@ -75,31 +92,25 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData, scroll
 			{
 				partData.map((part, index) => (
 					<TabsContent
-						ref={scrollRef}
 						key={part.part_id || index}
 						value={`part-${part.part_id}`}
 					>
 						<div>
 							{part.media_list?.map((media, key) =>
 								media.question_list.length === 1 ? (
-									<div key={media.media_id}
-										ref={(el: HTMLDivElement | null) => { pageRef.current[media.media_id] = el }}>
-										<QuestionCard
-											questionData={media.question_list[0]}
-											paragraphMain={media.media_paragraph_main}
-											translateScript={media.media_translate_script}
-										/>
-									</div>
+									<QuestionCard
+										key={media.media_id}
+										questionData={media.question_list[0]}
+										paragraphMain={media.media_paragraph_main}
+										translateScript={media.media_translate_script}
+									/>
 								) : (
-									<div key={key}
-										ref={(el: HTMLDivElement | null) => { pageRef.current[media.media_id] = el }}>
-										<QuestionMediaCard
-											mediaName={media.media_name}
-											paragraphMain={media.media_paragraph_main}
-											questionData={media.question_list}
-											translateScript={media.media_translate_script}
-										/>
-									</div>
+									<QuestionMediaCard
+										key={key}
+										mediaName={media.media_name}
+										paragraphMain={media.media_paragraph_main}
+										questionData={media.question_list}
+										translateScript={media.media_translate_script} />
 								)
 							)}
 						</div>

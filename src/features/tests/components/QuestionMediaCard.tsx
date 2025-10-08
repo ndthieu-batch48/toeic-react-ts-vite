@@ -12,6 +12,7 @@ import type { LANGUAGE_ID } from '../constants/const'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Button } from '@/components/ui/button'
 import { Flag } from 'lucide-react'
+import { useTestScrollContext } from '../context/TestScrollContext'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
@@ -25,6 +26,9 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	paragraphMain,
 	questionData,
 }) => {
+
+	// SCROLL LOGIC
+	const { setTargetQuestionCardRef } = useTestScrollContext()
 
 	const { selectedAnswers, setSelectedAnswer } = useTestContext()
 	const {
@@ -94,7 +98,10 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				{/* Right side - Questions */}
 				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
 					{questionData.map((question, index) => (
-						<div key={question.question_id || index}>
+						<div
+							key={question.question_id || index}
+							ref={(el: HTMLDivElement | null) => { setTargetQuestionCardRef(question.question_id, el) }}
+						>
 
 							{/* Question Block */}
 							<div className="flex flex-col space-y-4">

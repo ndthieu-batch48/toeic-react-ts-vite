@@ -18,7 +18,7 @@ type SolutionPageProps = {
 export const SolutionPage: React.FC<SolutionPageProps> = ({ detailHistory, partData }) => {
 	const params = useParams({ from: '/_protected/history/$historyId/solution' })
 
-	const { ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');
+	const { containerScrollRef: ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');
 	const pageRef = useRef<Record<number, HTMLElement | null>>({});
 
 	const handleScrollPartTab = (mediaId: number) => {

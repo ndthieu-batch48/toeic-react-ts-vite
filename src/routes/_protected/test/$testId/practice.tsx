@@ -1,4 +1,5 @@
 import { TestProvider, type TestState } from '@/features/tests/context/TestContext';
+import { TestScrollProvider } from '@/features/tests/context/TestScrollContext';
 import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
 import { TestPracticePage } from '@/features/tests/pages/TestPracticePage';
@@ -53,11 +54,13 @@ function TestPracticeRoute() {
 
 	return (
 		<TestProvider initialState={initialState}>
-			<TestPracticePage
-				testId={Number(testId)}
-				testTitle={testData!.test_title || "TMA TOEIC"}
-				partData={sortedParts}
-			/>
+			<TestScrollProvider>
+				<TestPracticePage
+					testId={Number(testId)}
+					testTitle={testData!.test_title || "TMA TOEIC"}
+					partData={sortedParts}
+				/>
+			</TestScrollProvider>
 		</TestProvider>
 	)
 }

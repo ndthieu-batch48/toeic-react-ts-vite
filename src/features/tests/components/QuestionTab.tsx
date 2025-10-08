@@ -4,18 +4,20 @@ import type { Part } from "../types/test"
 import { Label } from "@/components/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
 import React, { useEffect, useRef } from "react"
+import { useTestScrollContext } from "../context/TestScrollContext"
 
 type QuestionTabProps = {
 	partData: Part[]
 	className?: string,
-	onQuestionActive?: (mediaId: number) => void
+	// onQuestionActive?: (mediaId: number) => void
 }
 
 const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	className,
 	partData,
-	onQuestionActive,
 }) => {
+	const { getTargetQuestionCardRef } = useTestScrollContext()
+
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useTestContext()
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -55,7 +57,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 					const scrollTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
 
 					// Apply the calculated scroll position
-					scrollViewport.scrollTo({ left: 0, top: Math.max(0, scrollTop + 100), behavior: "smooth" });
+					scrollViewport.scrollTo({ left: 0, top: Math.max(0, scrollTop + 190), behavior: "smooth" });
 
 					console.log('Scrolling to active question:', questionKey, 'scrollTop:', scrollTop);
 				}
@@ -65,11 +67,11 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-full w-full rounded-md p-2 bg-transparent", className)}
+			className={cn("h-full w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
-				<div key={index} className="flex flex-col mb-5">
-					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
+				<div key={index} className="flex flex-col mb-2">
+					<Label className="font-semibold text-sm text-foreground mb-1">{part.part_order}</Label>
 
 					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
 						{part.media_list?.map((media, mediaIndex) => (
@@ -84,7 +86,8 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 											questionRefs.current[questionKey] = el;
 										}}
 										onClick={() => {
-											onQuestionActive?.(media.media_id)
+
+											getTargetQuestionCardRef(question.question_id)
 
 											toggleActive({
 												part_id: part.part_id,
@@ -92,7 +95,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 											})
 										}}
 										className={cn(
-											"flex items-center border border-border justify-center min-w-[37px] h-10 rounded-2xl text-base font-semibold cursor-pointer",
+											"flex items-center border border-border justify-center min-w-[26px] min-h-[26px] rounded-2xl text-xs font-semibold cursor-pointer",
 											isActive
 												? "bg-primary text-primary-foreground"
 												: isAnswered
