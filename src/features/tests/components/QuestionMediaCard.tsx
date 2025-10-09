@@ -19,18 +19,20 @@ type QuestionMediaCardProps = {
 	paragraphMain: string,
 	translateScript?: TranslateQuestionResponse
 	questionData: Question[],
+	partId: number,
 }
 
 export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	mediaName,
 	paragraphMain,
 	questionData,
+	partId,
 }) => {
 
 	// SCROLL LOGIC
-	const { setTargetQuestionCardRef } = useTestScrollContext()
+	const { setScrollTarget } = useTestScrollContext()
 
-	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { selectedAnswers, setSelectedAnswer, setActiveQuestion } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -44,13 +46,13 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
-	//TODO: Trigger active question 
 	const handleSelectAnswer = (data: string) => {
 		const [questionId, answerId] = data.split('-');
 		setSelectedAnswer({
 			...selectedAnswers,
 			[questionId]: answerId
 		});
+		setActiveQuestion({ part_id: partId, question_id: Number(questionId) })
 	}
 
 	// Helper function to get current answer value for a question
@@ -100,7 +102,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 					{questionData.map((question, index) => (
 						<div
 							key={question.question_id || index}
-							ref={(el: HTMLDivElement | null) => { setTargetQuestionCardRef(question.question_id, el) }}
+							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.question_id, el) }}
 						>
 
 							{/* Question Block */}
@@ -161,6 +163,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 												<RadioGroupItem
 													id={`question-${question.question_id}-answer-${answer.answer_id}`}
 													value={getAnswerValue(question.question_id, answer.answer_id)}
+													className="border border-foreground"
 												/>
 												{answer.content}
 											</Label>

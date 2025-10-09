@@ -3,8 +3,8 @@ import { createContext, useContext, useRef } from "react"
 type TestScrollContextType = {
 	// Page refs and functions
 	testPageRef: React.RefObject<Record<number, HTMLElement | null>>
-	getTargetQuestionCardRef: (questionId: number) => HTMLDivElement | null
-	setTargetQuestionCardRef: (questionId: number, element: HTMLDivElement | null) => void
+	getScrollTarget: (questionId: number) => HTMLDivElement | null
+	setScrollTarget: (questionId: number, element: HTMLDivElement | null) => void
 
 }
 
@@ -18,18 +18,18 @@ export const TestScrollProvider = ({
 
 	const testPageRef: React.RefObject<Record<number, HTMLElement | null>> = useRef({});
 
-	const getTargetQuestionCardRef = (questionId: number): HTMLDivElement | null => {
+	const getScrollTarget = (questionId: number): HTMLDivElement | null => {
 		return testPageRef.current[questionId] as HTMLDivElement | null;
 	}
 
-	const setTargetQuestionCardRef = (questionId: number, element: HTMLDivElement | null) => {
+	const setScrollTarget = (questionId: number, element: HTMLDivElement | null) => {
 		testPageRef.current[questionId] = element;
 	}
 
 	const contextValue = {
 		testPageRef,
-		getTargetQuestionCardRef,
-		setTargetQuestionCardRef,
+		getScrollTarget,
+		setScrollTarget,
 	};
 
 

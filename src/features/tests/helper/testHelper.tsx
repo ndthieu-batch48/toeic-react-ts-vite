@@ -27,3 +27,20 @@ export const isMainParagraphHasContent = (mainParagraph: string): boolean => {
 
 	return true;
 }
+
+export const getToeicPartTopic = (partOrder: string): string => {
+
+	const partTopicMap = [
+		{ partOrder: 'Part 1', topicName: 'Photographs' },
+		{ partOrder: 'Part 2', topicName: 'Question Response' },
+		{ partOrder: 'Part 3', topicName: 'Conversations' },
+		{ partOrder: 'Part 4', topicName: 'Talks' },
+		{ partOrder: 'Part 5', topicName: 'Incomplete Sentences' },
+		{ partOrder: 'Part 6', topicName: 'Text Completion' },
+		{ partOrder: 'Part 7', topicName: 'Reading Comprehension' }
+	];
+
+	const normalizedInput = partOrder.toLowerCase().replace(/\s+/g, '');
+	const part = partTopicMap.find(p => p.partOrder.toLowerCase().replace(/\s+/g, '') === normalizedInput);
+	return part ? part.topicName : '';
+}

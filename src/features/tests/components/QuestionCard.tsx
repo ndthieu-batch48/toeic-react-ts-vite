@@ -17,19 +17,20 @@ export interface QuestionCardProps {
 	paragraphMain: string
 	translateScript?: TranslateQuestionResponse
 	questionData: Question,
+	partId: number,
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
 	paragraphMain,
 	questionData,
+	partId,
 }) => {
 
 	// SCROLL LOGIC
-	const { setTargetQuestionCardRef } = useTestScrollContext()
-
+	const { setScrollTarget } = useTestScrollContext()
 
 	const { question_id, question_number, question_content, answer_list } = questionData
-	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { selectedAnswers, setSelectedAnswer, setActiveQuestion } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -43,22 +44,23 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
+	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
+
 	const handleSelectAnswer = (answerId: string) => {
 		const updatedAnswers = {
 			...selectedAnswers,
 			[String(question_id)]: answerId
 		};
 		setSelectedAnswer(updatedAnswers);
+		setActiveQuestion({ part_id: partId, question_id: question_id })
 	}
-
-	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
 
 	return (
 		<Card
-			className="w-full mx-auto mb-3 shadow-md"
-			ref={(el: HTMLDivElement | null) => { setTargetQuestionCardRef(question_id, el) }}
+			className="w-full mx-auto mb-3 shadow-md py-3"
+			ref={(el: HTMLDivElement | null) => { setScrollTarget(question_id, el) }}
 		>
-			<CardHeader className="mb-3">
+			<CardHeader>
 
 				<div className="flex items-center gap-1">
 					<Button
@@ -87,7 +89,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 				/>
 			</CardHeader>
 
-			<CardContent className="flex px-2 gap-4">
+			<CardContent className="flex gap-2">
 				{hasContent && (
 					<div className="flex-1 min-w-0">
 						<MainParagraph mainParagraph={paragraphMain} />
@@ -116,7 +118,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 								<RadioGroupItem
 									id={`question-${question_id}-option-${answer.answer_id}`}
 									value={String(answer.answer_id)}
-									className="mt-0.5"
+									className="border border-foreground"
 								/>
 								{answer.content}
 							</Label>

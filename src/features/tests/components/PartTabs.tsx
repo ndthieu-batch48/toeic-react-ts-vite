@@ -10,6 +10,7 @@ import React, { useEffect } from "react"
 import { Audio } from "../components/Audio"
 import { useTestScrollContext } from "../context/TestScrollContext"
 import { useScrollControl } from "@/hook/useScrollControl"
+import { getToeicPartTopic } from "../helper/testHelper"
 
 
 type PartTabsProps = {
@@ -35,20 +36,22 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 		}
 	}
 
-	const { getTargetQuestionCardRef } = useTestScrollContext()
+	// SCROLL LOGIC
+	const { getScrollTarget } = useTestScrollContext()
 	const { scrollTo } = useScrollControl('window')
 
 	useEffect(() => {
 		if (activeQuestion) {
 			setTimeout(() => {
-				const questionElement = getTargetQuestionCardRef(activeQuestion.question_id);
+				const questionElement = getScrollTarget(activeQuestion.question_id);
 				if (questionElement) {
 					const elementTop = questionElement.offsetTop;
-					scrollTo(0, elementTop - 70);
+					scrollTo(0, elementTop - 200);
 				}
 			}, 100);
 		}
-	}, [activeQuestion, getTargetQuestionCardRef, scrollTo])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [activeQuestion, getScrollTarget])
 
 
 	return (
@@ -59,33 +62,39 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 		>
 
 			{/* Full Part Tab control */}
-			<div className="w-full flex items-center fixed top-0 z-25 bg-background p-1">
+			<div className="w-full fixed top-0 z-25 bg-background p-1">
+				<div className="w-full flex items-center justify-between mb-2">
+					{/* TabsList */}
+					<TabsList
+						className="h-auto w-auto grid gap-1 bg-transparent p-0"
+						style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
+					>
+						{partData.map((part, index) => (
+							<TabsTrigger
+								key={part.part_id || index}
+								value={`part-${part.part_id}`}
+								className="h-auto min-h-10 text-sm font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+							>
+								<div className="flex flex-col w-full justify-center h-12 max-w-[80px]">
+									<span className="font-semibold">{part.part_order || `Part ${index + 1}`}</span>
+									<span className="font-medium opacity-80 text-wrap text-xs">
+										{getToeicPartTopic(part.part_order || `Part ${index + 1}`)}
+									</span>
+								</div>
+							</TabsTrigger>
+						))}
+					</TabsList>
 
-				{/* TabsList */}
-				<TabsList
-					className="h-auto w-auto grid gap-1 bg-transparent p-0"
-					style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
-				>
-					{partData.map((part, index) => (
-						<TabsTrigger
-							key={part.part_id || index}
-							value={`part-${part.part_id}`}
-							className="h-10 text-sm font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-						>
-							{part.part_order || index + 1}
-						</TabsTrigger>
-					))}
-				</TabsList>
 
-				{/* Audio Control */}
-				<div className="flex-1 mx-5">
-					<Audio />
-				</div>
+					<div className="w-full flex-1 mx-2">
+						<Audio />
+					</div>
 
-				{/* Right side */}
-				<div className="flex items-center gap-2 md:max-w-60">
-					<CountDownTimer />
-					<SubmitTestButton />
+					{/* Right side */}
+					<div className="flex items-center gap-2 md:max-w-60">
+						<CountDownTimer />
+						<SubmitTestButton />
+					</div>
 				</div>
 			</div>
 
@@ -100,6 +109,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 								media.question_list.length === 1 ? (
 									<QuestionCard
 										key={media.media_id}
+										partId={part.part_id}
 										questionData={media.question_list[0]}
 										paragraphMain={media.media_paragraph_main}
 										translateScript={media.media_translate_script}
@@ -108,8 +118,9 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 									<QuestionMediaCard
 										key={key}
 										mediaName={media.media_name}
-										paragraphMain={media.media_paragraph_main}
 										questionData={media.question_list}
+										partId={part.part_id}
+										paragraphMain={media.media_paragraph_main}
 										translateScript={media.media_translate_script} />
 								)
 							)}

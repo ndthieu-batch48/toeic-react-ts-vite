@@ -2,8 +2,9 @@ import type { Part } from "../types/test"
 import { PartTab } from "../components/PartTabs"
 import { QuestionTab } from "../components/QuestionTab"
 
-import { Card } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { useScrollControl } from "@/hook/useScrollControl"
+import { useTestContext } from "../context/TestContext"
 
 type TestPracticePageProps = {
 	testId: number
@@ -13,11 +14,21 @@ type TestPracticePageProps = {
 
 export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) => {
 	const { isScrolling, scrollPosition } = useScrollControl('window');
+	const { selectedAnswers } = useTestContext()
+
+	const getTotalQuestion = () => {
+		return partData.reduce((totalQuestions, part) => {
+			const partQuestions = part.media_list?.reduce((partTotal, media) => {
+				return partTotal + (media.question_list?.length || 0);
+			}, 0) || 0;
+			return totalQuestions + partQuestions;
+		}, 0);
+	}
 
 	return (
 		<div className="bg-primary/10 min-h-screen">
 
-			<div className="flex flex-col md:flex-row pt-13 pb-15">
+			<div className="flex flex-col md:flex-row pb-30 pt-20">
 
 				<PartTab
 					className="flex-1 min-w-0"
@@ -26,12 +37,19 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) 
 
 				{/* Question Tab Div */}
 				<Card
-					className="flex flex-col flex-shrink-0 md:max-w-60 md:h-120 md:sticky md:top-13 z-10 bg-background rounded-md shadow-md py-2"
+					className="flex flex-col flex-shrink-0 md:max-w-60 md:max-h-[calc(100vh-12rem)] md:sticky md:top-20 z-10 bg-background rounded-md shadow-md py-0 gap-2 overflow-hidden"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
 						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'
 					}}
 				>
+					<CardHeader className="bg-primary text-primary-foreground py-2 gap-0">
+						<CardTitle className="text-base">Question board</CardTitle>
+						<div className="text-xs font-semibold opacity-90">
+							Answered: {Object.keys(selectedAnswers).length} / {getTotalQuestion()}
+						</div>
+					</CardHeader>
+
 					<QuestionTab
 						partData={partData}
 					/>

@@ -5,23 +5,23 @@ import { Label } from "@/components/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
 import React, { useEffect, useRef } from "react"
 import { useTestScrollContext } from "../context/TestScrollContext"
+import { getToeicPartTopic } from "../helper/testHelper"
 
 type QuestionTabProps = {
 	partData: Part[]
 	className?: string,
-	// onQuestionActive?: (mediaId: number) => void
 }
 
 const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 	className,
 	partData,
 }) => {
-	const { getTargetQuestionCardRef } = useTestScrollContext()
+	const { getScrollTarget } = useTestScrollContext()
 
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useTestContext()
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const questionRefs = useRef<Record<string, HTMLElement | null>>({});
+	const partRefs = useRef<Record<string, HTMLElement | null>>({});
 
 	const toggleActive = (newSelectedQuestion: ActiveQuestion) => {
 		setActiveQuestion(newSelectedQuestion)
@@ -43,23 +43,16 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 			);
 
 			if (scrollViewport) {
-				// Get the active question element
-				const questionKey = `${activeQuestion.part_id}-${activeQuestion.question_id}`;
-				const activeQuestionElement = questionRefs.current[questionKey];
+				// Get the part div element (scroll to top of part)
+				const partKey = `part-${activeQuestion.part_id}`;
+				const activePartElement = partRefs.current[partKey];
 
-				if (activeQuestionElement) {
-					// Calculate the scroll position to center the active question
-					const elementTop = activeQuestionElement.offsetTop;
-					const elementHeight = activeQuestionElement.offsetHeight;
-					const viewportHeight = scrollViewport.clientHeight;
+				if (activePartElement) {
+					// Scroll to the top of the part div
+					const elementTop = activePartElement.offsetTop;
 
-					// Center the element in the viewport
-					const scrollTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
-
-					// Apply the calculated scroll position
-					scrollViewport.scrollTo({ left: 0, top: Math.max(0, scrollTop + 190), behavior: "smooth" });
-
-					console.log('Scrolling to active question:', questionKey, 'scrollTop:', scrollTop);
+					// Apply the calculated scroll position (scroll to top of part)
+					scrollViewport.scrollTo({ left: 0, top: Math.max(0, elementTop), behavior: "smooth" });
 				}
 			}
 		}
@@ -67,27 +60,41 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-full w-full px-2 bg-transparent", className)}
+			className={cn("h-120 w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
-				<div key={index} className="flex flex-col mb-2">
-					<Label className="font-semibold text-sm text-foreground mb-1">{part.part_order}</Label>
+				<div
+					key={index}
+					className="flex flex-col mb-5"
+					ref={(el: HTMLDivElement | null) => {
+						partRefs.current[`part-${part.part_id}`] = el;
+					}}
+				>
+					<div className="flex gap-2">
+
+						<div className="w-2 h-8 bg-primary rounded"></div>
+
+						<div className="mb-1">
+							<Label className="font-semibold text-sm text-foreground block">
+								{part.part_order || `Part ${index + 1}`}
+							</Label>
+							<Label className="text-xs text-muted-foreground font-normal">
+								{getToeicPartTopic(part.part_order || `Part ${index + 1}`)}
+							</Label>
+						</div>
+					</div>
 
 					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
 						{part.media_list?.map((media, mediaIndex) => (
 							media.question_list.map((question, questionIndex) => {
 								const isActive = isQuestionActive(part.part_id, question.question_id)
 								const isAnswered = isQuestionAnswered(question.question_id)
-								const questionKey = `${part.part_id}-${question.question_id}`;
 
 								return (
 									<Label
-										ref={(el: HTMLLabelElement | null) => {
-											questionRefs.current[questionKey] = el;
-										}}
 										onClick={() => {
 
-											getTargetQuestionCardRef(question.question_id)
+											getScrollTarget(question.question_id)
 
 											toggleActive({
 												part_id: part.part_id,
