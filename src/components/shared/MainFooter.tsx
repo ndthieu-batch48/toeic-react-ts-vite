@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function MainFooter() {
 	return (
-		<footer className="w-full h-80 bg-primary text-primary-foreground">
+		<footer className="w-full h-60 bg-primary text-primary-foreground">
 			<div className="flex flex-col items-center text-center pt-5">
 
 				<TmaLogo className="h-15 w-auto" />
