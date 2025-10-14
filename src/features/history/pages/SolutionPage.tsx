@@ -29,7 +29,7 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
 	return (
 		<div className="bg-primary/10 min-h-screen">
 
-			<div className="flex flex-col md:flex-row pb-30 pt-5">
+			<div className="flex flex-col md:flex-row pb-30 pt-2">
 
 				<SolutionPartTab
 					className="flex-1 min-w-0"
@@ -38,7 +38,7 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
 
 				{/* Question Tab Div */}
 				<Card
-					className="flex flex-col flex-shrink-0 md:max-w-60 md:max-h-[calc(100vh-12rem)] md:sticky md:top-20 z-10 bg-background rounded-md shadow-md py-0 gap-2 overflow-hidden"
+					className="flex flex-col flex-shrink-0 md:max-w-60 md:max-h-[calc(100vh-9rem)] md:sticky md:top-20 z-10 bg-background rounded-md shadow-md py-0 gap-2 overflow-hidden"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
 						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'

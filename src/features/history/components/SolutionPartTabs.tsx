@@ -42,7 +42,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 				const questionElement = getScrollTarget(activeQuestion.question_id);
 				if (questionElement) {
 					const elementTop = questionElement.offsetTop;
-					scrollTo(0, elementTop - 200);
+					scrollTo(0, elementTop - 100);
 				}
 			}, 100);
 		}

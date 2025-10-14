@@ -46,7 +46,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 				const questionElement = getScrollTarget(activeQuestion.question_id);
 				if (questionElement) {
 					const elementTop = questionElement.offsetTop;
-					scrollTo(0, elementTop - 200);
+					scrollTo(0, elementTop - 100);
 				}
 			}, 100);
 		}
@@ -75,7 +75,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 								value={`part-${part.part_id}`}
 								className="h-auto min-h-10 text-sm font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
 							>
-								<div className="flex flex-col w-full justify-center h-12 max-w-[80px]">
+								<div className="flex flex-col w-full justify-center min-h-13 max-w-[80px]">
 									<span className="font-semibold">{part.part_order || `Part ${index + 1}`}</span>
 									<span className="font-medium opacity-80 text-wrap text-xs">
 										{getToeicPartTopic(part.part_order || `Part ${index + 1}`)}
