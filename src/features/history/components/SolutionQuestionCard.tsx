@@ -5,9 +5,11 @@ import { Badge } from '@/components/ui/badge'
 import type { Question, TranslateQuestionResponse } from '@/features/tests/types/test'
 import { useTranslationCard } from '@/features/tests/hooks/useTranslationCard'
 import { useSolutionContext } from '../context/SolutionContext'
+import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { TranslationCard } from '@/features/tests/components/TranslationCard'
 import type { LANGUAGE_ID } from '@/features/tests/constants/const'
 import { MainParagraph } from '@/features/tests/components/MainParagraph'
+import { isMainParagraphHasContent } from '@/features/tests/helper/testHelper'
 
 
 export interface SolutionQuestionCardProps {
@@ -23,6 +25,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 
 	const { question_id, question_number, question_content, answer_list } = questionData
 	const { selectedAnswers, setSelectedAnswer } = useSolutionContext()
+	const { setScrollTarget } = useSolutionScrollContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -34,10 +37,10 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 		isTranslateError
 	} = useTranslationCard()
 
-	// Check if paragraphMain contains an image
-	const hasImage = paragraphMain && paragraphMain.includes('<img')
+	const hasContent = isMainParagraphHasContent(paragraphMain);
 
-	//TODO: Trigger active question 
+	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
+
 	const handleSelectAnswer = (answerId: string) => {
 		const updatedAnswers = {
 			...selectedAnswers,
@@ -46,34 +49,32 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 		setSelectedAnswer(updatedAnswers);
 	}
 
-	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
-
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean, isSelected: boolean) => {
-		const baseClass = "flex items-start gap-3 p-3 rounded-lg border border-border shadow-xs bg-background cursor-pointer text-base";
-		const correctBorder = `${baseClass} bg-positive/30 border-positive/30 border`
-		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30 border`
-		const defaultClass = `${baseClass} bg-card border-border border`
+		const baseClass = `flex items-center gap-2 p-1 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base`;
 
 		if (isAnswerCorrect) {
-			return correctBorder;
+			return `${baseClass} bg-positive/30 border-positive/30`;
 		}
 
 		if (isSelected && !isAnswerCorrect) {
-			return inCorrectBorder;
+			return `${baseClass} bg-destructive/30 border-destructive/30`;
 		}
 
-		return defaultClass;
+		return `${baseClass}`;
 	}
 
 	return (
-		<Card className="w-full mx-auto mb-3 shadow-md">
-			<CardHeader className="mb-3">
+		<Card
+			className="w-full mx-auto mb-3 shadow-md py-3"
+			ref={(el: HTMLDivElement | null) => { setScrollTarget(question_id, el) }}
+		>
+			<CardHeader>
 
-				<div className="flex items-center gap-2 mb-2">
+				<div className="flex items-center gap-1">
 					<Badge className="text-base font-semibold">
 						Question {question_number}
 					</Badge>
-					<Label className="text-lg font-semibold">
+					<Label className="text-base font-semibold self-start">
 						{question_content}
 					</Label>
 				</div>
@@ -90,20 +91,24 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 				/>
 			</CardHeader>
 
-			<CardContent className="flex px-2 gap-4">
-				{hasImage && (
+			<CardContent className="flex gap-2">
+				{hasContent && (
 					<div className="flex-1 min-w-0">
 						<MainParagraph mainParagraph={paragraphMain} />
 					</div>
 				)}
 
 				{/* Radio Group for Answer Options */}
-				<div className={`space-y-4 ${hasImage ? 'flex-shrink-0 w-auto' :'w-full'}`}>
+				<div className={`space-y-4 ${hasContent ? 'flex-shrink-0 w-auto' : 'w-full'}`}>
 					<Label>
 						Select your answer:
 					</Label>
 
-					<RadioGroup disabled value={currentSelectedAnswer} onValueChange={handleSelectAnswer}>
+					<RadioGroup
+						className="gap-1"
+						disabled
+						value={currentSelectedAnswer}
+						onValueChange={handleSelectAnswer}>
 						{answer_list.map((answer, index) => {
 							const isSelected = currentSelectedAnswer === String(answer.answer_id);
 							return (
@@ -115,7 +120,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 									<RadioGroupItem
 										id={`question-${question_id}-option-${answer.answer_id}`}
 										value={String(answer.answer_id)}
-										className="mt-0.5"
+										className="border border-foreground"
 									/>
 									{answer.content}
 								</Label>

@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import type { Question, TranslateQuestionResponse } from '@/features/tests/types/test'
 import { useSolutionContext } from '../context/SolutionContext'
+import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { useTranslationCard } from '@/features/tests/hooks/useTranslationCard'
 import { MainParagraph } from '@/features/tests/components/MainParagraph'
 import { TranslationCard } from '@/features/tests/components/TranslationCard'
 import type { LANGUAGE_ID } from '@/features/tests/constants/const'
+import { isMainParagraphHasContent } from '@/features/tests/helper/testHelper'
 
 type SolutionQuestionMediaCardProps = {
 	mediaName: string,
@@ -24,6 +26,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 }) => {
 
 	const { selectedAnswers, setSelectedAnswer } = useSolutionContext()
+	const { setScrollTarget } = useSolutionScrollContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -35,10 +38,8 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 		isTranslateError
 	} = useTranslationCard()
 
-	// Check if paragraphMain contains an image
-	const hasImage = paragraphMain && paragraphMain.includes('<img')
+	const hasContent = isMainParagraphHasContent(paragraphMain);
 
-	//TODO: Trigger active question 
 	const handleSelectAnswer = (data: string) => {
 		const [questionId, answerId] = data.split('-');
 		setSelectedAnswer({
@@ -63,33 +64,39 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 		return getCurrentAnswerValue(questionId) === getAnswerValue(questionId, answerId);
 	}
 
+	// Helper function for answer option styling
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean, isSelected: boolean) => {
-		const baseClass = "flex items-start gap-3 p-3 border border-border shadow-xs bg-background rounded-lg cursor-pointer text-base";
-		const correctBorder = `${baseClass} bg-positive/30 border-positive/30 border`
-		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30 border`
-		const defaultClass = `${baseClass} bg-card border-border border`
+		const baseClass = "flex items-center gap-2 p-1 border border-border shadow-xs bg-background rounded-lg cursor-pointer text-base";
 
 		if (isAnswerCorrect) {
-			return correctBorder;
+			return `${baseClass} bg-positive/30 border-positive/30`;
 		}
 
 		if (isSelected && !isAnswerCorrect) {
-			return inCorrectBorder;
+			return `${baseClass} bg-destructive/30 border-destructive/30`;
 		}
 
-		return defaultClass;
+		return `${baseClass}`;
 	}
 
 	return (
-		<Card className="w-full mx-auto mb-3">
-			<CardHeader className="pb-2">
+		<Card
+			className="w-full mx-auto mb-3"
+			ref={(el: HTMLDivElement | null) => {
+				// Set scroll target for the first question in this media
+				if (questionData.length > 0) {
+					setScrollTarget(questionData[0].question_id, el)
+				}
+			}}
+		>
+			<CardHeader>
 				<Badge className="text-lg font-semibold">
 					Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
 				</Badge>
 			</CardHeader>
 
-			<CardContent className="flex flex-col md:flex-row gap-6">
-				{hasImage && (
+			<CardContent className="flex flex-col md:flex-row gap-2">
+				{hasContent && (
 					<>
 						{/* Left side - Main Paragraph */}
 						<div className="flex-1 min-w-0">
@@ -99,22 +106,32 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasImage ? 'flex-shrink-0 md:w-70' : 'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
 					{questionData.map((question, index) => (
-						<div key={question.question_id || index}>
+						<div
+							key={question.question_id || index}
+							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.question_id, el) }}
+						>
 
 							{/* Question Block */}
 							<div className="flex flex-col space-y-4">
 
 								{/* Question Header */}
-								<div className="flex flex-col gap-2 mb-5">
-									<Badge variant='outline'
-										className="text-base font-semibold bg-primary/80 border-primary text-primary-foreground">
-										Question {question.question_number}
-									</Badge>
-									<Label className="text-lg font-medium">
-										{question.question_content}
-									</Label>
+								<div className="flex flex-col mb-5">
+
+									<div className="flex items-start gap-1">
+										<Badge
+											variant='outline'
+											className="text-base font-semibold border-primary">
+											{question.question_number}
+										</Badge>
+
+										<Label className="text-base font-medium flex-1 min-w-0">
+											{question.question_content}
+										</Label>
+									</div>
+
+
 								</div>
 
 								<TranslationCard
@@ -128,22 +145,20 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									isTranslateError={isTranslateError}
 								/>
 
-								<div className="mt-3">
+								<div>
 									<Label className="mb-2">
 										Select your answer:
 									</Label>
 
-									{/* Refactored Answer Options */}
+									{/* Answer Options */}
 									<RadioGroup
+										className="gap-1"
 										disabled
 										value={getCurrentAnswerValue(question.question_id)}
 										onValueChange={handleSelectAnswer}
 									>
 										{question.answer_list.map((answer, answerIndex) => {
-
 											const isSelected = isAnswerSelected(question.question_id, answer.answer_id)
-
-
 											return (
 												<Label
 													key={answer.answer_id || answerIndex}
@@ -153,12 +168,11 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 													<RadioGroupItem
 														id={`question-${question.question_id}-answer-${answer.answer_id}`}
 														value={getAnswerValue(question.question_id, answer.answer_id)}
-														className="mt-0.5"
+														className="border border-foreground"
 													/>
 													{answer.content}
 												</Label>
 											)
-
 										})}
 									</RadioGroup>
 

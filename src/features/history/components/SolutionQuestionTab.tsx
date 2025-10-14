@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label"
 import React, { useEffect, useRef } from "react"
 import type { Part } from "@/features/tests/types/test"
 import { useSolutionContext, type ActiveQuestion } from "../context/SolutionContext"
+import { getToeicPartTopic } from "@/features/tests/helper/testHelper"
 
 type SolutionQuestionTabProps = {
 	partData: Part[]
@@ -19,6 +20,7 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useSolutionContext()
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
+	const partRefs = useRef<Record<string, HTMLElement | null>>({});
 	const questionRefs = useRef<Record<string, HTMLElement | null>>({});
 
 	const toggleActive = (newSelectedQuestion: ActiveQuestion) => {
@@ -37,23 +39,16 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 			);
 
 			if (scrollViewport) {
-				// Get the active question element
-				const questionKey = `${activeQuestion.part_id}-${activeQuestion.question_id}`;
-				const activeQuestionElement = questionRefs.current[questionKey];
+				// Get the part div element (scroll to top of part)
+				const partKey = `part-${activeQuestion.part_id}`;
+				const activePartElement = partRefs.current[partKey];
 
-				if (activeQuestionElement) {
-					// Calculate the scroll position to center the active question
-					const elementTop = activeQuestionElement.offsetTop;
-					const elementHeight = activeQuestionElement.offsetHeight;
-					const viewportHeight = scrollViewport.clientHeight;
+				if (activePartElement) {
+					// Scroll to the top of the part div
+					const elementTop = activePartElement.offsetTop;
 
-					// Center the element in the viewport
-					const scrollTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
-
-					// Apply the calculated scroll position
-					scrollViewport.scrollTo({ left: 0, top: Math.max(0, scrollTop + 100), behavior: "smooth" });
-
-					console.log('Scrolling to active question:', questionKey, 'scrollTop:', scrollTop);
+					// Apply the calculated scroll position (scroll to top of part)
+					scrollViewport.scrollTo({ left: 0, top: Math.max(0, elementTop), behavior: "smooth" });
 				}
 			}
 		}
@@ -64,38 +59,47 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 	}
 
 	const getSolutionAnswerClass = (isAnswerCorrect: boolean | undefined, isSelected: boolean) => {
-		const baseClass = [
-			"flex items-center justify-center",
-			"border border-border",
-			"hover:border-primary hover:bg-primary/20 hover:text-foreground",
-			"min-w-[37px] h-10 rounded-2xl",
-			"text-base font-semibold cursor-pointer"
-		].join(" ");
-		const correctBorder = `${baseClass} bg-positive/30 border-positive/30`
-		const inCorrectBorder = `${baseClass} bg-destructive/30 border-destructive/30`
-
 		if (!isSelected) {
-			return baseClass;
+			return "bg-muted hover:bg-primary/20 text-muted-foreground";
 		}
 
 		// Handle case where answer is selected but correctness is unknown
 		if (isAnswerCorrect === undefined) {
-			return baseClass;
+			return "bg-muted hover:bg-primary/20 text-muted-foreground";
 		}
 
 		return isAnswerCorrect
-			? correctBorder
-			: inCorrectBorder
+			? "bg-positive/60 text-white"
+			: "bg-destructive/60 text-white"
 	}
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-full w-full rounded-md border border-border p-2 bg-background shadow-md", className)} >
+			className={cn("h-120 w-full px-2 bg-transparent", className)}
+		>
 			{partData.map((part, index) => (
-				<div key={index} className="flex flex-col mb-5">
-					<Label className="font-bold text-xl text-foreground mb-2">{part.part_order}</Label>
+				<div
+					key={index}
+					className="flex flex-col mb-5"
+					ref={(el: HTMLDivElement | null) => {
+						partRefs.current[`part-${part.part_id}`] = el;
+					}}
+				>
+					<div className="flex gap-2">
 
-					<div className="flex flex-wrap gap-1 border border-border rounded-md p-2">
+						<div className="w-2 h-8 bg-primary rounded"></div>
+
+						<div className="mb-1">
+							<Label className="font-semibold text-sm text-foreground block">
+								{part.part_order || `Part ${index + 1}`}
+							</Label>
+							<Label className="text-xs text-muted-foreground font-normal">
+								{getToeicPartTopic(part.part_order || `Part ${index + 1}`)}
+							</Label>
+						</div>
+					</div>
+
+					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
 						{part.media_list?.map((media, mediaIndex) => (
 							media.question_list.map((question, questionIndex) => {
 								const answerId = getSelectedAnswerId(question.question_id)
@@ -121,8 +125,10 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 											})
 										}}
 										className={cn(
-											getSolutionAnswerClass(selectedAnswer?.is_correct, isSelected),
-											isActive && "bg-primary text-primary-foreground border-primary"
+											"flex items-center border border-border justify-center min-w-[26px] min-h-[26px] rounded-2xl text-xs font-semibold cursor-pointer",
+											isActive
+												? "bg-primary text-primary-foreground"
+												: getSolutionAnswerClass(selectedAnswer?.is_correct, isSelected)
 										)}
 										key={`${mediaIndex}-${questionIndex}`}
 									>

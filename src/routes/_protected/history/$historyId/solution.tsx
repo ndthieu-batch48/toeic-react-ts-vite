@@ -1,5 +1,6 @@
 import { SolutionPage } from '@/features/history/pages/SolutionPage';
 import { SolutionProvider, type SolutionState } from '@/features/history/context/SolutionContext';
+import { SolutionScrollProvider } from '@/features/history/context/SolutionScrollContext';
 import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
 import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
 import { createFileRoute } from '@tanstack/react-router'
@@ -71,10 +72,12 @@ function SolutionRoute() {
 
 	return (
 		<SolutionProvider initialState={initialState}>
-			<SolutionPage
-				detailHistory={historyData}
-				partData={sortedParts}
-			/>
+			<SolutionScrollProvider>
+				<SolutionPage
+					detailHistory={historyData}
+					partData={sortedParts}
+				/>
+			</SolutionScrollProvider>
 		</SolutionProvider>
 	)
 }

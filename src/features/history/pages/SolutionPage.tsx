@@ -1,13 +1,11 @@
-import { Button } from "@/components/ui/button"
-import { Link, useParams } from "@tanstack/react-router"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 
-import { Label } from "@radix-ui/react-dropdown-menu"
 import type { Part } from "@/features/tests/types/test"
 import { SolutionPartTab } from "../components/SolutionPartTabs"
 import { SolutionQuestionTab } from "../components/SolutionQuestionTab"
 import type { HistoryResultDetailResponse } from "../types/history"
 import { useScrollControl } from "@/hook/useScrollControl"
-import { useRef } from "react"
+import { useSolutionContext } from "../context/SolutionContext"
 
 
 type SolutionPageProps = {
@@ -15,64 +13,48 @@ type SolutionPageProps = {
 	partData: Part[]
 }
 
-export const SolutionPage: React.FC<SolutionPageProps> = ({ detailHistory, partData }) => {
-	const params = useParams({ from: '/_protected/history/$historyId/solution' })
+export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
+	const { isScrolling, scrollPosition } = useScrollControl('window');
+	const { selectedAnswers } = useSolutionContext()
 
-	const { containerScrollRef: ref, scrollPosition, scrollTo, isScrolling } = useScrollControl('window');
-	const pageRef = useRef<Record<number, HTMLElement | null>>({});
-
-	const handleScrollPartTab = (mediaId: number) => {
-		setTimeout(() => {
-			const questionCard = pageRef.current[mediaId]
-
-			if (questionCard) {
-				const elementTop = questionCard.offsetTop;
-				scrollTo(0, elementTop);
-			}
-		}, 100);
+	const getTotalQuestion = () => {
+		return partData.reduce((totalQuestions, part) => {
+			const partQuestions = part.media_list?.reduce((partTotal, media) => {
+				return partTotal + (media.question_list?.length || 0);
+			}, 0) || 0;
+			return totalQuestions + partQuestions;
+		}, 0);
 	}
 
 	return (
-		<div className="bg-primary/10">
-			<div className="flex justify-center items-center w-full h-32 gap-2">
-				<Label className="text-xl font-bold text-foreground">{detailHistory.test_name}</Label>
-				<Button
-					className="border-destructive text-destructive hover:bg-destructive hover:text-primary-foreground text-lg"
-					variant="outline"
-					asChild>
-					<Link
-						to="/history/$historyId"
-						params={{ historyId: params.historyId }}
-						replace={true}
-					>
-						Exit
-					</Link>
-				</Button>
-			</div>
+		<div className="bg-primary/10 min-h-screen">
 
-			<div className="flex flex-col md:flex-row gap-4 px-2">
+			<div className="flex flex-col md:flex-row pb-30 pt-5">
+
 				<SolutionPartTab
-					scrollRef={ref}
-					pageRef={pageRef}
 					className="flex-1 min-w-0"
 					partData={partData}
-					isScrolling={isScrolling}
-					scrollPosition={scrollPosition}
 				/>
 
-				<div
-					className="flex flex-col gap-1 self-start flex-shrink-0 md:w-70 md:h-100 md:sticky md:top-4"
+				{/* Question Tab Div */}
+				<Card
+					className="flex flex-col flex-shrink-0 md:max-w-60 md:max-h-[calc(100vh-12rem)] md:sticky md:top-20 z-10 bg-background rounded-md shadow-md py-0 gap-2 overflow-hidden"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
 						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'
 					}}
 				>
+					<CardHeader className="bg-primary text-primary-foreground py-2 gap-0">
+						<CardTitle className="text-base">Question board</CardTitle>
+						<div className="text-xs font-semibold opacity-90">
+							Answered: {Object.keys(selectedAnswers).length} / {getTotalQuestion()}
+						</div>
+					</CardHeader>
+
 					<SolutionQuestionTab
 						partData={partData}
-						onQuestionActive={handleScrollPartTab}
 					/>
-				</div>
-
+				</Card>
 			</div>
 		</div>
 	)
