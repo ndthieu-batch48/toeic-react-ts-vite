@@ -1,4 +1,4 @@
-import type { Part } from "../types/test"
+import type { PartDetailRes } from "../types/test"
 import { PartTab } from "../components/PartTabs"
 import { QuestionTab } from "../components/QuestionTab"
 
@@ -9,7 +9,7 @@ import { useTestContext } from "../context/TestContext"
 type TestPracticePageProps = {
 	testId: number
 	testTitle: string
-	partData: Part[],
+	partData: PartDetailRes[],
 }
 
 export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) => {
@@ -18,8 +18,8 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ partData }) 
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
-			const partQuestions = part.media_list?.reduce((partTotal, media) => {
-				return partTotal + (media.question_list?.length || 0);
+			const partQuestions = part.media_ques_list?.reduce((partTotal, media) => {
+				return partTotal + (media.ques_list?.length || 0);
 			}, 0) || 0;
 			return totalQuestions + partQuestions;
 		}, 0);

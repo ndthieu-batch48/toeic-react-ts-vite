@@ -4,19 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 import { Clock, Info } from 'lucide-react'
-import type { Test, Part } from '../types/test'
+import type { TestSummaryRes, PartSummaryRes } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
 import { TimePicker } from '../components/TimePicker'
 import type { HistoryResponse } from '@/features/history/types/history'
 import { Label } from '@/components/ui/label'
 import { getToeicPartDescription, getToeicPartTopic } from '../helper/testHelper'
 
-interface TestDetailProps {
-	currentTest: Test
+interface TestSetupProps {
+	currentTest: TestSummaryRes
 	saveHistoryData?: HistoryResponse
 }
 
-const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData }) => {
+const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData }) => {
 	const navigate = useNavigate();
 
 	const [isPracticeTest, setIsPracticeTest] = useState<boolean>(true)
@@ -38,7 +38,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 	const hasSelectedParts = isPracticeTest ? selectedPartIds.size > 0 : true
 
 	// Lấy danh sách các parts đã được chọn
-	const getSelectedParts = (): Part[] => {
+	const getSelectedParts = (): PartSummaryRes[] => {
 		if (isPracticeTest) {
 			return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
 		}
@@ -47,7 +47,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 
 	// Tính tổng số câu hỏi của các parts đã chọn
 	const getTotalQuestions = (): number => {
-		return getSelectedParts().reduce((total, part) => total + part.total_question, 0)
+		return getSelectedParts().reduce((total, part) => total + part.total_ques, 0)
 	}
 
 	const handleStartTest = () => {
@@ -205,7 +205,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 												<span>{part.part_order}:</span>
 												<span>{getToeicPartTopic(part.part_order)}</span>
 												<span className="text-muted-foreground">-</span>
-												<span className="text-muted-foreground">{part.total_question} questions</span>
+												<span className="text-muted-foreground">{part.total_ques} questions</span>
 											</Label>
 
 											<p className="text-muted-foreground text-sm pl-6">
@@ -283,7 +283,7 @@ const TestSetupPage: React.FC<TestDetailProps> = ({ currentTest, saveHistoryData
 											<span>{part.part_order}:</span>
 											<span>{getToeicPartTopic(part.part_order)}</span>
 											<span className="text-muted-foreground">-</span>
-											<span className="text-muted-foreground">{part.total_question} questions</span>
+											<span className="text-muted-foreground">{part.total_ques} questions</span>
 										</Label>
 
 										<p className="text-muted-foreground text-sm pl-6">

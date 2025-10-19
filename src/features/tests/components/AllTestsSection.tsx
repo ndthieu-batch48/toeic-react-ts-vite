@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Clock } from "lucide-react";
-import type { Test } from "../types/test";
+import type { TestSummaryRes } from "../types/test";
 
 type AllTestsSection = React.ComponentProps<"section"> & {
-	availableTests: Test[]
+	availableTests: TestSummaryRes[]
 }
 
 export function AllTestsSection({ availableTests }: AllTestsSection) {

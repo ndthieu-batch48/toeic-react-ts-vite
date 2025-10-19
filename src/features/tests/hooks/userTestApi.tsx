@@ -14,10 +14,10 @@ export const getAllTestsQuery = {
 	queryFn: getAllTests,
 };
 
-export const useGetTestDetail = (id: number) => {
+export const useGetTestDetail = (id: number, partIds?: number[]) => {
 	return useQuery({
-		queryKey: ['test', id],
-		queryFn: () => getTestDetail(id),
+		queryKey: ['test', id, partIds],
+		queryFn: () => getTestDetail(id, partIds),
 		enabled: !!id,
 	});
 }

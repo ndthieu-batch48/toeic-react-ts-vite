@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import type { Question, TranslateQuestionResponse } from '../types/test'
+import type { QuesDetailRes, TranslateQuestionResponse } from '../types/test'
 import { MainParagraph } from './MainParagraph'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
@@ -16,7 +16,7 @@ import { useTestScrollContext } from '../context/TestScrollContext'
 export interface QuestionCardProps {
 	paragraphMain: string
 	translateScript?: TranslateQuestionResponse
-	questionData: Question,
+	questionData: QuesDetailRes,
 	partId: number,
 }
 
@@ -29,7 +29,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	// SCROLL LOGIC
 	const { setScrollTarget } = useTestScrollContext()
 
-	const { question_id, question_number, question_content, answer_list } = questionData
+	const { ques_id, ques_number, ques_content, ans_list } = questionData
 	const { selectedAnswers, setSelectedAnswer, setActiveQuestion } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
@@ -44,21 +44,21 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
-	const currentSelectedAnswer = selectedAnswers[String(question_id)] || '';
+	const currentSelectedAnswer = selectedAnswers[String(ques_id)] || '';
 
 	const handleSelectAnswer = (answerId: string) => {
 		const updatedAnswers = {
 			...selectedAnswers,
-			[String(question_id)]: answerId
+			[String(ques_id)]: answerId
 		};
 		setSelectedAnswer(updatedAnswers);
-		setActiveQuestion({ part_id: partId, question_id: question_id })
+		setActiveQuestion({ part_id: partId, question_id: ques_id })
 	}
 
 	return (
 		<Card
 			className="w-full mx-auto mb-3 shadow-md py-3"
-			ref={(el: HTMLDivElement | null) => { setScrollTarget(question_id, el) }}
+			ref={(el: HTMLDivElement | null) => { setScrollTarget(ques_id, el) }}
 		>
 			<CardHeader>
 
@@ -70,20 +70,20 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 						<Flag className="fill-marker text-marker" />
 					</Button>
 					<Badge className="text-base font-semibold">
-						Question {question_number}
+						Question {ques_number}
 					</Badge>
 					<Label className="text-base font-semibold self-start">
-						{question_content}
+						{ques_content}
 					</Label>
 				</div>
 
 				<TranslationCard
-					translateScript={newTranslateScript[question_id]}
-					selectedLanguage={getSelectedLanguage(question_id)}
-					isExpanded={isTranslateCardExpanded(question_id)}
-					onToggle={() => toggleTranslateCardExpanded(question_id)}
-					onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question_id, lang)}
-					onTranslate={() => handleTranslation(question_id)}
+					translateScript={newTranslateScript[ques_id]}
+					selectedLanguage={getSelectedLanguage(ques_id)}
+					isExpanded={isTranslateCardExpanded(ques_id)}
+					onToggle={() => toggleTranslateCardExpanded(ques_id)}
+					onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(ques_id, lang)}
+					onTranslate={() => handleTranslation(ques_id)}
 					isTranslatePending={isTranslatePending}
 					isTranslateError={isTranslateError}
 				/>
@@ -106,18 +106,18 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 						className="gap-1"
 						value={currentSelectedAnswer}
 						onValueChange={handleSelectAnswer}>
-						{answer_list.map((answer, index) => (
+						{ans_list.map((answer, index) => (
 							<Label
-								key={answer.answer_id || index}
-								htmlFor={`question-${question_id}-option-${answer.answer_id}`}
-								className={`flex items-center gap-2 p-1 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base ${currentSelectedAnswer === String(answer.answer_id)
+								key={answer.ans_id || index}
+								htmlFor={`question-${ques_id}-option-${answer.ans_id}`}
+								className={`flex items-center gap-2 p-1 rounded-lg border border-border shadow-xs bg-background cursor-pointer transition-colors text-base ${currentSelectedAnswer === String(answer.ans_id)
 									? "border-primary bg-primary-foreground"
 									: "hover:border-primary/50 hover:bg-primary-foreground"
 									}`}
 							>
 								<RadioGroupItem
-									id={`question-${question_id}-option-${answer.answer_id}`}
-									value={String(answer.answer_id)}
+									id={`question-${ques_id}-option-${answer.ans_id}`}
+									value={String(answer.ans_id)}
 									className="border border-foreground"
 								/>
 								{answer.content}

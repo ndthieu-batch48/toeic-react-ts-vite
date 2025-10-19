@@ -4,14 +4,14 @@ import { SolutionQuestionCard } from "./SolutionQuestionCard"
 import { SolutionAudio } from "./SolutionAudio"
 import { cn } from "@/lib/utils"
 import React, { useEffect } from "react"
-import type { Part } from "@/features/tests/types/test"
+import type { PartDetailRes } from "@/features/tests/types/test"
 import { useSolutionContext } from "../context/SolutionContext"
 import { useSolutionScrollContext } from "../context/SolutionScrollContext"
 import { useScrollControl } from "@/hook/useScrollControl"
 import { getToeicPartTopic } from "@/features/tests/helper/testHelper"
 
 type SolutionPartTabsProps = {
-	partData: Part[]
+	partData: PartDetailRes[]
 	className?: string,
 }
 
@@ -26,8 +26,8 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 		const partId = parseInt(value.replace('part-', ''))
 		const part = partData.find(p => p.part_id === partId)
 
-		if (part && part.media_list?.[0]?.question_list?.[0]) {
-			const firstQuestionId = part.media_list[0].question_list[0].question_id
+		if (part && part.media_ques_list?.[0]?.ques_list?.[0]) {
+			const firstQuestionId = part.media_ques_list[0].ques_list[0].ques_id
 			setActivePart(partId, firstQuestionId)
 		}
 	}
@@ -95,21 +95,21 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 						value={`part-${part.part_id}`}
 					>
 						<div>
-							{part.media_list?.map((media, key) =>
-								media.question_list.length === 1 ? (
+							{part.media_ques_list?.map((media, key) =>
+								media.ques_list.length === 1 ? (
 									<SolutionQuestionCard
-										key={media.media_id}
-										questionData={media.question_list[0]}
-										paragraphMain={media.media_paragraph_main}
-										translateScript={media.media_translate_script}
+										key={media.media_ques_id}
+										questionData={media.ques_list[0]}
+										paragraphMain={media.media_ques_main_para}
+										translateScript={media.media_ques_trans_script}
 									/>
 								) : (
 									<SolutionQuestionMediaCard
 										key={key}
-										mediaName={media.media_name}
-										paragraphMain={media.media_paragraph_main}
-										questionData={media.question_list}
-										translateScript={media.media_translate_script} />
+										mediaName={media.media_ques_name}
+										paragraphMain={media.media_ques_main_para}
+										questionData={media.ques_list}
+										translateScript={media.media_ques_trans_script} />
 								)
 							)}
 						</div>

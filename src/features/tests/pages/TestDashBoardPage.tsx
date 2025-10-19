@@ -1,11 +1,11 @@
 import type { HistoryResultListResponse } from "@/features/history/types/history"
 import { AllHistorySection } from "../components/AllHistorySection"
 import { AllTestsSection } from "../components/AllTestsSection"
-import type { Test } from "../types/test"
+import type { TestSummaryRes } from "../types/test"
 import { Separator } from "@/components/ui/separator"
 
 type TestDashBoardPageProps = {
-	testData: Test[]
+	testData: TestSummaryRes[]
 	historyData: HistoryResultListResponse[]
 }
 

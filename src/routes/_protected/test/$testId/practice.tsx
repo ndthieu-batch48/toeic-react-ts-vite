@@ -22,7 +22,7 @@ function TestPracticeRoute() {
 
 	const { testId } = Route.useParams();
 	const { selectedAnswers, selectedPartIds, timeLimit, type } = Route.useSearch();
-	const { data: testData, isLoading, error } = useGetTestDetail(Number(testId));
+	const { data: testData, isLoading, error } = useGetTestDetail(Number(testId), selectedPartIds);
 
 	if (isLoading) return <div className="text-center text-foreground">Loading...</div>;
 	if (error) return <div className="text-center text-destructive">Error: {error.message}</div>;

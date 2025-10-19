@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import type { Part } from "../types/test"
+import type { PartDetailRes } from "../types/test"
 import { Label } from "@/components/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
 import React, { useEffect, useRef } from "react"
@@ -8,7 +8,7 @@ import { useTestScrollContext } from "../context/TestScrollContext"
 import { getToeicPartTopic } from "../helper/testHelper"
 
 type QuestionTabProps = {
-	partData: Part[]
+	partData: PartDetailRes[]
 	className?: string,
 }
 
@@ -85,20 +85,20 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 					</div>
 
 					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
-						{part.media_list?.map((media, mediaIndex) => (
-							media.question_list.map((question, questionIndex) => {
-								const isActive = isQuestionActive(part.part_id, question.question_id)
-								const isAnswered = isQuestionAnswered(question.question_id)
+						{part.media_ques_list?.map((media, mediaIndex) => (
+							media.ques_list.map((question, questionIndex) => {
+								const isActive = isQuestionActive(part.part_id, question.ques_id)
+								const isAnswered = isQuestionAnswered(question.ques_id)
 
 								return (
 									<Label
 										onClick={() => {
 
-											getScrollTarget(question.question_id)
+											getScrollTarget(question.ques_id)
 
 											toggleActive({
 												part_id: part.part_id,
-												question_id: question.question_id
+												question_id: question.ques_id
 											})
 										}}
 										className={cn(
@@ -111,7 +111,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 										)}
 										key={`${mediaIndex}-${questionIndex}`}
 									>
-										{question.question_number}
+										{question.ques_number}
 									</Label>
 								)
 							})

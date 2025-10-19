@@ -3,7 +3,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import type { Question, TranslateQuestionResponse } from '@/features/tests/types/test'
+import type { QuesDetailRes, TranslateQuestionResponse } from '@/features/tests/types/test'
 import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { useTranslationCard } from '@/features/tests/hooks/useTranslationCard'
@@ -16,7 +16,7 @@ type SolutionQuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
 	translateScript?: TranslateQuestionResponse
-	questionData: Question[],
+	questionData: QuesDetailRes[],
 }
 
 export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps> = ({
@@ -85,7 +85,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 			ref={(el: HTMLDivElement | null) => {
 				// Set scroll target for the first question in this media
 				if (questionData.length > 0) {
-					setScrollTarget(questionData[0].question_id, el)
+					setScrollTarget(questionData[0].ques_id, el)
 				}
 			}}
 		>
@@ -109,8 +109,8 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div
-							key={question.question_id || index}
-							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.question_id, el) }}
+							key={question.ques_id || index}
+							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.ques_id, el) }}
 						>
 
 							{/* Question Block */}
@@ -123,11 +123,11 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 										<Badge
 											variant='outline'
 											className="text-base font-semibold border-primary">
-											{question.question_number}
+											{question.ques_number}
 										</Badge>
 
 										<Label className="text-base font-medium flex-1 min-w-0">
-											{question.question_content}
+											{question.ques_content}
 										</Label>
 									</div>
 
@@ -135,12 +135,12 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 								</div>
 
 								<TranslationCard
-									translateScript={newTranslateScript[question.question_id]}
-									selectedLanguage={getSelectedLanguage(question.question_id)}
-									isExpanded={isTranslateCardExpanded(question.question_id)}
-									onToggle={() => toggleTranslateCardExpanded(question.question_id)}
-									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.question_id, lang)}
-									onTranslate={() => handleTranslation(question.question_id)}
+									translateScript={newTranslateScript[question.ques_id]}
+									selectedLanguage={getSelectedLanguage(question.ques_id)}
+									isExpanded={isTranslateCardExpanded(question.ques_id)}
+									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
+									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.ques_id, lang)}
+									onTranslate={() => handleTranslation(question.ques_id)}
 									isTranslatePending={isTranslatePending}
 									isTranslateError={isTranslateError}
 								/>
@@ -154,20 +154,20 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									<RadioGroup
 										className="gap-1"
 										disabled
-										value={getCurrentAnswerValue(question.question_id)}
+										value={getCurrentAnswerValue(question.ques_id)}
 										onValueChange={handleSelectAnswer}
 									>
-										{question.answer_list.map((answer, answerIndex) => {
-											const isSelected = isAnswerSelected(question.question_id, answer.answer_id)
+										{question.ans_list.map((answer, answerIndex) => {
+											const isSelected = isAnswerSelected(question.ques_id, answer.ans_id)
 											return (
 												<Label
-													key={answer.answer_id || answerIndex}
-													htmlFor={`question-${question.question_id}-answer-${answer.answer_id}`}
+													key={answer.ans_id || answerIndex}
+													htmlFor={`question-${question.ques_id}-answer-${answer.ans_id}`}
 													className={getSolutionAnswerClass(answer.is_correct, isSelected)}
 												>
 													<RadioGroupItem
-														id={`question-${question.question_id}-answer-${answer.answer_id}`}
-														value={getAnswerValue(question.question_id, answer.answer_id)}
+														id={`question-${question.ques_id}-answer-${answer.ans_id}`}
+														value={getAnswerValue(question.ques_id, answer.ans_id)}
 														className="border border-foreground"
 													/>
 													{answer.content}

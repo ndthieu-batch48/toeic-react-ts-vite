@@ -1,15 +1,16 @@
 import { axiosBase } from "@/lib/axios";
-import type { GetPartAudioRequest, Test, TranslateQuestionRequest, TranslateQuestionResponse } from "../types/test";
+import type { GetPartAudioRequest, TestDetailRes, TestSummaryRes, TranslateQuestionRequest, TranslateQuestionResponse } from "../types/test";
 
-export const getAllTests = async (): Promise<Test[]> => {
+export const getAllTests = async (): Promise<TestSummaryRes[]> => {
   const url = 'test/all';
   const res = await axiosBase.get(url);
   return res.data;
 };
 
-export const getTestDetail = async (id: number): Promise<Test> => {
+export const getTestDetail = async (id: number, partIds?: number[]): Promise<TestDetailRes> => {
   const url = `test/${id}`;
-  const res = await axiosBase.get(url);
+  const params = partIds && partIds.length > 0 ? { part_id: partIds } : {};
+  const res = await axiosBase.get(url, { params });
   return res.data;
 };
 

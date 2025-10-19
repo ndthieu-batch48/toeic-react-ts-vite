@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { MainParagraph } from './MainParagraph'
-import type { Question, TranslateQuestionResponse } from '../types/test'
+import type { QuesDetailRes, TranslateQuestionResponse } from '../types/test'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hooks/useTranslationCard'
@@ -18,7 +18,7 @@ type QuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
 	translateScript?: TranslateQuestionResponse
-	questionData: Question[],
+	questionData: QuesDetailRes[],
 	partId: number,
 }
 
@@ -101,8 +101,8 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div
-							key={question.question_id || index}
-							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.question_id, el) }}
+							key={question.ques_id || index}
+							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.ques_id, el) }}
 						>
 
 							{/* Question Block */}
@@ -121,11 +121,11 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 										<Badge
 											variant='outline'
 											className="text-base font-semibold border-primary">
-											{question.question_number}
+											{question.ques_number}
 										</Badge>
 
 										<Label className="text-base font-medium flex-1 min-w-0">
-											{question.question_content}
+											{question.ques_content}
 										</Label>
 									</div>
 
@@ -133,12 +133,12 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								</div>
 
 								<TranslationCard
-									translateScript={newTranslateScript[question.question_id]}
-									selectedLanguage={getSelectedLanguage(question.question_id)}
-									isExpanded={isTranslateCardExpanded(question.question_id)}
-									onToggle={() => toggleTranslateCardExpanded(question.question_id)}
-									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.question_id, lang)}
-									onTranslate={() => handleTranslation(question.question_id)}
+									translateScript={newTranslateScript[question.ques_id]}
+									selectedLanguage={getSelectedLanguage(question.ques_id)}
+									isExpanded={isTranslateCardExpanded(question.ques_id)}
+									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
+									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.ques_id, lang)}
+									onTranslate={() => handleTranslation(question.ques_id)}
 									isTranslatePending={isTranslatePending}
 									isTranslateError={isTranslateError}
 								/>
@@ -151,18 +151,18 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 									{/* Answer Options */}
 									<RadioGroup
 										className="gap-1"
-										value={getCurrentAnswerValue(question.question_id)}
+										value={getCurrentAnswerValue(question.ques_id)}
 										onValueChange={handleSelectAnswer}
 									>
-										{question.answer_list.map((answer, answerIndex) => (
+										{question.ans_list.map((answer, answerIndex) => (
 											<Label
-												key={answer.answer_id || answerIndex}
-												htmlFor={`question-${question.question_id}-answer-${answer.answer_id}`}
-												className={getAnswerOptionClass(question.question_id, answer.answer_id)}
+												key={answer.ans_id || answerIndex}
+												htmlFor={`question-${question.ques_id}-answer-${answer.ans_id}`}
+												className={getAnswerOptionClass(question.ques_id, answer.ans_id)}
 											>
 												<RadioGroupItem
-													id={`question-${question.question_id}-answer-${answer.answer_id}`}
-													value={getAnswerValue(question.question_id, answer.answer_id)}
+													id={`question-${question.ques_id}-answer-${answer.ans_id}`}
+													value={getAnswerValue(question.ques_id, answer.ans_id)}
 													className="border border-foreground"
 												/>
 												{answer.content}

@@ -2,12 +2,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 import React, { useEffect, useRef } from "react"
-import type { Part } from "@/features/tests/types/test"
+import type { PartDetailRes } from "@/features/tests/types/test"
 import { useSolutionContext, type ActiveQuestion } from "../context/SolutionContext"
 import { getToeicPartTopic } from "@/features/tests/helper/testHelper"
 
 type SolutionQuestionTabProps = {
-	partData: Part[]
+	partData: PartDetailRes[]
 	className?: string,
 	onQuestionActive?: (mediaId: number) => void
 }
@@ -100,15 +100,15 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 					</div>
 
 					<div className="flex flex-wrap gap-1 p-1 border border-border rounded-md">
-						{part.media_list?.map((media, mediaIndex) => (
-							media.question_list.map((question, questionIndex) => {
-								const answerId = getSelectedAnswerId(question.question_id)
+						{part.media_ques_list?.map((media, mediaIndex) => (
+							media.ques_list.map((question, questionIndex) => {
+								const answerId = getSelectedAnswerId(question.ques_id)
 								const isSelected = answerId !== undefined && answerId !== null && answerId !== ''
-								const isActive = isQuestionActive(part.part_id, question.question_id)
-								const questionKey = `${part.part_id}-${question.question_id}`;
+								const isActive = isQuestionActive(part.part_id, question.ques_id)
+								const questionKey = `${part.part_id}-${question.ques_id}`;
 
 								const selectedAnswer = isSelected
-									? question.answer_list.find(answer => String(answer.answer_id) === String(answerId))
+									? question.ans_list.find(answer => String(answer.ans_id) === String(answerId))
 									: undefined
 
 								return (
@@ -117,11 +117,11 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 											questionRefs.current[questionKey] = el;
 										}}
 										onClick={() => {
-											onQuestionActive?.(media.media_id)
+											onQuestionActive?.(media.media_ques_id)
 
 											toggleActive({
 												part_id: part.part_id,
-												question_id: question.question_id
+												question_id: question.ques_id
 											})
 										}}
 										className={cn(
@@ -132,7 +132,7 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 										)}
 										key={`${mediaIndex}-${questionIndex}`}
 									>
-										{question.question_number}
+										{question.ques_number}
 									</Label>
 								)
 							})

@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 
-import type { Part } from "@/features/tests/types/test"
+import type { PartDetailRes } from "@/features/tests/types/test"
 import { SolutionPartTab } from "../components/SolutionPartTabs"
 import { SolutionQuestionTab } from "../components/SolutionQuestionTab"
 import type { HistoryResultDetailResponse } from "../types/history"
@@ -10,7 +10,7 @@ import { useSolutionContext } from "../context/SolutionContext"
 
 type SolutionPageProps = {
 	detailHistory: HistoryResultDetailResponse
-	partData: Part[]
+	partData: PartDetailRes[]
 }
 
 export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
@@ -19,8 +19,8 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
-			const partQuestions = part.media_list?.reduce((partTotal, media) => {
-				return partTotal + (media.question_list?.length || 0);
+			const partQuestions = part.media_ques_list?.reduce((partTotal, media) => {
+				return partTotal + (media.ques_list?.length || 0);
 			}, 0) || 0;
 			return totalQuestions + partQuestions;
 		}, 0);

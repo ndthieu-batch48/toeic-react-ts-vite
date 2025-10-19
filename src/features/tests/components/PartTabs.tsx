@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Part } from "../types/test"
+import type { PartDetailRes } from "../types/test"
 import { QuestionMediaCard } from "./QuestionMediaCard"
 import { QuestionCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"
@@ -14,7 +14,7 @@ import { getToeicPartTopic } from "../helper/testHelper"
 
 
 type PartTabsProps = {
-	partData: Part[]
+	partData: PartDetailRes[]
 	className?: string,
 }
 
@@ -30,8 +30,8 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 		const partId = parseInt(value.replace('part-', ''))
 		const part = partData.find(p => p.part_id === partId)
 
-		if (part && part.media_list?.[0]?.question_list?.[0]) {
-			const firstQuestionId = part.media_list[0].question_list[0].question_id
+		if (part && part.media_ques_list?.[0]?.ques_list?.[0]) {
+			const firstQuestionId = part.media_ques_list[0].ques_list[0].ques_id
 			setActivePart(partId, firstQuestionId)
 		}
 	}
@@ -105,23 +105,23 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 						value={`part-${part.part_id}`}
 					>
 						<div>
-							{part.media_list?.map((media, key) =>
-								media.question_list.length === 1 ? (
+							{part.media_ques_list?.map((media, key) =>
+								media.ques_list.length === 1 ? (
 									<QuestionCard
-										key={media.media_id}
+										key={media.media_ques_id}
 										partId={part.part_id}
-										questionData={media.question_list[0]}
-										paragraphMain={media.media_paragraph_main}
-										translateScript={media.media_translate_script}
+										questionData={media.ques_list[0]}
+										paragraphMain={media.media_ques_main_para}
+										translateScript={media.media_ques_trans_script}
 									/>
 								) : (
 									<QuestionMediaCard
 										key={key}
-										mediaName={media.media_name}
-										questionData={media.question_list}
+										mediaName={media.media_ques_name}
+										questionData={media.ques_list}
 										partId={part.part_id}
-										paragraphMain={media.media_paragraph_main}
-										translateScript={media.media_translate_script} />
+										paragraphMain={media.media_ques_main_para}
+										translateScript={media.media_ques_trans_script} />
 								)
 							)}
 						</div>
