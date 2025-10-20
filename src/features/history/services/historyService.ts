@@ -1,29 +1,29 @@
 import { axiosJWT } from "@/lib/axios";
-import type { HistoryCreateRequest, HistoryResponse as HistorySaveProgressResponse, HistoryResultDetailResponse, HistoryResultListResponse, } from "../types/history";
+import type { HistoryCreateReq, HistoryResp as HistorySaveProgressResponse, HistoryResultDetailResp, HistoryResultListRes, HistoryCreateResp, } from "../types/history";
 
-export const createHistory = async (request: HistoryCreateRequest) => {
-  const url = 'history'
-  const response = await axiosJWT.post(url, request);
+export const createHistory = async (request: HistoryCreateReq) => {
+  const url = 'histories'
+  const response = await axiosJWT.post<HistoryCreateResp>(url, request);
   return response.data;
 }
 
 export const getSaveProgressHistory = async (testId: number): Promise<HistorySaveProgressResponse> => {
-  const url = 'history/save';
+  const url = 'histories/save';
   const response = await axiosJWT.get<HistorySaveProgressResponse>(url, {
     params: { test_id: testId },
   });
   return response.data;
 };
 
-export const getHistoryResultList = async (): Promise<HistoryResultListResponse[]> => {
-  const url = 'history/result/list'
+export const getHistoryResultList = async (): Promise<HistoryResultListRes[]> => {
+  const url = 'histories/result/list'
   const response = await axiosJWT.get(url);
   return response.data;
 }
 
-export const getHistoryResultDetail = async (historyId: number): Promise<HistoryResultDetailResponse> => {
-  const url = 'history/result/detail'
-  const response = await axiosJWT.get<HistoryResultDetailResponse>(url,
+export const getHistoryResultDetail = async (historyId: number): Promise<HistoryResultDetailResp> => {
+  const url = 'histories/result/detail'
+  const response = await axiosJWT.get<HistoryResultDetailResp>(url,
     { params: { history_id: historyId } },
   );
   return response.data;

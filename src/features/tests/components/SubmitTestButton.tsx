@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { useTestContext } from "../context/TestContext"
-import type { HistoryCreateRequest } from "@/features/history/types/history"
+import type { HistoryCreateReq } from "@/features/history/types/history"
 import { useCreateHistory } from "@/features/history/hooks/useHistoryApi"
 import {
 	AlertDialog,
@@ -13,43 +13,59 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useEffect } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
-export const SubmitTestButton: React.FC = () => {
+export const SubmitTestButton = () => {
 	const navigate = useNavigate()
 	const { testId, testType, selectedAnswers, selectedParts, remainingDuration } = useTestContext()
 	const { createHistoryMutation } = useCreateHistory()
 
-	const handleSubmitTest = () => {
-		const submitPayload: HistoryCreateRequest = {
+
+
+	const handleSubmitTest = async () => {
+		const submitPayload: HistoryCreateReq = {
 			test_id: testId,
 			type: testType,
-			dataprogress: selectedAnswers,
-			part: selectedParts,
-			time: remainingDuration / 60,
+			dataprog: selectedAnswers,
+			part_id_list: selectedParts,
+			dura: remainingDuration / 60,
 			status: 'submit'
 		}
-		createHistoryMutation.mutateAsync(submitPayload)
+
+		try {
+			const result = await createHistoryMutation.mutateAsync(submitPayload)
+
+			if (result.status === 'submit') {
+				navigate({
+					to: "/history/$historyId",
+					params: { historyId: String(result.history_id) },
+					replace: true
+				})
+			}
+		} catch (error) {
+			console.error('Failed to submit test:', error)
+		}
 	}
 
-	const handleSaveTest = () => {
-		const savePayload: HistoryCreateRequest = {
+	const handleSaveTest = async () => {
+		const savePayload: HistoryCreateReq = {
 			test_id: testId,
 			type: testType,
-			dataprogress: selectedAnswers,
-			part: selectedParts,
-			time: remainingDuration / 60,
+			dataprog: selectedAnswers,
+			part_id_list: selectedParts,
+			dura: remainingDuration / 60,
 			status: 'save'
 		}
-		createHistoryMutation.mutateAsync(savePayload)
+
+		try {
+			await createHistoryMutation.mutateAsync(savePayload)
+			navigate({ to: "/test", replace: true })
+		} catch (error) {
+			console.error('Failed to save test:', error)
+		}
 	}
 
-	useEffect(() => {
-		if (createHistoryMutation.isSuccess) {
-			navigate({ to: "/test", replace: true })
-		}
-	}, [createHistoryMutation.isSuccess, navigate])
+
 
 	return (
 		<div className="flex gap-1">

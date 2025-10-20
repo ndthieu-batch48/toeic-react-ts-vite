@@ -1,26 +1,31 @@
-export interface HistoryResponse {
+export interface HistoryResp {
   id: number;
-  dataprogress: Record<string, string>; // JSON<Dict[str, str]>
+  dataprog: Record<string, string>;
   type: string;                         // e.g. "Practice", "FullTest"
-  part: string[];
-  time: number;
+  part_id_list: string[];
+  dura: number;
   test_id: number;
   user_id: number;
   create_at: string;
-  status: string;                       // e.g. "submit"
-  time_left?: number | null;
+  status: string;                       // e.g. "submit", "save"
 }
 
-export interface HistoryCreateRequest {
-  dataprogress: Record<string, string>;
+export interface HistoryCreateResp {
+  history_id: number
+  status: string
+  message: string
+}
+
+export interface HistoryCreateReq {
+  dataprog: Record<string, string>;
   type: string;
-  part: string[];
-  time: number;
+  part_id_list: string[];
+  dura: number;
   test_id: number;
-  status?: "save" | "submit";           // default = "save"
+  status?: "save" | "submit";
 }
 
-export interface HistoryResultDetailResponse {
+export interface HistoryResultDetailResp {
   history_id: number;
   test_id: number;
   test_type: string;
@@ -29,22 +34,22 @@ export interface HistoryResultDetailResponse {
   incorrect_count: number;
   correct_listening: number;
   correct_reading: number;
-  no_answer: number;
-  total_question: number;
+  no_ans: number;
+  total_ques: number;
   accuracy: number;
-  duration: number;
+  dura: number;
   create_at: string;
-  dataprogress: Record<string, string>
+  dataprog: Record<string, string>
   part_id_list: string[];
 }
 
-export interface HistoryResultListResponse {
+export interface HistoryResultListRes {
   history_id: number;
   score: string;
   test_id: number;
   test_type: string;
   test_name: string;
-  duration: number;
+  dura: number;
   part_id_list: string[];
   part_order_list: string[];
   create_at: string;

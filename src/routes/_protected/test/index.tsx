@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useGetAllTests } from '@/features/tests/hooks/userTestApi'
-import { useGetHistoryResultList } from '@/features/history/hooks/useHistoryApi'
 import { TestDashBoardPage } from '@/features/tests/pages/TestDashBoardPage'
 
 export const Route = createFileRoute('/_protected/test/')({
@@ -15,14 +14,8 @@ function TestDashBoardRoute() {
 		error: testsError,
 	} = useGetAllTests()
 
-	const {
-		status: historyStatus,
-		data: historyData,
-		isError: isHistoryError,
-		error: historyError,
-	} = useGetHistoryResultList()
 
-	if (testsStatus === 'pending' || historyStatus === 'pending') {
+	if (testsStatus === 'pending') {
 		return (
 			<div className="container mx-auto p-6">
 				<div className="text-center text-foreground">Loading...</div>
@@ -40,17 +33,8 @@ function TestDashBoardRoute() {
 		)
 	}
 
-	if (isHistoryError) {
-		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-destructive">
-					Error loading history: {historyError?.message}
-				</div>
-			</div>
-		)
-	}
-	
+
 	return (
-		<TestDashBoardPage testData={testData} historyData={historyData} />
+		<TestDashBoardPage testData={testData} />
 	)
 }

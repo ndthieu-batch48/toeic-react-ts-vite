@@ -7,13 +7,13 @@ import { Clock, Info } from 'lucide-react'
 import type { TestSummaryRes, PartSummaryRes } from '../types/test'
 import { useNavigate } from '@tanstack/react-router'
 import { TimePicker } from '../components/TimePicker'
-import type { HistoryResponse } from '@/features/history/types/history'
+import type { HistoryResp } from '@/features/history/types/history'
 import { Label } from '@/components/ui/label'
 import { getToeicPartDescription, getToeicPartTopic } from '../helper/testHelper'
 
 interface TestSetupProps {
 	currentTest: TestSummaryRes
-	saveHistoryData?: HistoryResponse
+	saveHistoryData?: HistoryResp
 }
 
 const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData }) => {
@@ -58,7 +58,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 			selectedPartIds: selectedParts.map(p => p.part_id),
 			timeLimit: isPracticeTest
 				? (timeLimit ? parseInt(timeLimit) : 0)
-				: currentTest.test_duration,
+				: currentTest.test_dura,
 		}
 
 		navigate({
@@ -77,11 +77,11 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 
 		const saveTestSetup = {
 			testId: String(saveHistoryData.test_id),
-			selectedPartIds: saveHistoryData.part,
-			selectedAnswers: saveHistoryData.dataprogress,
+			selectedPartIds: saveHistoryData.part_id_list,
+			selectedAnswers: saveHistoryData.dataprog,
 			timeLimit: isPracticeTest
 				? (timeLimit ? parseInt(timeLimit) : 0)
-				: currentTest.test_duration,
+				: currentTest.test_dura,
 		}
 
 		navigate({
@@ -117,7 +117,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 					<div className="flex items-start text-muted-foreground text-base gap-1 pb-2">
 						<h1 className="text-2xl font-bold text-foreground pr-2">{currentTest.test_title}</h1>
 						<Clock />
-						<span>Standard duration: {currentTest.test_duration} minutes</span>
+						<span>Standard duration: {currentTest.test_dura} minutes</span>
 					</div>
 				</div>
 
@@ -184,7 +184,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 										<TimePicker
 											timeLimit={timeLimit}
 											onTimeLimitChange={setTimeLimit}
-											testDuration={String(currentTest.test_duration)}
+											testDuration={String(currentTest.test_dura)}
 										/>
 									</div>
 

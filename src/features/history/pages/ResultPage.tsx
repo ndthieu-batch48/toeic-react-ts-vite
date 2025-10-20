@@ -3,18 +3,18 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye } from 'lucide-react';
-import type { HistoryResultDetailResponse } from '../types/history';
+import type { HistoryResultDetailResp } from '../types/history';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 
 type ResultPageProps = {
-	detailResult: HistoryResultDetailResponse;
+	detailResult: HistoryResultDetailResp;
 };
 
 const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 	const isFailed = detailResult.accuracy < 50
-	const durationMinutes = Math.floor(detailResult.duration / 60);
-	const durationSeconds = detailResult.duration % 60;
+	const durationMinutes = Math.floor(detailResult.dura / 60);
+	const durationSeconds = detailResult.dura % 60;
 
 	// Format date
 	const testDate = new Date(detailResult.create_at).toLocaleDateString('en-US', {
@@ -58,8 +58,8 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 						<CardTitle className="text-sm font-medium text-muted-foreground">Questions Answered</CardTitle>
 					</CardHeader>
 					<CardContent className="text-center">
-						<div className="text-4xl font-bold mb-2">{detailResult.total_question - detailResult.no_answer}</div>
-						<p className="text-sm text-muted-foreground">of {detailResult.total_question} total</p>
+						<div className="text-4xl font-bold mb-2">{detailResult.total_ques - detailResult.no_ans}</div>
+						<p className="text-sm text-muted-foreground">of {detailResult.total_ques} total</p>
 					</CardContent>
 				</Card>
 
@@ -87,7 +87,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<div className="space-y-3">
 						<div className="flex justify-between items-center">
 							<span className="text-sm font-medium">Overall Progress</span>
-							<span className="text-sm text-muted-foreground">{detailResult.correct_count}/{detailResult.total_question}</span>
+							<span className="text-sm text-muted-foreground">{detailResult.correct_count}/{detailResult.total_ques}</span>
 						</div>
 						<Progress value={detailResult.accuracy} />
 					</div>
@@ -126,7 +126,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 										<span>No Answer</span>
 									</div>
 									<Badge variant="secondary">
-										{detailResult.no_answer}
+										{detailResult.no_ans}
 									</Badge>
 								</div>
 

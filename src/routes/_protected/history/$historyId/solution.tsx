@@ -66,7 +66,7 @@ function SolutionRoute() {
 		testId: historyData.test_id,
 		activePart: initialActive.part_id,
 		activeQuestion: initialActive,
-		selectedAnswers: historyData.dataprogress ?? {},
+		selectedAnswers: historyData.dataprog ?? {},
 		selectedParts: [],
 	}
 

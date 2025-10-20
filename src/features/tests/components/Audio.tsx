@@ -6,7 +6,7 @@ import { useTestContext } from "../context/TestContext"
 import { useQuery } from "@tanstack/react-query"
 import { getPartAudioUrlOption } from "../util/queryUtil"
 
-export const Audio: React.FC = () => {
+export const Audio = () => {
 	const { testId, activePart: partId } = useTestContext()
 
 	const { data: audioUrl } = useQuery(getPartAudioUrlOption(testId, partId))
@@ -61,7 +61,6 @@ export const Audio: React.FC = () => {
 
 	// Reset audio state when audio URL changes (switching parts)
 	useEffect(() => {
-		console.log("Audio URL changed:", audioUrl);
 		const audioElement = audioRef.current;
 
 		if (audioElement && audioUrl) {

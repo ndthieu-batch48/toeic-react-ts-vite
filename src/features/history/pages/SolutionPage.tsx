@@ -3,13 +3,13 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import type { PartDetailRes } from "@/features/tests/types/test"
 import { SolutionPartTab } from "../components/SolutionPartTabs"
 import { SolutionQuestionTab } from "../components/SolutionQuestionTab"
-import type { HistoryResultDetailResponse } from "../types/history"
+import type { HistoryResultDetailResp } from "../types/history"
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useSolutionContext } from "../context/SolutionContext"
 
 
 type SolutionPageProps = {
-	detailHistory: HistoryResultDetailResponse
+	detailHistory: HistoryResultDetailResp
 	partData: PartDetailRes[]
 }
 

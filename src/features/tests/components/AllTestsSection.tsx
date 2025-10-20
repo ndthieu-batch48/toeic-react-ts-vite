@@ -31,7 +31,7 @@ export function AllTestsSection({ availableTests }: AllTestsSection) {
 						<CardContent>
 							<div className="flex items-center gap-2 text-lg text-muted-foreground">
 								<Clock />
-								{test.test_duration} minutes
+								{test.test_dura} minutes
 							</div>
 						</CardContent>
 
