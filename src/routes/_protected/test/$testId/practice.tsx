@@ -57,7 +57,7 @@ function TestPracticeRoute() {
 			<TestScrollProvider>
 				<TestPracticePage
 					testId={Number(testId)}
-					testTitle={"TMA TOEIC"} // testData!.test_title || 
+					testTitle={"TMA TOEIC TEST"} // testData!.test_title || 
 					partData={sortedParts}
 				/>
 			</TestScrollProvider>
