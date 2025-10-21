@@ -42,8 +42,8 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 	const getScoreBgColor = (scoreString: string) => {
 		const status = getScoreStatus(scoreString);
 		return status === 'failed'
-			? 'bg-destructive/12'
-			: 'bg-possitive/15';
+			? 'bg-destructive/10'
+			: 'bg-possitive/10';
 	};
 
 	const formatDate = (dateString: string) => {

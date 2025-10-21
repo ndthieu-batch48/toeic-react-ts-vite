@@ -17,20 +17,18 @@ export interface QuestionCardProps {
 	paragraphMain: string
 	translateScript?: TranslateQuestionResponse
 	questionData: QuesDetailRes,
-	partId: number,
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
 	paragraphMain,
 	questionData,
-	partId,
 }) => {
 
 	// SCROLL LOGIC
 	const { setScrollTarget } = useTestScrollContext()
 
 	const { ques_id, ques_number, ques_content, ans_list } = questionData
-	const { selectedAnswers, setSelectedAnswer, setActiveQuestion } = useTestContext()
+	const { selectedAnswers, setSelectedAnswer } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -52,7 +50,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 			[String(ques_id)]: answerId
 		};
 		setSelectedAnswer(updatedAnswers);
-		setActiveQuestion({ part_id: partId, question_id: ques_id })
 	}
 
 	return (

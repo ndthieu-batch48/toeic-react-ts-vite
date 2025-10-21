@@ -109,7 +109,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 								media.ques_list.length === 1 ? (
 									<QuestionCard
 										key={media.media_ques_id}
-										partId={part.part_id}
 										questionData={media.ques_list[0]}
 										paragraphMain={media.media_ques_main_para}
 										translateScript={media.media_ques_trans_script}
@@ -119,7 +118,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 										key={key}
 										mediaName={media.media_ques_name}
 										questionData={media.ques_list}
-										partId={part.part_id}
 										paragraphMain={media.media_ques_main_para}
 										translateScript={media.media_ques_trans_script} />
 								)

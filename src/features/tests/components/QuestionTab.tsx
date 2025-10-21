@@ -60,7 +60,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-100 w-full px-2 bg-transparent", className)}
+			className={cn("md:min-h-100 lg:max-h-110 w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
 				<div

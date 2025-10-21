@@ -69,13 +69,13 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 		}
 
 		return isAnswerCorrect
-			? "bg-positive/60 text-white"
-			: "bg-destructive/60 text-white"
+			? "bg-positive/70 text-white"
+			: "bg-destructive/70 text-white"
 	}
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("h-100 w-full px-2 bg-transparent", className)}
+			className={cn("md:min-h-100 lg:max-h-110 w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
 				<div

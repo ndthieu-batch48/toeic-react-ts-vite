@@ -19,20 +19,18 @@ type QuestionMediaCardProps = {
 	paragraphMain: string,
 	translateScript?: TranslateQuestionResponse
 	questionData: QuesDetailRes[],
-	partId: number,
 }
 
 export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	mediaName,
 	paragraphMain,
 	questionData,
-	partId,
 }) => {
 
 	// SCROLL LOGIC
 	const { setScrollTarget } = useTestScrollContext()
 
-	const { selectedAnswers, setSelectedAnswer, setActiveQuestion } = useTestContext()
+	const { selectedAnswers, setSelectedAnswer } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -52,7 +50,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 			...selectedAnswers,
 			[questionId]: answerId
 		});
-		setActiveQuestion({ part_id: partId, question_id: Number(questionId) })
 	}
 
 	// Helper function to get current answer value for a question
@@ -128,8 +125,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 											{question.ques_content}
 										</Label>
 									</div>
-
-
 								</div>
 
 								<TranslationCard
