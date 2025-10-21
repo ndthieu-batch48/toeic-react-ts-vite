@@ -20,7 +20,7 @@ export const AUTH_FORM_TEXTS = {
   // Forgot Password Form
   FORGOT_PASSWORD_TITLE: "Reset your password",
   FORGOT_PASSWORD_DESCRIPTION: "Enter your account's verified email or username and we'll send you an OTP.",
-  FORGOT_PASSWORD_BUTTON_TEXT: "Login to your account",
+  FORGOT_PASSWORD_BUTTON_TEXT: "Send OTP",
 
   // Reset Password Form
   RESET_PASSWORD_TITLE: "Change your password",

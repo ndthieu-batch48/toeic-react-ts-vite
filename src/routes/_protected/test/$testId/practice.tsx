@@ -28,17 +28,17 @@ function TestPracticeRoute() {
 	if (error) return <div className="text-center text-destructive">Error: {error.message}</div>;
 
 
-	// Filter parts based on selectedPartIds, then sort the media_list
+	// Filter parts based on selectedPartIds, then sort the media_ques_list
 	const sortedParts = testData!.part_list
 		.filter((part) => selectedPartIds.includes(part.part_id))
 		.map((part) => ({
 			...part,
-			media_list: part.media_list ? mediaQuestionSorter(part.media_list) : []
+			media_ques_list: part.media_ques_list ? mediaQuestionSorter(part.media_ques_list) : []
 		}))
 
 	const initialActive = (() => {
 		const part = sortedParts[0]
-		const questionId = part?.media_list?.[0]?.question_list?.[0]?.question_id ?? 0
+		const questionId = part?.media_ques_list?.[0]?.ques_list?.[0]?.ques_id ?? 0
 		return { part_id: part?.part_id ?? 0, question_id: questionId }
 	})()
 
@@ -57,7 +57,7 @@ function TestPracticeRoute() {
 			<TestScrollProvider>
 				<TestPracticePage
 					testId={Number(testId)}
-					testTitle={testData!.test_title || "TMA TOEIC"}
+					testTitle={"TMA TOEIC"} // testData!.test_title || 
 					partData={sortedParts}
 				/>
 			</TestScrollProvider>

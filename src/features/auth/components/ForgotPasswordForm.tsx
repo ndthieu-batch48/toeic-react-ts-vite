@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Link } from "lucide-react"
+import { Link } from "@tanstack/react-router"
 import { AUTH_FORM_TEXTS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from "../const/authConst"
 
 export function ForgotPasswordForm({
