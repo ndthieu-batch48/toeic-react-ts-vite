@@ -1,36 +1,109 @@
-import { TestProvider, type TestState } from '@/features/tests/context/TestContext';
-import { TestScrollProvider } from '@/features/tests/context/TestScrollContext';
-import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
-import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
-import { TestPracticePage } from '@/features/tests/pages/TestPracticePage';
+import { saveHistoryProgOption } from '@/feature/history/query/historyQuery';
+import { TEST_TYPE } from '@/feature/test/const/testConst';
+import { TestProvider, type TestState } from '@/feature/test/context/TestContext';
+import { TestScrollProvider } from '@/feature/test/context/TestScrollContext';
+import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
+import { TestPracticePage } from '@/feature/test/page/TestPracticePage';
+import { testDetailOption } from '@/feature/test/query/testQuery';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod';
 
 const searchSchema = z.object({
-	type: z.string(),
-	selectedPartIds: z.array(z.number()),
-	selectedAnswers: z.record(z.string(), z.string()).optional(),
+	testTitle: z.string(),
+	type: z.enum(TEST_TYPE),
+	selectedPartIds: z.array(z.number()).optional(),
 	timeLimit: z.number(),
+	isContinue: z.boolean().optional(),
 })
 
 export const Route = createFileRoute('/_protected/test/$testId/practice')({
+
 	validateSearch: searchSchema,
 	component: TestPracticeRoute,
+
+	// loaderDeps function load data from search params and return to loader function
+	loaderDeps: ({ search }) => {
+		const { isContinue: continueTest } = search
+		return { continueTest }
+	},
+
+	loader: async ({ context, params, deps }) => {
+		const testId = Number(params.testId);
+
+		// Always prefetch test data
+		await context.queryClient.prefetchQuery(testDetailOption(testId));
+
+		// Only prefetch history for if continue flag is passed
+		if (deps.continueTest) {
+			await context.queryClient.prefetchQuery(saveHistoryProgOption(testId));
+		}
+	},
 })
 
 function TestPracticeRoute() {
-
 	const { testId } = Route.useParams();
-	const { selectedAnswers, selectedPartIds, timeLimit, type } = Route.useSearch();
-	const { data: testData, isLoading, error } = useGetTestDetail(Number(testId), selectedPartIds);
+	const { testTitle, type, selectedPartIds, timeLimit, isContinue: shouldContinueTest } = Route.useSearch();
 
-	if (isLoading) return <div className="text-center text-foreground">Loading...</div>;
-	if (error) return <div className="text-center text-destructive">Error: {error.message}</div>;
+	// Fetch test data with regular useQuery
+	const { data: testData, isLoading: isTestLoading, error: testError } = useQuery(
+		testDetailOption(Number(testId))
+	);
 
+	const { data: historyData, isLoading: isHistoryLoading } = useQuery({
+		...saveHistoryProgOption(Number(testId)),
+		enabled: shouldContinueTest,
+	});
 
-	// Filter parts based on selectedPartIds, then sort the media_ques_list
-	const sortedParts = testData!.part_list
-		.filter((part) => selectedPartIds.includes(part.part_id))
+	// Show loading state
+	if (isTestLoading || (shouldContinueTest && isHistoryLoading)) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<div className="text-center">
+					<div className="text-lg font-semibold">Loading test data...</div>
+					<div className="text-sm text-muted-foreground mt-2">Please wait</div>
+				</div>
+			</div>
+		);
+	}
+
+	// Show error state
+	if (testError) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<div className="text-center text-destructive">
+					<div className="text-lg font-semibold">Error loading test</div>
+					<div className="text-sm mt-2">{testError.message}</div>
+				</div>
+			</div>
+		);
+	}
+
+	if (!testData) return null;
+
+	// Determine parts and answers based on whether we're continuing from history
+	const partIds = shouldContinueTest && historyData
+		? historyData.part_id_list.map(Number)
+		: selectedPartIds;
+
+	const savedAnswers = shouldContinueTest && historyData
+		? historyData.dataprog
+		: {};
+
+	const duration = shouldContinueTest && historyData
+		? historyData.dura
+		: timeLimit;
+
+	// Sort and filter parts
+	const sortedParts = testData.part_list
+		.filter((part) => {
+			// In Exam mode include all parts
+			if (!partIds || partIds.length === 0) {
+				return true;
+			}
+			// In Practice mode filter by partIds
+			return partIds.includes(part.part_id);
+		})
 		.map((part) => ({
 			...part,
 			media_ques_list: part.media_ques_list ? mediaQuestionSorter(part.media_ques_list) : []
@@ -47,9 +120,9 @@ function TestPracticeRoute() {
 		testType: type,
 		activePart: initialActive.part_id,
 		activeQuestion: initialActive,
-		selectedAnswers: selectedAnswers ?? {},
-		selectedParts: type === "Practice" ? selectedPartIds.map(String) : [],
-		remainingDuration: timeLimit,
+		selectedAnswers: savedAnswers,
+		selectedParts: partIds ? partIds.map(String) : [],
+		remainingDuration: duration,
 	}
 
 	return (
@@ -57,7 +130,7 @@ function TestPracticeRoute() {
 			<TestScrollProvider>
 				<TestPracticePage
 					testId={Number(testId)}
-					testTitle={"TMA TOEIC TEST"} // testData!.test_title || 
+					testTitle={testTitle || "TOEIC English practice"}
 					partData={sortedParts}
 				/>
 			</TestScrollProvider>

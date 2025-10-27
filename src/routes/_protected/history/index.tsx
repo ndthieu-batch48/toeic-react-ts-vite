@@ -1,5 +1,5 @@
-import HistoryPage from '@/features/history/pages/HistoryPage'
-import { getHistoryResultListOptions } from '@/features/history/utils/historyQuery';
+import HistoryPage from '@/feature/history/page/HistoryPage'
+import { getHistoryResultListOptions } from '@/feature/history/util/historyQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 

@@ -1,7 +1,7 @@
 import z from 'zod'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@/contexts/AuthContext'
-import { LoginPage } from '@/features/auth/page/LoginPage'
+import { LoginPage } from '@/feature/auth/page/LoginPage'
 
 export const Route = createFileRoute('/(auth)/login')({
 	validateSearch: z.object({

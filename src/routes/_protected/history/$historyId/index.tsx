@@ -1,5 +1,5 @@
-import ResultPage from '@/features/history/pages/ResultPage'
-import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
+import ResultPage from '@/feature/history/page/ResultPage'
+import { useGetHistoryResultDetail } from '@/feature/history/query/historyQuery';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/history/$historyId/')({

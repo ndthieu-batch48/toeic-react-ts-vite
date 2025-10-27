@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { clearUserSession, getUserSession } from '@/features/auth/helper/authHelper';
+import { clearUserSession, getUserSession } from '@/feature/auth/helper/authHelper';
 
 // Base axios instance (no auth)
 export const axiosBase = axios.create({

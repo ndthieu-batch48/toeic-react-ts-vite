@@ -1,7 +1,7 @@
-import { refreshTokenService } from '@/features/auth/services/authService';
-import type { UserResponse } from '@/features/auth/types/authType';
-import { clearUserSession, getUserSession, saveUserSession } from '@/features/auth/helper/authHelper';
-import { isTokenExpired } from '@/utils/jwtUtil';
+import { refreshTokenService } from '@/feature/auth/service/authService';
+import type { UserResponse } from '@/feature/auth/type/authType';
+import { clearUserSession, getUserSession, saveUserSession } from '@/feature/auth/helper/authHelper';
+import { isTokenExpired } from '@/util/jwtUtil';
 import * as React from 'react'
 
 export interface User {

@@ -1,10 +1,10 @@
-import { SolutionPage } from '@/features/history/pages/SolutionPage';
-import { SolutionProvider, type SolutionState } from '@/features/history/context/SolutionContext';
-import { SolutionScrollProvider } from '@/features/history/context/SolutionScrollContext';
-import { mediaQuestionSorter } from '@/features/tests/helper/testHelper';
-import { useGetTestDetail } from '@/features/tests/hooks/userTestApi';
+import { SolutionPage } from '@/feature/history/page/SolutionPage';
+import { SolutionProvider, type SolutionState } from '@/feature/history/context/SolutionContext';
+import { SolutionScrollProvider } from '@/feature/history/context/SolutionScrollContext';
+import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
+import { useGetTestDetail } from '@/feature/test/hook/useTestApi';
 import { createFileRoute } from '@tanstack/react-router'
-import { useGetHistoryResultDetail } from '@/features/history/hooks/useHistoryApi';
+import { useGetHistoryResultDetail } from '@/feature/history/query/historyQuery';
 import z from 'zod';
 
 const searchSchema = z.object({

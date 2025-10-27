@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGetAllTests } from '@/features/tests/hooks/userTestApi'
-import { TestDashBoardPage } from '@/features/tests/pages/TestDashBoardPage'
+import { useGetAllTests } from '@/feature/test/hook/useTestApi'
+import { TestDashBoardPage } from '@/feature/test/page/TestDashBoardPage'
 
 export const Route = createFileRoute('/_protected/test/')({
 	component: TestDashBoardRoute,

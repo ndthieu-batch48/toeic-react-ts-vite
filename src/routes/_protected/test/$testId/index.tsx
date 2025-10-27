@@ -1,6 +1,7 @@
-import { useGetSaveHistoryProgress } from '@/features/history/hooks/useHistoryApi';
-import { useGetAllTests } from '@/features/tests/hooks/userTestApi';
-import TestSetupPage from '@/features/tests/pages/TestSetupPage';
+import { saveHistoryProgOption } from '@/feature/history/query/historyQuery';
+import { useGetAllTests } from '@/feature/test/hook/useTestApi';
+import TestSetupPage from '@/feature/test/page/TestSetupPage';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/test/$testId/')({
@@ -11,7 +12,7 @@ function TestSetupRoute() {
 	const { testId } = Route.useParams();
 
 	const { status, data, isError, error } = useGetAllTests();
-	const { data: historyData } = useGetSaveHistoryProgress(Number(testId));
+	const { data: historyData } = useQuery(saveHistoryProgOption(Number(testId)));
 
 	if (status === 'pending') {
 		return (
