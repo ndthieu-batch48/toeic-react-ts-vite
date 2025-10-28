@@ -29,10 +29,11 @@ function RootComponent() {
 	const isPracticeRoute = router.state.location.pathname.includes('/practice');
 
 	return (
-		<div className="h-screen">
+		<div className="h-dvh">
 			{!isPracticeRoute && <MainNavigationMenu />}
-			<main><Outlet /></main>
-			{!isPracticeRoute && <MainFooter />}
+			<><Outlet /></>
+			{/* {!isPracticeRoute && } */}
+			<MainFooter />
 			<ScrollToTop
 				isVisible={isVisible}
 				onScrollToTop={handleScrollToTop}

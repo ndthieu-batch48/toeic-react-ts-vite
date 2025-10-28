@@ -1,7 +1,7 @@
 import { AllTestsSection } from "../component/AllTestsSection"
-// import { HeroCarousel } from "../components/HeroCarousel"
-// import { UserInsightsPanel } from "../components/UserInsightPanel"
 import type { TestSummaryRes } from "../type/testType"
+// import { UserInsightsPanel } from "../components/UserInsightPanel"
+// import { HeroCarousel } from "../components/HeroCarousel"
 
 type TestDashBoardPageProps = {
 	testData: TestSummaryRes[]
@@ -23,12 +23,9 @@ export const TestDashBoardPage: React.FC<TestDashBoardPageProps> = ({ testData }
 	// };
 
 	return (
-		<div className="container mx-auto p-6 bg-background">
-
+		<div className="container mx-auto p-6">
 			<AllTestsSection availableTests={testData || []} />
-
 			{/* <UserInsightsPanel insightsData={mockInsightsData} /> */}
-
 		</div>
 	)
 }

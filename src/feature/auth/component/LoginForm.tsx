@@ -15,7 +15,10 @@ import {
 	FormMessage,
 } from "@/component/ui/form";
 import type { LoginRequest } from "../type/authType";
-import { FacebookIcon, GoogleIcon } from "@/component/shared/SocialMediaIcon";
+
+// TODO: Implement OAuth in the future
+// import { FacebookIcon, GoogleIcon } from "@/component/shared/SocialMediaIcon";
+
 import {
 	AUTH_FORM_TEXTS,
 	FORM_FIELD_LABELS,
@@ -124,7 +127,7 @@ export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: Login
 				</Button>
 
 				{/* OAuth buttons */}
-				<div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+				{/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
 					<span className="bg-card text-muted-foreground relative z-10 px-2 ">
 						{AUTH_FORM_TEXTS.OAUTH_SEPARATOR_TEXT}
 					</span>
@@ -138,7 +141,7 @@ export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: Login
 						<FacebookIcon />
 						<span className="sr-only">{AUTH_FORM_TEXTS.FACEBOOK_LOGIN_SR_TEXT}</span>
 					</Button>
-				</div>
+				</div> */}
 
 				{/* Switch to Register */}
 				<div className="text-center text-sm ">

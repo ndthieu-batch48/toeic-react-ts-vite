@@ -1,3 +1,4 @@
+import ResultPageSkeleton from '@/feature/history/loading/ResultPageSkeleton';
 import ResultPage from '@/feature/history/page/ResultPage'
 import { useGetHistoryResultDetail } from '@/feature/history/query/historyQuery';
 import { createFileRoute } from '@tanstack/react-router'
@@ -13,9 +14,7 @@ function ResultRoute() {
 
 	if (status === 'pending') {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-foreground">Loading history detail...</div>
-			</div>
+			<ResultPageSkeleton />
 		)
 	}
 

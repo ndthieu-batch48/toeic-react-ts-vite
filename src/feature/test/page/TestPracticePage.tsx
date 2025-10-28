@@ -35,9 +35,9 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, p
 	});
 
 	return (
-		<div className="bg-background min-h-screen">
+		<div className="bg-background">
 
-			<div className="flex flex-col md:flex-row pt-20">
+			<div className="flex flex-col md:flex-row pt-20 pb-10">
 
 				<PartTab
 					className="flex-1 min-w-0"

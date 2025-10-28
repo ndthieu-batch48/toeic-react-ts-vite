@@ -107,8 +107,8 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 
 	// Common CardFooter component
 	const TestCardFooter = () => (
-		<CardFooter className="flex-col">
-			<Separator className="mb-2" />
+		<CardFooter className="flex-col mt-auto">
+			<Separator className="mb-3" />
 			<div className="flex justify-start gap-3 w-full">
 				<Button
 					size="default"
@@ -164,7 +164,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 			</div>
 
 			{/* Main Content Section */}
-			<section className="grid gap-2 min-h-[400px]">
+			<section className="grid gap-2">
 				{isPracticeTest ? (
 					<Card className="py-3 gap-1">
 						<CardHeader className="px-3">

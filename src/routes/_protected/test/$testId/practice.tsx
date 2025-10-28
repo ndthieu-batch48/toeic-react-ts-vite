@@ -1,4 +1,5 @@
 import { saveHistoryProgOption } from '@/feature/history/query/historyQuery';
+import TestPracticeSkeleton from '@/feature/test/loading/TestPracticeSkeleton';
 import { TEST_TYPE } from '@/feature/test/const/testConst';
 import { TestProvider, type TestState } from '@/feature/test/context/TestContext';
 import { TestScrollProvider } from '@/feature/test/context/TestScrollContext';
@@ -21,24 +22,24 @@ export const Route = createFileRoute('/_protected/test/$testId/practice')({
 
 	validateSearch: searchSchema,
 	component: TestPracticeRoute,
-
+	pendingComponent: TestPracticeSkeleton,
 	// loaderDeps function load data from search params and return to loader function
-	loaderDeps: ({ search }) => {
-		const { isContinue: continueTest } = search
-		return { continueTest }
-	},
+	// loaderDeps: ({ search }) => {
+	// 	const { isContinue: continueTest } = search
+	// 	return { continueTest }
+	// },
 
-	loader: async ({ context, params, deps }) => {
-		const testId = Number(params.testId);
+	// loader: async ({ context, params, deps }) => {
+	// 	const testId = Number(params.testId);
 
-		// Always prefetch test data
-		await context.queryClient.prefetchQuery(testDetailOption(testId));
+	// 	// Always prefetch test data
+	// 	await context.queryClient.prefetchQuery(testDetailOption(testId));
 
-		// Only prefetch history for if continue flag is passed
-		if (deps.continueTest) {
-			await context.queryClient.prefetchQuery(saveHistoryProgOption(testId));
-		}
-	},
+	// 	// Only prefetch history for if continue flag is passed
+	// 	if (deps.continueTest) {
+	// 		await context.queryClient.prefetchQuery(saveHistoryProgOption(testId));
+	// 	}
+	// },
 })
 
 function TestPracticeRoute() {
@@ -58,12 +59,13 @@ function TestPracticeRoute() {
 	// Show loading state
 	if (isTestLoading || (shouldContinueTest && isHistoryLoading)) {
 		return (
-			<div className="flex items-center justify-center min-h-screen">
-				<div className="text-center">
-					<div className="text-lg font-semibold">Loading test data...</div>
-					<div className="text-sm text-muted-foreground mt-2">Please wait</div>
-				</div>
-			</div>
+			// <div className="flex items-center justify-center min-h-screen">
+			// 	<div className="text-center">
+			// 		<div className="text-lg font-semibold">Loading test data...</div>
+			// 		<div className="text-sm text-muted-foreground mt-2">Please wait</div>
+			// 	</div>
+			// </div>
+			<TestPracticeSkeleton />
 		);
 	}
 

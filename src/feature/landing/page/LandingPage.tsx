@@ -6,12 +6,12 @@ import { CtaSection } from "../component/CtaSection";
 
 export const LandingPage = () => {
 	return (
-		<div className="w-full">
+		<>
 			<HeroContent />
 			<CarouselItems />
 			<FeaturesSection />
 			<TestimonialsSection />
 			<CtaSection />
-		</div>
+		</>
 	);
 }

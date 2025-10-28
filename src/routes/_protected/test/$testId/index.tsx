@@ -1,5 +1,6 @@
 import { saveHistoryProgOption } from '@/feature/history/query/historyQuery';
 import { useGetAllTests } from '@/feature/test/hook/useTestApi';
+import TestSetupSkeleton from '@/feature/test/loading/TestSetupSkeleton';
 import TestSetupPage from '@/feature/test/page/TestSetupPage';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
@@ -16,9 +17,7 @@ function TestSetupRoute() {
 
 	if (status === 'pending') {
 		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-foreground">Loading tests...</div>
-			</div>
+			<TestSetupSkeleton />
 		)
 	}
 
