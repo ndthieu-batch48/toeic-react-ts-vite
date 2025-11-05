@@ -1,3 +1,4 @@
+import { CredentialType, OtpPurpose } from '../type/authEnum';
 import type { OtpSession, UserResponse } from '../type/authServiceType';
 import { getStorageJSON, removeStorageItem, setStorageJSON } from "@/util/localStorageUtil";
 
@@ -14,8 +15,8 @@ export const clearUserSession = (): boolean => removeStorageItem(STORAGE_KEYS.US
 export const createOtpSession = (session: Partial<OtpSession>): boolean => {
   const otpSession: OtpSession = {
     credential: session.credential || '',
-    credential_type: session.credential_type || '',
-    purpose: session.purpose || '',
+    credential_type: session.credential_type || CredentialType.UNKNOWN,
+    purpose: session.purpose || OtpPurpose.UNKNOWN,
     token: session.token || '',
   };
 
@@ -25,8 +26,8 @@ export const createOtpSession = (session: Partial<OtpSession>): boolean => {
 export const getOtpSession = (): OtpSession => {
   return getStorageJSON<OtpSession>(STORAGE_KEYS.OTP_SERVICE_SESSION, {
     credential: '',
-    credential_type: '',
-    purpose: '',
+    credential_type: CredentialType.UNKNOWN,
+    purpose: OtpPurpose.UNKNOWN,
     token: '',
   });
 };

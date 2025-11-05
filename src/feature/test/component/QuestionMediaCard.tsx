@@ -30,7 +30,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	// SCROLL LOGIC
 	const { setScrollTarget } = useTestScrollContext()
 
-	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { testType, selectedAnswers, setSelectedAnswer } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -126,17 +126,19 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 										</Label>
 									</div>
 								</div>
+								{testType === 'practice' &&
+									<TranslationCard
+										translateScript={newTranslateScript[question.ques_id]}
+										selectedLanguage={getSelectedLanguage(question.ques_id)}
+										isExpanded={isTranslateCardExpanded(question.ques_id)}
+										onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
+										onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
+										onTranslate={() => handleTranslation(question.ques_id)}
+										isTranslatePending={isTranslatePending}
+										isTranslateError={isTranslateError}
+									/>
+								}
 
-								<TranslationCard
-									translateScript={newTranslateScript[question.ques_id]}
-									selectedLanguage={getSelectedLanguage(question.ques_id)}
-									isExpanded={isTranslateCardExpanded(question.ques_id)}
-									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-									onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
-									onTranslate={() => handleTranslation(question.ques_id)}
-									isTranslatePending={isTranslatePending}
-									isTranslateError={isTranslateError}
-								/>
 
 								<div>
 									<Label className="mb-2">
