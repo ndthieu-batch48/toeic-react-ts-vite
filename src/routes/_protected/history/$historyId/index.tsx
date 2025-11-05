@@ -19,6 +19,8 @@ function ResultRoute() {
 	);
 
 	return (
-		<ResultPage detailResult={historyResultDetail} />
+		<div className=" min-h-screen">
+			<ResultPage detailResult={historyResultDetail} />
+		</div>
 	)
 }

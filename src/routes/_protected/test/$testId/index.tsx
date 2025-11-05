@@ -20,7 +20,7 @@ function TestSetupRoute() {
 	const currentTest = testData.find(test => test.test_id === Number(testId));
 
 	return (
-		<div className="h-screen">
+		<div className="min-h-screen">
 			<TestSetupPage
 				currentTest={currentTest!}
 				saveHistoryData={historyData} />

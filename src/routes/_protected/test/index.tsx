@@ -13,7 +13,7 @@ function TestDashBoardRoute() {
 	const { data: testData } = useSuspenseQuery(testQuery.all())
 
 	return (
-		<div className="h-screen container mx-auto p-6">
+		<div className="min-h-screen container mx-auto p-6">
 			<TestDashBoardPage testData={testData} />
 		</div>
 	)

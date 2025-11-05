@@ -36,7 +36,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onAuthSuccess }) => {
 
 	return (
 		<div className="bg-primary-foreground min-h-screen pt-10">
-			<Card className="lg:h-[70dvh] md:h-[60dvh] md:max-w-6xl mx-auto p-0 shadow-xl">
+			<Card className="lg:h-[90dvh] md:h-[70dvh] md:max-w-6xl mx-auto p-0 shadow-xl">
 				<CardContent className="flex h-full lg:flex-row flex-col p-2">
 
 					<div className={`flex-1 ${mode === "login" ? "order-1" : "order-2"} flex flex-col gap-4 p-6 bg-card`}>

@@ -13,7 +13,7 @@ function HistoryRoute() {
 	const { data: historyList } = useSuspenseQuery(historyQuery.resultList());
 
 	return (
-		<div className="h-screen">
+		<div className="min-h-screen">
 			<HistoryPage historyList={historyList} />
 		</div>
 	)
