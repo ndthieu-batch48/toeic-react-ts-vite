@@ -3,19 +3,19 @@ import { RadioGroup, RadioGroupItem } from '@/component/ui/radio-group'
 import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
 import { Separator } from '@/component/ui/separator'
-import type { QuesDetailRes, TranslateQuestionResponse } from '@/feature/test/type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testType'
 import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { TranslationCard } from '@/feature/test/component/TranslationCard'
-import type { LANGUAGE_ID } from '@/feature/test/const/testConst'
+import type { LANG_ID } from '@/feature/test/const/testConst'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
 
 type SolutionQuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
-	translateScript?: TranslateQuestionResponse
+	translateScript?: GeminiTransQuesResp
 	questionData: QuesDetailRes[],
 }
 
@@ -139,7 +139,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									selectedLanguage={getSelectedLanguage(question.ques_id)}
 									isExpanded={isTranslateCardExpanded(question.ques_id)}
 									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.ques_id, lang)}
+									onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
 									onTranslate={() => handleTranslation(question.ques_id)}
 									isTranslatePending={isTranslatePending}
 									isTranslateError={isTranslateError}

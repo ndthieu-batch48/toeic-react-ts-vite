@@ -20,8 +20,8 @@ import { Button } from "../ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/component/ui/avatar"
 import { Sheet, SheetContent, SheetTrigger } from "@/component/ui/sheet"
 import { Menu, LogOut, History, User } from "lucide-react"
-import { useAuth } from "@/contexts/AuthContext"
-import { cn } from "@/lib/utils"
+import { useAuth } from "@/context/AuthContext"
+import { cn } from "@/lib/util"
 import { TmaLogo } from "./TmaLogo"
 import { APP_INFO, TMA_INFO } from "../const/appConst"
 
@@ -61,7 +61,7 @@ export function MainNavigationMenu() {
 				</NavigationMenuLink>
 			</NavigationMenuItem>
 
-			{/* Features Dropdown - Example of structured navigation */}
+			{/* Features Dropdown */}
 			<NavigationMenuItem>
 				<NavigationMenuTrigger>About Us</NavigationMenuTrigger>
 				<NavigationMenuContent>
@@ -84,7 +84,7 @@ export function MainNavigationMenu() {
 
 	return (
 		<header className="bg-sidebar top-0 z-50 w-full border py-3">
-			<div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4">
+			<div className="flex h-14 items-center px-4 w-full">
 
 				<div className="flex items-center space-x-4">
 					<Link

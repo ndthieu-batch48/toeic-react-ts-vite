@@ -4,12 +4,12 @@ import { LucidePlay, LucidePause, LucideVolumeX, LucideVolume2 } from "lucide-re
 import { useState, useRef, useEffect } from "react"
 import { useTestContext } from "../context/TestContext"
 import { useQuery } from "@tanstack/react-query"
-import { partAudioUrlOption } from "../query/testQuery"
+import { testQuery } from "../service/testService"
 
 export const Audio = () => {
-	const { testId, activePart: partId } = useTestContext()
+	const { testId, activePart: partId, testType } = useTestContext()
 
-	const { data: audioUrl } = useQuery(partAudioUrlOption(testId, partId))
+	const { data: audioUrl } = useQuery(testQuery.partAudioUrl(testId, partId))
 
 	const [isPlaying, setIsPlaying] = useState<boolean>(false)
 	const [currentTime, setCurrentTime] = useState<number>(0)
@@ -105,6 +105,8 @@ export const Audio = () => {
 	}
 
 	const handleProgressChange = (value: number[]) => {
+		if (testType === "exam") return;
+
 		if (audioRef.current && duration) {
 			const newTime = (value[0] / 100) * duration
 			audioRef.current.currentTime = newTime

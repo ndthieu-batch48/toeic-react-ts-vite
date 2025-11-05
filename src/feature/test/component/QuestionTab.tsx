@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/component/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/util"
 import type { PartDetailRes } from "../type/testType"
 import { Label } from "@/component/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
@@ -60,7 +60,7 @@ const QuestionTabComponent: React.FC<QuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("md:min-h-100 lg:max-h-110 w-full px-2 bg-transparent", className)}
+			className={cn("h-full w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
 				<div

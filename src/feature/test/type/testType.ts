@@ -1,5 +1,4 @@
-import type { LANGUAGE_ID } from "../const/testConst";
-
+import type { LANG_ID } from "../const/testConst";
 
 export interface AnsDetailRes {
   ans_id: number;
@@ -20,7 +19,7 @@ export interface MediaQuesDetailRes {
   media_ques_main_parag: string;
   media_ques_audio_script?: string;
   media_ques_explain?: string;
-  media_ques_trans_script?: TranslateQuestionResponse;
+  media_ques_trans_script?: GeminiTransQuesResp;
   ques_list: QuesDetailRes[];
 }
 
@@ -51,19 +50,19 @@ export interface TestSummaryRes {
   test_descrip: string;
 }
 
-export interface TranslateQuestionResponse {
-  question_id: number;
-  question_content: string;
-  answer_list: string[];
-  language_id: LANGUAGE_ID;
+export interface GeminiTransQuesResp {
+  ques_id: number;
+  ques_content: string;
+  ans_list: string[];
+  lang_id: LANG_ID;
 }
 
-export interface TranslateQuestionRequest {
-  question_id: number;
-  language_id: LANGUAGE_ID;
+export interface GeminiTransQuesReq {
+  ques_id: number;
+  lang_id: LANG_ID;
 }
 
-export interface GetPartAudioRequest {
+export interface GetPartAudioUrlReq {
   test_id: number;
   part_id: number;
 }

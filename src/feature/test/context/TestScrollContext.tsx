@@ -1,4 +1,5 @@
 import { createContext, useContext, useRef } from "react"
+import { useTestContext } from "./TestContext"
 
 type TestScrollContextType = {
 	// Page refs and functions
@@ -15,14 +16,18 @@ export const TestScrollProvider = ({
 }: {
 	children: React.ReactNode
 }) => {
-
+	const { testType } = useTestContext()
 	const testPageRef: React.RefObject<Record<number, HTMLElement | null>> = useRef({});
 
 	const getScrollTarget = (questionId: number): HTMLDivElement | null => {
+		if (testType === "exam") return null;
+
 		return testPageRef.current[questionId] as HTMLDivElement | null;
 	}
 
 	const setScrollTarget = (questionId: number, element: HTMLDivElement | null) => {
+		if (testType === "exam") return null;
+
 		testPageRef.current[questionId] = element;
 	}
 

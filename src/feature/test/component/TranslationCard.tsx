@@ -3,15 +3,16 @@ import { Button } from '@/component/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/component/ui/select';
 import { Separator } from '@/component/ui/separator';
 import { Globe, ChevronDown, ChevronUp } from 'lucide-react';
-import type { TranslateQuestionResponse } from '../type/testType';
-import { LANGUAGE_MAP, type LANGUAGE_ID } from '../const/testConst';
+import type { GeminiTransQuesResp } from '../type/testType';
+import { LANG_MAP, type LANG_ID } from '../const/testConst';
+import { useTestContext } from '../context/TestContext';
 
 type TranslationCardProps = {
-	translateScript?: TranslateQuestionResponse,
+	translateScript?: GeminiTransQuesResp,
 	isExpanded: boolean,
 	onToggle: () => void,
-	selectedLanguage: LANGUAGE_ID,
-	onLanguageChange: (lang: LANGUAGE_ID) => void,
+	selectedLanguage: LANG_ID,
+	onLanguageChange: (lang: LANG_ID) => void,
 	onTranslate: () => void,
 	isTranslatePending: boolean,
 	isTranslateError: boolean,
@@ -26,6 +27,10 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 	onTranslate,
 	isTranslatePending,
 }) => {
+
+	const { testType } = useTestContext()
+
+	if (testType === 'exam') return <></>
 
 	return (
 		<div className="space-y-1">
@@ -56,7 +61,7 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 										<SelectValue placeholder="Select language" />
 									</SelectTrigger>
 									<SelectContent>
-										{Object.entries(LANGUAGE_MAP).map(([langId, langName]) => (
+										{Object.entries(LANG_MAP).map(([langId, langName]) => (
 											<SelectItem key={langId} value={langId}>
 												{langName}
 											</SelectItem>
@@ -84,8 +89,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 											<div className="w-4 h-4 border border-primary border-t-transparent rounded-2xl animate-spin" />
 											<p className="text-sm">Translating question...</p>
 										</div>
-									) : translateScript?.question_content ? (
-										<p className="text-sm font-medium">{translateScript.question_content}</p>
+									) : translateScript?.ques_content ? (
+										<p className="text-sm font-medium">{translateScript.ques_content}</p>
 									) : (
 										<p className="text-sm font-medium">Select a language and click translate to see the translation</p>
 									)}
@@ -99,8 +104,8 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 												<div className="w-3 h-3 border border-primary border-t-transparent rounded-2xl animate-spin" />
 												<p className="text-sm text-muted-foreground">Translating answers...</p>
 											</div>
-										) : translateScript?.answer_list && translateScript.answer_list.length > 0 ? (
-											translateScript.answer_list.map((answer, idx) => (
+										) : translateScript?.ans_list && translateScript.ans_list.length > 0 ? (
+											translateScript.ans_list.map((answer, idx) => (
 												<div key={idx} className="p-2 bg-background rounded-lg border">
 													<p className="text-sm">
 														{answer}

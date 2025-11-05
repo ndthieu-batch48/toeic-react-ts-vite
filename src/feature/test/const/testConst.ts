@@ -1,8 +1,8 @@
-export type LANGUAGE_ID = "vi" | "ja" | "en"
+export type LANG_ID = "vi" | "ja" | "en"
 
-export type LANGUAGE_MAP = Record<LANGUAGE_ID, string>
+export type LANG_MAP = Record<LANG_ID, string>
 
-export const LANGUAGE_MAP: LANGUAGE_MAP = {
+export const LANG_MAP: LANG_MAP = {
   "vi": "Vietnamese",
   "ja": "Japanese",
   "en": "English",

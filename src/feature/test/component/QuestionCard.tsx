@@ -2,12 +2,12 @@ import { Card, CardContent, CardHeader } from '@/component/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/component/ui/radio-group'
 import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
-import type { QuesDetailRes, TranslateQuestionResponse } from '../type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testType'
 import { MainParagraph } from './MainParagraph'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hook/useTranslationCard'
-import type { LANGUAGE_ID } from '../const/testConst'
+import type { LANG_ID } from '../const/testConst'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Flag } from 'lucide-react'
 import { Button } from '@/component/ui/button'
@@ -15,7 +15,7 @@ import { useTestScrollContext } from '../context/TestScrollContext'
 
 export interface QuestionCardProps {
 	paragraphMain: string
-	translateScript?: TranslateQuestionResponse
+	translateScript?: GeminiTransQuesResp
 	questionData: QuesDetailRes,
 }
 
@@ -79,7 +79,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 					selectedLanguage={getSelectedLanguage(ques_id)}
 					isExpanded={isTranslateCardExpanded(ques_id)}
 					onToggle={() => toggleTranslateCardExpanded(ques_id)}
-					onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(ques_id, lang)}
+					onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(ques_id, lang)}
 					onTranslate={() => handleTranslation(ques_id)}
 					isTranslatePending={isTranslatePending}
 					isTranslateError={isTranslateError}

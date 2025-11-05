@@ -14,7 +14,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/component/ui/form";
-import type { LoginRequest } from "../type/authType";
+import type { LoginRequest } from "../type/authServiceType";
 
 // TODO: Implement OAuth in the future
 // import { FacebookIcon, GoogleIcon } from "@/component/shared/SocialMediaIcon";
@@ -29,7 +29,7 @@ import {
 } from "../const/authConst";
 
 const loginSchema = z.object({
-	credential: z.string().min(AUTH_CONFIG.MINIMUM_FIELD_LENGTH, VALIDATION_MESSAGES.EMAIL_OR_USERNAME_REQUIRED),
+	credential: z.string().min(AUTH_CONFIG.MINIMUM_FIELD_LENGTH, VALIDATION_MESSAGES.THIS_FIELD_IS_REQUIRED),
 	password: z.string().min(AUTH_CONFIG.MINIMUM_FIELD_LENGTH, VALIDATION_MESSAGES.PASSWORD_REQUIRED),
 });
 
@@ -57,7 +57,7 @@ export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: Login
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full h-full ">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full">
 				<div className="flex flex-col items-center gap-2 text-center">
 					<h1 className="text-2xl font-bold text-foreground">{AUTH_FORM_TEXTS.LOGIN_WELCOME_TITLE}</h1>
 					<p className="text-muted-foreground ">

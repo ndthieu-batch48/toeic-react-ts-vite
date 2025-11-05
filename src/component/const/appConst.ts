@@ -1,7 +1,7 @@
 export const APP_INFO = {
   APP_NAME: "English practice",
   INTRODUCTION: "The most comprehensive TOEIC preparation platform trusted by students worldwide",
-  FOOTER_COPYRIGHT: "© 2025 TMA TOEIC. All rights reserved.",
+  FOOTER_COPYRIGHT: "© 2025 TMA English practice. All rights reserved.",
 }
 
 export const TMA_INFO = {

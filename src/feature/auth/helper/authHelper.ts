@@ -1,4 +1,4 @@
-import type { OtpSession, UserResponse } from '../type/authType';
+import type { OtpSession, UserResponse } from '../type/authServiceType';
 import { getStorageJSON, removeStorageItem, setStorageJSON } from "@/util/localStorageUtil";
 
 export const STORAGE_KEYS = {
@@ -13,7 +13,7 @@ export const clearUserSession = (): boolean => removeStorageItem(STORAGE_KEYS.US
 // OTP Session functions
 export const createOtpSession = (session: Partial<OtpSession>): boolean => {
   const otpSession: OtpSession = {
-    credential_value: session.credential_value || '',
+    credential: session.credential || '',
     credential_type: session.credential_type || '',
     purpose: session.purpose || '',
     token: session.token || '',
@@ -24,7 +24,7 @@ export const createOtpSession = (session: Partial<OtpSession>): boolean => {
 
 export const getOtpSession = (): OtpSession => {
   return getStorageJSON<OtpSession>(STORAGE_KEYS.OTP_SERVICE_SESSION, {
-    credential_value: '',
+    credential: '',
     credential_type: '',
     purpose: '',
     token: '',

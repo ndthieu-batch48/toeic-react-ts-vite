@@ -4,12 +4,12 @@ import { LucidePlay, LucidePause, LucideVolumeX, LucideVolume2 } from "lucide-re
 import { useState, useRef, useEffect } from "react"
 import { useSolutionContext } from "../context/SolutionContext"
 import { useQuery } from "@tanstack/react-query"
-import { partAudioUrlOption } from "@/feature/test/query/testQuery"
+import { testQuery } from "@/feature/test/service/testService"
 
 export const SolutionAudio: React.FC = () => {
 	const { testId, activePart: partId } = useSolutionContext()
 
-	const { data: audioUrl } = useQuery(partAudioUrlOption(testId, partId))
+	const { data: audioUrl } = useQuery(testQuery.partAudioUrl(testId, partId))
 
 	const [isPlaying, setIsPlaying] = useState<boolean>(false)
 	const [currentTime, setCurrentTime] = useState<number>(0)

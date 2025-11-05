@@ -2,10 +2,11 @@ import { SolutionPage } from '@/feature/history/page/SolutionPage';
 import { SolutionProvider, type SolutionState } from '@/feature/history/context/SolutionContext';
 import { SolutionScrollProvider } from '@/feature/history/context/SolutionScrollContext';
 import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
-import { useGetTestDetail } from '@/feature/test/hook/useTestApi';
 import { createFileRoute } from '@tanstack/react-router'
-import { useGetHistoryResultDetail } from '@/feature/history/query/historyQuery';
 import z from 'zod';
+import { useQuery } from '@tanstack/react-query';
+import { historyQuery } from '@/feature/history/service/historyService';
+import { testQuery } from '@/feature/test/service/testService';
 
 const searchSchema = z.object({
 	testId: z.number(),
@@ -19,8 +20,8 @@ export const Route = createFileRoute('/_protected/history/$historyId/solution')(
 function SolutionRoute() {
 	const { historyId } = Route.useParams();
 	const { testId } = Route.useSearch();
-	const { data: historyData, isLoading: historyLoading, error: historyError } = useGetHistoryResultDetail(Number(historyId))
-	const { data: testData, isLoading: testLoading, error: testError } = useGetTestDetail(testId);
+	const { data: historyData, isLoading: historyLoading, error: historyError } = useQuery(historyQuery.resultDetail(Number(historyId)));
+	const { data: testData, isLoading: testLoading, error: testError } = useQuery(testQuery.byId(testId));
 
 	// Show loading if either request is loading
 	if (historyLoading || testLoading) {

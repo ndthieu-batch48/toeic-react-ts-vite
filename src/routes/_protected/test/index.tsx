@@ -1,39 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGetAllTests } from '@/feature/test/hook/useTestApi'
 import { TestDashBoardPage } from '@/feature/test/page/TestDashBoardPage'
 import TestDashBoardSkeleton from '@/feature/test/loading/TestDashBoardSkeleton'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { testQuery } from '@/feature/test/service/testService'
 
 export const Route = createFileRoute('/_protected/test/')({
 	component: TestDashBoardRoute,
+	pendingComponent: TestDashBoardSkeleton,
 })
 
 function TestDashBoardRoute() {
-	const {
-		status: testsStatus,
-		data: testData,
-		isError: isTestsError,
-		error: testsError,
-	} = useGetAllTests()
-
-
-	if (testsStatus === 'pending') {
-		return (
-			<TestDashBoardSkeleton />
-		)
-	}
-
-	if (isTestsError) {
-		return (
-			<div className="container mx-auto p-6">
-				<div className="text-center text-destructive">
-					Error loading tests: {testsError?.message}
-				</div>
-			</div>
-		)
-	}
-
+	const { data: testData } = useSuspenseQuery(testQuery.all())
 
 	return (
-		<TestDashBoardPage testData={testData} />
+		<div className="h-screen container mx-auto p-6">
+			<TestDashBoardPage testData={testData} />
+		</div>
 	)
 }

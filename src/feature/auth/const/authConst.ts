@@ -2,7 +2,7 @@
 export const AUTH_FORM_TEXTS = {
   // Login Form
   LOGIN_WELCOME_TITLE: "Welcome back",
-  LOGIN_SUBTITLE: "Login to your TMA TOEIC account",
+  LOGIN_SUBTITLE: "Login to your TMA English practice account",
   LOGIN_BUTTON_TEXT: "Login",
   LOGIN_BUTTON_LOADING_TEXT: "Logging in...",
   LOGIN_FORGOT_PASSWORD_TEXT: "Forgot your password?",
@@ -11,7 +11,7 @@ export const AUTH_FORM_TEXTS = {
 
   // Register Form
   REGISTER_TITLE: "Create Account",
-  REGISTER_SUBTITLE: "Join TMA TOEIC today",
+  REGISTER_SUBTITLE: "Join TMA English practice today",
   REGISTER_BUTTON_TEXT: "Create account",
   REGISTER_BUTTON_LOADING_TEXT: "Creating account...",
   REGISTER_ALREADY_HAVE_ACCOUNT_TEXT: "Already have an account?",
@@ -63,7 +63,7 @@ export const FORM_FIELD_PLACEHOLDERS = {
 
 // Validation Messages
 export const VALIDATION_MESSAGES = {
-  EMAIL_OR_USERNAME_REQUIRED: "Email or username is required",
+  THIS_FIELD_IS_REQUIRED: "This field is required",
   PASSWORD_REQUIRED: "Password is required",
   EMAIL_REQUIRED: "Email is required",
   USERNAME_REQUIRED: "User name is required",

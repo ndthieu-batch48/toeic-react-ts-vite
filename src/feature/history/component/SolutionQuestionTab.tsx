@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/component/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/util"
 import { Label } from "@/component/ui/label"
 import React, { useEffect, useRef } from "react"
 import type { PartDetailRes } from "@/feature/test/type/testType"

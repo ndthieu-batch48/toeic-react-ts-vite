@@ -65,7 +65,7 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 	};
 
 	return (
-		<div className="min-h-screen bg-primary/5 p-4 md:p-8">
+		<div className="p-8">
 			<div className="mx-auto">
 				{/* Header */}
 				<div className="mb-6">

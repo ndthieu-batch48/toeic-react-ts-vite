@@ -54,7 +54,7 @@ export const HERO_CONTENT = {
 
 // Features Section Content
 export const FEATURES_SECTION = {
-  title: "Why Choose TMA TOEIC ?",
+  title: "Why Choose TMA English practice ?",
   description: "Everything you need to ace the TOEIC exam in one comprehensive platform"
 }
 

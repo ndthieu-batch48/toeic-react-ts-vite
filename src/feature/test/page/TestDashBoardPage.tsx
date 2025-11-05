@@ -23,9 +23,9 @@ export const TestDashBoardPage: React.FC<TestDashBoardPageProps> = ({ testData }
 	// };
 
 	return (
-		<div className="container mx-auto p-6">
+		<>
 			<AllTestsSection availableTests={testData || []} />
 			{/* <UserInsightsPanel insightsData={mockInsightsData} /> */}
-		</div>
+		</>
 	)
 }

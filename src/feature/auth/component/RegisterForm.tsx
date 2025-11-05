@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import type { RegisterRequest } from "../type/authType"
+import type { RegisterRequest } from "../type/authServiceType"
 
 // TODO: Implement OAuth in the future
 // import { FacebookIcon, GoogleIcon } from "@/component/shared/SocialMediaIcon"

@@ -1,7 +1,6 @@
 import { Button } from "@/component/ui/button"
 import { useTestContext } from "../context/TestContext"
 import type { HistoryCreateReq } from "@/feature/history/type/historyType"
-import { useCreateHistory } from "@/feature/history/query/historyQuery"
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -14,11 +13,12 @@ import {
 	AlertDialogTrigger,
 } from "@/component/ui/alert-dialog"
 import { useNavigate } from "@tanstack/react-router"
+import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
 	const { testId, testType, selectedAnswers, selectedParts, remainingDuration } = useTestContext()
-	const { createHistoryMutation } = useCreateHistory(testId)
+	const createHistoryMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
 

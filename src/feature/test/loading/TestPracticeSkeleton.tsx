@@ -15,15 +15,12 @@ export default function TestPracticeSkeleton() {
 				<div className="flex-1 space-y-6">
 					{[1, 2, 3, 4, 5, 6].map((card) => (
 						<div key={card} className="border rounded-lg p-6 space-y-4 bg-white">
-							<Skeleton className="h-10 w-32 rounded-full" />
-							<Skeleton className="h-5 w-full" />
-							<Skeleton className="h-5 w-3/4" />
-							<Skeleton className="h-8 w-48 mt-4" />
+							<Skeleton className="h-15 w-2xl rounded-xl" />
 							<div className="space-y-3 mt-4">
 								{[1, 2, 3, 4].map((i) => (
 									<div key={i} className="flex items-center gap-3 p-4 border rounded-lg">
-										<Skeleton className="h-5 w-5 rounded-full" />
-										<Skeleton className="h-4 w-1/3" />
+										<Skeleton className="h-10 w-10 rounded-full" />
+										<Skeleton className="h-8 w-1/3" />
 									</div>
 								))}
 							</div>
@@ -31,18 +28,16 @@ export default function TestPracticeSkeleton() {
 					))}
 				</div>
 
-				{/* Question navigation board - RIGHT SIDE */}
+				{/* Question board - RIGHT SIDE */}
 				<div className="w-60 flex-shrink-0">
 					<div className="border rounded-lg p-4 bg-white sticky top-6">
-						<Skeleton className="h-12 w-40 rounded-lg mb-4" />
-
 						{/* Part sections */}
 						{[1, 2, 3].map((section) => (
 							<div key={section} className="mb-4">
-								<Skeleton className="h-4 w-30 mb-3" />
-								<div className="grid grid-cols-7 gap-2">
+								<Skeleton className="h-10 w-40 rounded-lg mb-4" />
+								<div className="grid grid-cols-7 gap-3">
 									{Array.from({ length: 14 }).map((_, i) => (
-										<Skeleton key={i} className="h-8 w-8 rounded-full" />
+										<Skeleton key={i} className="min-w-[26px] min-h-[26px] rounded-2xl" />
 									))}
 								</div>
 							</div>

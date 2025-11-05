@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/util"
 
 export const GoogleIcon = ({ className }: React.ComponentProps<"div">) => {
 	return (

@@ -1,8 +1,8 @@
-import { refreshTokenService } from '@/feature/auth/service/authService';
-import type { UserResponse } from '@/feature/auth/type/authType';
+import * as React from 'react'
+import type { UserResponse } from '@/feature/auth/type/authServiceType';
 import { clearUserSession, getUserSession, saveUserSession } from '@/feature/auth/helper/authHelper';
 import { isTokenExpired } from '@/util/jwtUtil';
-import * as React from 'react'
+import { authService } from '@/feature/auth/service/authService';
 
 export interface User {
 	id: number;
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		if (!isTokenExpired(session.access_token)) {
 			return session
 		}
-		const { access_token, refresh_token } = await refreshTokenService(session.refresh_token)
+		const { access_token, refresh_token } = await authService.refreshToken(session.refresh_token)
 
 		const updatedSession: UserResponse = { ...session, access_token, refresh_token }
 		saveUserSession(updatedSession)
@@ -72,6 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	)
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
 	const context = React.useContext(AuthContext)
 	if (!context) {

@@ -4,11 +4,11 @@ import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
 import { Separator } from '@/component/ui/separator'
 import { MainParagraph } from './MainParagraph'
-import type { QuesDetailRes, TranslateQuestionResponse } from '../type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testType'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hook/useTranslationCard'
-import type { LANGUAGE_ID } from '../const/testConst'
+import type { LANG_ID } from '../const/testConst'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Button } from '@/component/ui/button'
 import { Flag } from 'lucide-react'
@@ -17,7 +17,7 @@ import { useTestScrollContext } from '../context/TestScrollContext'
 type QuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
-	translateScript?: TranslateQuestionResponse
+	translateScript?: GeminiTransQuesResp
 	questionData: QuesDetailRes[],
 }
 
@@ -132,7 +132,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 									selectedLanguage={getSelectedLanguage(question.ques_id)}
 									isExpanded={isTranslateCardExpanded(question.ques_id)}
 									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-									onLanguageChange={(lang: LANGUAGE_ID) => handleSelectLanguage(question.ques_id, lang)}
+									onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
 									onTranslate={() => handleTranslation(question.ques_id)}
 									isTranslatePending={isTranslatePending}
 									isTranslateError={isTranslateError}
