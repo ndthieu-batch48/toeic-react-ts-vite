@@ -1,14 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { testMutation } from "../service/testService";
 
-export const useTranslateQuestion = () => {
+export const useGeminiMutation = () => {
   // const queryClient = useQueryClient();
 
-  return useMutation({
+  const transQuesMutation = useMutation({
     ...testMutation.transQuesWithGemini(),
-
-    // TODO: Save translation data to database
     // onSuccess: (data) => {},
     // onError: (error) => {},
   });
+
+  const explainQuesMutation = useMutation({
+    ...testMutation.explainQuesWithGemini(),
+  });
+
+  return {
+    transQuesMutation,
+    explainQuesMutation,
+  };
 };

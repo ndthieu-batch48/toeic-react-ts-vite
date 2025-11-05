@@ -1,5 +1,5 @@
 import { AllTestsSection } from "../component/AllTestsSection"
-import type { TestSummaryRes } from "../type/testType"
+import type { TestSummaryRes } from "../type/testServiceType"
 // import { UserInsightsPanel } from "../components/UserInsightPanel"
 // import { HeroCarousel } from "../components/HeroCarousel"
 

@@ -3,7 +3,7 @@ import { Button } from "@/component/ui/button";
 import { Badge } from '@/component/ui/badge'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/component/ui/card";
 import { BookOpen, Clock, FileText } from "lucide-react";
-import type { TestSummaryRes } from "../type/testType";
+import type { TestSummaryRes } from "../type/testServiceType";
 
 type AllTestsSection = React.ComponentProps<"section"> & {
 	availableTests: TestSummaryRes[]

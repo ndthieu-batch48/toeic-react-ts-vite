@@ -1,4 +1,4 @@
-import type { MediaQuesDetailRes } from "@/feature/test/type/testType"
+import type { MediaQuesDetailRes } from "@/feature/test/type/testServiceType"
 
 export const mediaQuestionSorter = (mediaQuestion: MediaQuesDetailRes[]) => {
   return [...mediaQuestion].sort((a, b) => {

@@ -1,6 +1,6 @@
 import { Button } from "@/component/ui/button"
 import { useTestContext } from "../context/TestContext"
-import type { HistoryCreateReq } from "@/feature/history/type/historyType"
+import type { HistoryCreateReq } from "@/feature/history/type/historyServiceType"
 import {
 	AlertDialog,
 	AlertDialogAction,

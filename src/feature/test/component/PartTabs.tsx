@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/component/ui/tabs"
-import type { PartDetailRes } from "../type/testType"
+import type { PartDetailRes } from "../type/testServiceType"
 import { QuestionMediaCard } from "./QuestionMediaCard"
 import { QuestionCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"

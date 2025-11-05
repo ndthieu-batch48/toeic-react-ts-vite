@@ -9,8 +9,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod';
 import { testQuery } from '@/feature/test/service/testService';
 import { historyQuery } from '@/feature/history/service/historyService';
-import type { TestDetailRes } from '@/feature/test/type/testType';
-import type { HistoryResp } from '@/feature/history/type/historyType';
+import type { TestDetailRes } from '@/feature/test/type/testServiceType';
+import type { HistoryResp } from '@/feature/history/type/historyServiceType';
 
 const searchSchema = z.object({
 	testTitle: z.string(),

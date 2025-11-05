@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
-import { useTranslateQuestion } from "./useTranslateQuestion";
-import type { GeminiTransQuesResp } from "../type/testType";
+import { useGeminiMutation } from "./useGeminiMutation";
+import type { GeminiTransQuesResp } from "../type/testServiceType";
 import type { LANG_ID } from "../const/testConst";
 
 export const useTranslationCard = () => {
-  const translateMutation = useTranslateQuestion()
+  const { transQuesMutation } = useGeminiMutation()
 
   const [translateScript, setTranslateScript] = useState<Record<number, GeminiTransQuesResp>>({});
   const [expandedCardMap, setExpandedCardMap] = useState<Record<number, boolean>>({}); // { questionId : true/false }
@@ -52,7 +52,7 @@ export const useTranslationCard = () => {
     const selectedLang = selectedLanguages[questionId];
     if (!selectedLang) return;
 
-    const translation = await translateMutation.mutateAsync({
+    const translation = await transQuesMutation.mutateAsync({
       ques_id: questionId,
       lang_id: selectedLang
     });
@@ -61,7 +61,7 @@ export const useTranslationCard = () => {
       [questionId]: translation
     }));
 
-  }, [selectedLanguages, translateMutation]);
+  }, [selectedLanguages, transQuesMutation]);
 
   return {
     translateScript,
@@ -76,7 +76,7 @@ export const useTranslationCard = () => {
 
     // Translation functions and state
     handleTranslation,
-    isTranslatePending: translateMutation.isPending,
-    isTranslateError: translateMutation.isError,
+    isTranslatePending: transQuesMutation.isPending,
+    isTranslateError: transQuesMutation.isError,
   }
 }

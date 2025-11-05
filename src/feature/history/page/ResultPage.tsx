@@ -3,7 +3,7 @@ import { Badge } from '@/component/ui/badge';
 import { Progress } from '@/component/ui/progress';
 import { Separator } from '@/component/ui/separator';
 import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye } from 'lucide-react';
-import type { HistoryResultDetailResp } from '../type/historyType';
+import type { HistoryResultDetailResp } from '../type/historyServiceType';
 import { Button } from '@/component/ui/button';
 import { Link } from '@tanstack/react-router';
 

@@ -50,6 +50,11 @@ export interface TestSummaryRes {
   test_descrip: string;
 }
 
+export interface GetPartAudioUrlReq {
+  test_id: number;
+  part_id: number;
+}
+
 export interface GeminiTransQuesResp {
   ques_id: number;
   ques_content: string;
@@ -62,9 +67,18 @@ export interface GeminiTransQuesReq {
   lang_id: LANG_ID;
 }
 
-export interface GetPartAudioUrlReq {
-  test_id: number;
-  part_id: number;
+export interface GeminiExplainQuesReq {
+  ques_id: number
+  lang_id: LANG_ID
+}
+
+export interface GeminiExplainQuesResp {
+  lang_id: LANG_ID;
+  ques_id: number;
+  ques_need: string;
+  ques_ask: string;
+  correct_ans_reason: string;
+  incorrect_ans_reason: Record<string, string>;
 }
 
 

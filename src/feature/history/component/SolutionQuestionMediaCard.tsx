@@ -3,7 +3,7 @@ import { RadioGroup, RadioGroupItem } from '@/component/ui/radio-group'
 import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
 import { Separator } from '@/component/ui/separator'
-import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testServiceType'
 import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
@@ -11,6 +11,8 @@ import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { TranslationCard } from '@/feature/test/component/TranslationCard'
 import type { LANG_ID } from '@/feature/test/const/testConst'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
+import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
+import { ExplainationCard } from '@/feature/test/component/ExplainationCard'
 
 type SolutionQuestionMediaCardProps = {
 	mediaName: string,
@@ -31,12 +33,23 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
 		toggleTranslateCardExpanded,
-		getSelectedLanguage,
-		handleSelectLanguage,
+		getSelectedLanguage: getSelectedTranslateLanguage,
+		handleSelectLanguage: handleSelectTranslateLanguage,
 		handleTranslation,
 		isTranslatePending,
 		isTranslateError
 	} = useTranslationCard()
+
+	const {
+		explainScript: newExplainScript,
+		isExplainCardExpanded,
+		toggleExplainCardExpanded,
+		getSelectedLanguage: getSelectedExplainLanguage,
+		handleSelectLanguage: handleSelectExplainLanguage,
+		handlExplaination,
+		isExplainPending,
+		isExplainError
+	} = useExplainationCard()
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
@@ -106,7 +119,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80 lg:w-120' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div
 							key={question.ques_id || index}
@@ -136,13 +149,24 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 
 								<TranslationCard
 									translateScript={newTranslateScript[question.ques_id]}
-									selectedLanguage={getSelectedLanguage(question.ques_id)}
+									selectedLanguage={getSelectedTranslateLanguage(question.ques_id)}
 									isExpanded={isTranslateCardExpanded(question.ques_id)}
 									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-									onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
+									onLanguageChange={(lang: LANG_ID) => handleSelectTranslateLanguage(question.ques_id, lang)}
 									onTranslate={() => handleTranslation(question.ques_id)}
 									isTranslatePending={isTranslatePending}
 									isTranslateError={isTranslateError}
+								/>
+
+								<ExplainationCard
+									explainScript={newExplainScript[question.ques_id]}
+									isExpanded={isExplainCardExpanded(question.ques_id)}
+									onToggle={() => toggleExplainCardExpanded(question.ques_id)}
+									selectedLanguage={getSelectedExplainLanguage(question.ques_id)}
+									onLanguageChange={(lang: LANG_ID) => handleSelectExplainLanguage(question.ques_id, lang)}
+									onExplain={() => handlExplaination(question.ques_id)}
+									isExplainPending={isExplainPending}
+									isExplainError={isExplainError}
 								/>
 
 								<div>

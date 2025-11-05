@@ -2,14 +2,16 @@ import { Card, CardContent, CardHeader } from '@/component/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/component/ui/radio-group'
 import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
-import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testServiceType'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
+import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
 import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { TranslationCard } from '@/feature/test/component/TranslationCard'
 import type { LANG_ID } from '@/feature/test/const/testConst'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
+import { ExplainationCard } from '@/feature/test/component/ExplainationCard'
 
 
 export interface SolutionQuestionCardProps {
@@ -30,12 +32,23 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
 		toggleTranslateCardExpanded,
-		getSelectedLanguage,
-		handleSelectLanguage,
+		getSelectedLanguage: getSelectedTranslateLanguage,
+		handleSelectLanguage: handleSelectTranslateLanguage,
 		handleTranslation,
 		isTranslatePending,
 		isTranslateError
 	} = useTranslationCard()
+
+	const {
+		explainScript: newExplainScript,
+		isExplainCardExpanded,
+		toggleExplainCardExpanded,
+		getSelectedLanguage: getSelectedExplainLanguage,
+		handleSelectLanguage: handleSelectExplainLanguage,
+		handlExplaination,
+		isExplainPending,
+		isExplainError
+	} = useExplainationCard()
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
@@ -81,13 +94,23 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 
 				<TranslationCard
 					translateScript={newTranslateScript[ques_id]}
-					selectedLanguage={getSelectedLanguage(ques_id)}
+					selectedLanguage={getSelectedTranslateLanguage(ques_id)}
 					isExpanded={isTranslateCardExpanded(ques_id)}
 					onToggle={() => toggleTranslateCardExpanded(ques_id)}
-					onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(ques_id, lang)}
+					onLanguageChange={(lang: LANG_ID) => handleSelectTranslateLanguage(ques_id, lang)}
 					onTranslate={() => handleTranslation(ques_id)}
 					isTranslatePending={isTranslatePending}
 					isTranslateError={isTranslateError}
+				/>
+				<ExplainationCard
+					explainScript={newExplainScript[ques_id]}
+					isExpanded={isExplainCardExpanded(ques_id)}
+					onToggle={() => toggleExplainCardExpanded(ques_id)}
+					selectedLanguage={getSelectedExplainLanguage(ques_id)}
+					onLanguageChange={(lang: LANG_ID) => handleSelectExplainLanguage(ques_id, lang)}
+					onExplain={() => handlExplaination(ques_id)}
+					isExplainPending={isExplainPending}
+					isExplainError={isExplainError}
 				/>
 			</CardHeader>
 

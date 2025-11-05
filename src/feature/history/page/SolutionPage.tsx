@@ -1,9 +1,9 @@
-import { Card, CardHeader, CardTitle } from "@/component/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/component/ui/card"
 
-import type { PartDetailRes } from "@/feature/test/type/testType"
+import type { PartDetailRes } from "@/feature/test/type/testServiceType"
 import { SolutionPartTab } from "../component/SolutionPartTabs"
 import { SolutionQuestionTab } from "../component/SolutionQuestionTab"
-import type { HistoryResultDetailResp } from "../type/historyType"
+import type { HistoryResultDetailResp } from "../type/historyServiceType"
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useSolutionContext } from "../context/SolutionContext"
 
@@ -11,9 +11,10 @@ import { useSolutionContext } from "../context/SolutionContext"
 type SolutionPageProps = {
 	detailHistory: HistoryResultDetailResp
 	partData: PartDetailRes[]
+	testTitle: string
 }
 
-export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
+export const SolutionPage: React.FC<SolutionPageProps> = ({ partData, testTitle }) => {
 	const { isScrolling, scrollPosition } = useScrollControl('window');
 	const { selectedAnswers } = useSolutionContext()
 
@@ -27,9 +28,9 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
 	}
 
 	return (
-		<div className="bg-primary/10 min-h-screen">
+		<div className="bg-background">
 
-			<div className="flex flex-col md:flex-row pb-30 pt-10">
+			<div className="flex flex-col md:flex-row pb-10">
 
 				<SolutionPartTab
 					className="flex-1 min-w-0"
@@ -38,22 +39,23 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData }) => {
 
 				{/* Question Tab Div */}
 				<Card
-					className="flex flex-col flex-shrink-0 md:max-w-60 md:max-h-120 md:sticky md:top-20 z-10 bg-background rounded-md shadow-md py-0 gap-2 overflow-hidden"
+					className="flex-shrink-0 md:w-60 md:sticky md:top-20 z-10 bg-background rounded-md shadow-md overflow-hidden p-0 gap-0 m-0"
 					style={{
 						transform: isScrolling ? `translateY(${scrollPosition.y * 0.0005}px)` : 'translateY(0)',
-						transition: isScrolling ? 'none' : 'transform 0.2s ease-out'
+						transition: isScrolling ? 'none' : 'transform 0.2s ease-out',
+						maxHeight: 'calc(100vh - 10rem)'
 					}}
 				>
-					<CardHeader className="bg-primary text-primary-foreground py-2 gap-0">
-						<CardTitle className="text-base">Question board</CardTitle>
+					<CardHeader className="bg-primary text-primary-foreground py-2 gap-0 flex-shrink-0">
+						<CardTitle className="text-base">{testTitle}</CardTitle>
 						<div className="text-xs font-semibold opacity-90">
 							Answered: {Object.keys(selectedAnswers).length} / {getTotalQuestion()}
 						</div>
 					</CardHeader>
 
-					<SolutionQuestionTab
-						partData={partData}
-					/>
+					<CardContent className="flex-1 min-h-0 p-0 pt-2">
+						<SolutionQuestionTab partData={partData} />
+					</CardContent>
 				</Card>
 			</div>
 		</div>

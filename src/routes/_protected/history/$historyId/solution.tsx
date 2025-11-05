@@ -4,9 +4,10 @@ import { SolutionScrollProvider } from '@/feature/history/context/SolutionScroll
 import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { historyQuery } from '@/feature/history/service/historyService';
 import { testQuery } from '@/feature/test/service/testService';
+import SolutionPageSkeleton from '@/feature/history/loading/SolutionPageSkeleton';
 
 const searchSchema = z.object({
 	testId: z.number(),
@@ -15,53 +16,60 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/_protected/history/$historyId/solution')({
 	validateSearch: searchSchema,
 	component: SolutionRoute,
+	pendingComponent: SolutionPageSkeleton,
+
+	loaderDeps: ({ search }) => ({
+		testId: search.testId
+	}),
+
+	loader: ({ context, params, deps }) => {
+		const testId = Number(deps.testId);
+		const historyId = Number(params.historyId)
+
+		const promises = [
+			context.queryClient.ensureQueryData(testQuery.byId(testId)),
+			context.queryClient.ensureQueryData(historyQuery.resultDetail(Number(historyId)))
+		];
+
+		Promise.all(promises);
+
+	},
 })
 
 function SolutionRoute() {
 	const { historyId } = Route.useParams();
 	const { testId } = Route.useSearch();
-	const { data: historyData, isLoading: historyLoading, error: historyError } = useQuery(historyQuery.resultDetail(Number(historyId)));
-	const { data: testData, isLoading: testLoading, error: testError } = useQuery(testQuery.byId(testId));
 
-	// Show loading if either request is loading
-	if (historyLoading || testLoading) {
-		return <div className="text-center text-foreground">Loading...</div>;
-	}
+	const historyIdParam = Number(historyId)
 
-	// Show error if either request has an error
-	if (historyError) {
-		return <div className="text-center text-destructive">Error loading history: {historyError.message}</div>;
-	}
+	const { data: historyData } = useSuspenseQuery(historyQuery.resultDetail(historyIdParam));
+	const { data: testData } = useSuspenseQuery(testQuery.byId(testId));
 
-	if (testError) {
-		return <div className="text-center text-destructive">Error loading test: {testError.message}</div>;
-	}
+	if (!testData) return null;
 
-	// Check if data exists
-	if (!historyData || !testData) {
-		return <div className="text-center text-foreground">No data available</div>;
-	}
+	const historySetup = {
+		partIdList: historyData?.part_id_list.map(Number),
+		answerMap: historyData?.dataprog,
+	};
 
-	const selectedPartIds = historyData.part_id_list.map((part) => Number(part))
-
-	// Filter parts based on selectedPartIds, then sort the media_ques_list
-	const sortedParts = testData.part_list
-		.filter((part) => selectedPartIds?.includes(part.part_id))
+	const sortedPartList = testData.part_list
+		.filter((part) => {
+			if (!historySetup.partIdList || historySetup.partIdList.length === 0) {
+				return true;
+			}
+			return historySetup.partIdList.includes(part.part_id);
+		})
 		.map((part) => ({
 			...part,
-			media_ques_list: part.media_ques_list ? mediaQuestionSorter(part.media_ques_list) : []
-		}))
+			media_ques_list: part.media_ques_list ? mediaQuestionSorter(part.media_ques_list) : [],
+		}));
 
-	// Check if sortedParts is empty
-	if (sortedParts.length === 0) {
-		return <div className="text-center text-foreground">No test parts found</div>;
-	}
-
-	const initialActive = (() => {
-		const part = sortedParts[0]
-		const questionId = part?.media_ques_list?.[0]?.ques_list?.[0]?.ques_id ?? 0
-		return { part_id: part?.part_id ?? 0, question_id: questionId }
-	})()
+	const firstPart = sortedPartList[0];
+	const firstQuestion = firstPart?.media_ques_list?.[0]?.ques_list?.[0];
+	const initialActive = {
+		part_id: firstPart?.part_id ?? 0,
+		question_id: firstQuestion?.ques_id ?? 0,
+	};
 
 	const initialState: SolutionState = {
 		testId: historyData.test_id,
@@ -76,7 +84,8 @@ function SolutionRoute() {
 			<SolutionScrollProvider>
 				<SolutionPage
 					detailHistory={historyData}
-					partData={sortedParts}
+					partData={sortedPartList}
+					testTitle={historyData.test_name || "TOEIC English practice"}
 				/>
 			</SolutionScrollProvider>
 		</SolutionProvider>

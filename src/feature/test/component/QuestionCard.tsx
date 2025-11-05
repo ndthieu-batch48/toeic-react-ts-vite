@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/component/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/component/ui/radio-group'
 import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
-import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testServiceType'
 import { MainParagraph } from './MainParagraph'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
@@ -28,7 +28,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	const { setScrollTarget } = useTestScrollContext()
 
 	const { ques_id, ques_number, ques_content, ans_list } = questionData
-	const { selectedAnswers, setSelectedAnswer } = useTestContext()
+	const { selectedAnswers, setSelectedAnswer, testType } = useTestContext()
 	const {
 		translateScript: newTranslateScript,
 		isTranslateCardExpanded,
@@ -74,16 +74,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 					</Label>
 				</div>
 
-				<TranslationCard
-					translateScript={newTranslateScript[ques_id]}
-					selectedLanguage={getSelectedLanguage(ques_id)}
-					isExpanded={isTranslateCardExpanded(ques_id)}
-					onToggle={() => toggleTranslateCardExpanded(ques_id)}
-					onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(ques_id, lang)}
-					onTranslate={() => handleTranslation(ques_id)}
-					isTranslatePending={isTranslatePending}
-					isTranslateError={isTranslateError}
-				/>
+				{(testType === "practice") &&
+					<TranslationCard
+						translateScript={newTranslateScript[ques_id]}
+						selectedLanguage={getSelectedLanguage(ques_id)}
+						isExpanded={isTranslateCardExpanded(ques_id)}
+						onToggle={() => toggleTranslateCardExpanded(ques_id)}
+						onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(ques_id, lang)}
+						onTranslate={() => handleTranslation(ques_id)}
+						isTranslatePending={isTranslatePending}
+						isTranslateError={isTranslateError}
+					/>}
 			</CardHeader>
 
 			<CardContent className="flex gap-2">

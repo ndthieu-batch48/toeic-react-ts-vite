@@ -4,7 +4,7 @@ import { Label } from '@/component/ui/label'
 import { Badge } from '@/component/ui/badge'
 import { Separator } from '@/component/ui/separator'
 import { MainParagraph } from './MainParagraph'
-import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testType'
+import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testServiceType'
 import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
 import { useTranslationCard } from '../hook/useTranslationCard'
@@ -95,7 +95,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80' : 'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80 lg:w-120' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div
 							key={question.ques_id || index}

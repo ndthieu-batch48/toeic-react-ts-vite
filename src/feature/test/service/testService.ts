@@ -5,8 +5,10 @@ import type {
   TestDetailRes,
   TestSummaryRes,
   GeminiTransQuesReq,
-  GeminiTransQuesResp
-} from "../type/testType";
+  GeminiTransQuesResp,
+  GeminiExplainQuesReq,
+  GeminiExplainQuesResp
+} from "../type/testServiceType";
 
 // ========== Services ==========
 const testService = {
@@ -24,6 +26,12 @@ const testService = {
 
   transQuesWithGemini: async (request: GeminiTransQuesReq): Promise<GeminiTransQuesResp> => {
     const url = 'tests/gemini/trans/ques';
+    const res = await axiosBase.post(url, request);
+    return res.data;
+  },
+
+  explainQuesWithGemini: async (request: GeminiExplainQuesReq): Promise<GeminiExplainQuesResp> => {
+    const url = 'tests/gemini/explain/ques';
     const res = await axiosBase.post(url, request);
     return res.data;
   },
@@ -62,6 +70,9 @@ const testQuery = {
 const testMutation = {
   transQuesWithGemini: () => mutationOptions({
     mutationFn: testService.transQuesWithGemini,
+  }),
+  explainQuesWithGemini: () => mutationOptions({
+    mutationFn: testService.explainQuesWithGemini,
   }),
 } as const;
 

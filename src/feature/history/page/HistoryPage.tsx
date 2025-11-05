@@ -3,7 +3,7 @@ import { Badge } from '@/component/ui/badge';
 import { Calendar, Clock, FileText, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/component/ui/button';
 import { Link } from '@tanstack/react-router';
-import type { HistoryResultListRes } from '../type/historyType';
+import type { HistoryResultListRes } from '../type/historyServiceType';
 
 interface HistoryPageProps {
 	historyList: HistoryResultListRes[];

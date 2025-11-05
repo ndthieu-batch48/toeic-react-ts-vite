@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/component/ui/scroll-area"
 import { cn } from "@/lib/util"
-import type { PartDetailRes } from "../type/testType"
+import type { PartDetailRes } from "../type/testServiceType"
 import { Label } from "@/component/ui/label"
 import { useTestContext, type ActiveQuestion } from "../context/TestContext"
 import React, { useEffect, useRef } from "react"

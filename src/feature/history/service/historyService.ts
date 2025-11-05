@@ -6,7 +6,7 @@ import type {
   HistoryResultDetailResp,
   HistoryResultListRes,
   HistoryCreateResp
-} from '../type/historyType';
+} from '../type/historyServiceType';
 
 // ========== Services ==========
 const historyService = {

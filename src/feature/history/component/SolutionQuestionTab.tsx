@@ -2,7 +2,7 @@ import { ScrollArea } from "@/component/ui/scroll-area"
 import { cn } from "@/lib/util"
 import { Label } from "@/component/ui/label"
 import React, { useEffect, useRef } from "react"
-import type { PartDetailRes } from "@/feature/test/type/testType"
+import type { PartDetailRes } from "@/feature/test/type/testServiceType"
 import { useSolutionContext, type ActiveQuestion } from "../context/SolutionContext"
 import { getToeicPartTopic } from "@/feature/test/helper/testHelper"
 
@@ -75,7 +75,7 @@ const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
 
 	return (
 		<ScrollArea ref={scrollAreaRef}
-			className={cn("md:min-h-100 lg:max-h-110 w-full px-2 bg-transparent", className)}
+			className={cn("h-full w-full px-2 bg-transparent", className)}
 		>
 			{partData.map((part, index) => (
 				<div

@@ -1,4 +1,4 @@
-import type { PartDetailRes } from "../type/testType"
+import type { PartDetailRes } from "../type/testServiceType"
 import { PartTab } from "../component/PartTabs"
 import { QuestionTab } from "../component/QuestionTab"
 
