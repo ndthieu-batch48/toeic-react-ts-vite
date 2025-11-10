@@ -33,7 +33,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<BookOpen className="h-8 w-8 text-primary" />
 					<h1 className="text-3xl font-bold">TOEIC Test Results</h1>
 				</div>
-				<Badge variant="secondary" className="text-lg px-4 py-2">
+				<Badge variant="secondary" className="text-lg px-4 py-2 capitalize">
 					{detailResult.test_type} Test
 				</Badge>
 			</div>

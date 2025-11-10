@@ -72,7 +72,7 @@ export function ForgotPasswordForm({ onFormSubmit, isSending, isError }: ForgotP
 					)}
 				/>
 
-				<Button type="submit" size="lg" className="w-full">
+				<Button type="submit" size="lg" className="w-full" disabled={isSending}>
 					{isSending ? "Sending..." : AUTH_FORM_TEXTS.FORGOT_PASSWORD_BUTTON_TEXT}
 				</Button>
 

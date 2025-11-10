@@ -17,7 +17,7 @@ import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
-	const { testId, testType, selectedAnswers, selectedParts, remainingDuration } = useTestContext()
+	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitOrSave } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
@@ -41,6 +41,7 @@ export const SubmitTestButton = () => {
 				})
 			}
 		} catch (error) {
+			setIsSubmitOrSave(false)
 			console.error('Failed to submit test:', error)
 		}
 	}
@@ -58,6 +59,7 @@ export const SubmitTestButton = () => {
 			await createHistoryMutation.mutateAsync(savePayload)
 			navigate({ to: "/test", replace: true })
 		} catch (error) {
+			setIsSubmitOrSave(false)
 			console.error('Failed to save test:', error)
 		}
 	}
@@ -69,6 +71,7 @@ export const SubmitTestButton = () => {
 					<Button
 						className={`font-bold h-8 text-sm ${isPracticeMode ? 'w-15 flex-1' : 'w-30'}`}
 						variant="destructive"
+						onClick={() => { setIsSubmitOrSave(true) }}
 					>
 						Submit
 					</Button>
@@ -81,7 +84,11 @@ export const SubmitTestButton = () => {
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel className="text-base">Cancel</AlertDialogCancel>
+						<AlertDialogCancel
+							className="text-base"
+							onClick={() => setIsSubmitOrSave(false)}
+						>Cancel
+						</AlertDialogCancel>
 						<AlertDialogAction
 							className="text-base"
 							onClick={handleSubmitTest}
@@ -99,6 +106,7 @@ export const SubmitTestButton = () => {
 						<Button
 							className="font-bold h-8 text-sm w-15 flex-1 bg-marker hover:bg-marker text-primary-foreground"
 							variant="default"
+							onClick={() => { setIsSubmitOrSave(true) }}
 						>
 							Save
 						</Button>
@@ -111,7 +119,11 @@ export const SubmitTestButton = () => {
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogCancel
+								className="text-base"
+								onClick={() => setIsSubmitOrSave(false)}
+							>Cancel
+							</AlertDialogCancel>
 							<AlertDialogAction
 								className="text-base"
 								onClick={handleSaveTest}

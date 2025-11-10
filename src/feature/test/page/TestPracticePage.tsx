@@ -5,7 +5,9 @@ import { QuestionTab } from "../component/QuestionTab"
 import { Card, CardContent, CardHeader, CardTitle } from "@/component/ui/card"
 import { useScrollControl } from "@/hook/useScrollControl"
 import { useTestContext } from "../context/TestContext"
-import { useBlocker } from "@tanstack/react-router"
+import { useBlocker, useNavigate } from "@tanstack/react-router"
+import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
+import type { HistoryCreateReq } from "@/feature/history/type/historyServiceType"
 
 type TestPracticePageProps = {
 	testId: number
@@ -13,9 +15,11 @@ type TestPracticePageProps = {
 	partData: PartDetailRes[],
 }
 
-export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, partData }) => {
+export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, testTitle, partData }) => {
+	const navigate = useNavigate()
 	const { isScrolling, scrollPosition } = useScrollControl('window');
-	const { selectedAnswers } = useTestContext()
+	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitOrSave, setIsSubmitOrSave } = useTestContext()
+	const createHistoryMutation = useCreateHistory(testId)
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
@@ -26,11 +30,49 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, p
 		}, 0);
 	}
 
+	const handleAutoSubmit = async () => {
+		const submitPayload: HistoryCreateReq = {
+			test_id: testId,
+			type: testType,
+			dataprog: selectedAnswers,
+			part_id_list: selectedParts,
+			dura: remainingDuration / 60,
+			status: 'submit'
+		}
+
+		try {
+			setIsSubmitOrSave(true)
+			const result = await createHistoryMutation.mutateAsync(submitPayload)
+			if (result.status === 'submit') {
+				navigate({
+					to: "/history/$historyId",
+					params: { historyId: String(result.history_id) },
+					replace: true
+				})
+			}
+		} catch (error) {
+			setIsSubmitOrSave(false)
+			console.error('Failed to auto-submit test:', error)
+		}
+	}
+
 	useBlocker({
 		shouldBlockFn: () => {
+			if (isSubmitOrSave) {
+				return false; // User is submitting/saving - allow navigation
+			}
 
-			const shouldLeave = confirm("You're about to quit the test. Your current answers will be submitted. Are you sure you want to continue?");
-			return !shouldLeave;
+			// User is NOT submitting/saving - Block and show confirmation
+			const shouldLeave = confirm(
+				"You're about to quit the test. Your current answers will be submitted. Are you sure you want to continue?"
+			);
+
+			if (shouldLeave) {
+				// User confirmed - submit the test
+				handleAutoSubmit()
+			}
+
+			return !shouldLeave; // Block if user wants to stay (clicked Cancel)
 		},
 	});
 

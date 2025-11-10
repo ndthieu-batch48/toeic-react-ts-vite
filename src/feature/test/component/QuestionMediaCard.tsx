@@ -88,14 +88,14 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 				{hasContent && (
 					<>
 						{/* Left side - Main Paragraph */}
-						<div className="flex-1 min-w-0">
+						<div className="flex-1 min-w-0 max-w-5xl">
 							<MainParagraph mainParagraph={paragraphMain} />
 						</div>
 					</>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80 lg:w-120' : 'w-full'}`}>
+				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 lg:w-80 2xl:w-[26rem]' : 'w-full'}`}>
 					{questionData.map((question, index) => (
 						<div
 							key={question.ques_id || index}

@@ -14,6 +14,7 @@ export type TestState = {
 	selectedAnswers: Record<string, string> // { questionId: answerId }
 	selectedParts: string[]
 	remainingDuration: number
+	isSubmitOrSave: boolean
 }
 
 type TestAction =
@@ -24,6 +25,8 @@ type TestAction =
 	| { type: 'SET_SELECTED_ANSWERS', payload: Record<string, string> }
 	| { type: 'SET_SELECTED_PARTS', payload: string[] }
 	| { type: 'SET_REMAINING_DURATION'; payload: number }
+	| { type: 'SET_IS_SUBMIT_OR_SAVE'; payload: boolean }
+
 
 const testReducer = (state: TestState, action: TestAction): TestState => {
 	let newState: TestState
@@ -56,6 +59,9 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_REMAINING_DURATION':
 			newState = { ...state, remainingDuration: action.payload }
 			break
+		case 'SET_IS_SUBMIT_OR_SAVE':
+			newState = { ...state, isSubmitOrSave: action.payload }
+			break
 		default:
 			newState = state
 	}
@@ -72,6 +78,7 @@ type TestContextType = {
 	selectedAnswers: Record<string, string>
 	selectedParts: string[]
 	remainingDuration: number
+	isSubmitOrSave: boolean
 
 	// Actions
 	setTestId: (testId: number) => void
@@ -81,6 +88,7 @@ type TestContextType = {
 	setSelectedAnswer: (answers: Record<string, string>) => void
 	setSelectedParts: (parts: string[]) => void
 	setRemainingDuration: (duration: number) => void
+	setIsSubmitOrSave: (action: boolean) => void
 }
 
 const TestContext = createContext<TestContextType | null>(null)
@@ -103,6 +111,7 @@ export const TestProvider = ({
 		selectedAnswers: state.selectedAnswers,
 		selectedParts: state.selectedParts,
 		remainingDuration: state.remainingDuration,
+		isSubmitOrSave: state.isSubmitOrSave,
 
 		// Actions
 		setTestId: (testId: number) =>
@@ -125,6 +134,9 @@ export const TestProvider = ({
 
 		setRemainingDuration: (duration: number) =>
 			dispatch({ type: 'SET_REMAINING_DURATION', payload: duration }),
+
+		setIsSubmitOrSave: (action: boolean) =>
+			dispatch({ type: 'SET_IS_SUBMIT_OR_SAVE', payload: action })
 
 	}), [state])
 

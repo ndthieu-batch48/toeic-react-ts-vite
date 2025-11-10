@@ -64,6 +64,32 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 		return `${mins}m`;
 	};
 
+	// Show empty state if no history
+	if (historyList.length === 0) {
+		return (
+			<div className="flex items-center justify-center min-h-[calc(100vh-8rem)] p-8">
+				<Card className="max-w-md w-full">
+					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
+						<div className="rounded-full bg-muted p-6 mb-4">
+							<FileText className="w-12 h-12 text-muted-foreground" />
+						</div>
+						<h3 className="text-xl font-semibold text-foreground mb-2">
+							No Test history Yet
+						</h3>
+						<p className="text-sm text-muted-foreground text-center mb-6">
+							You haven't completed any tests yet. Start practicing to see your results here!
+						</p>
+						<Button asChild>
+							<Link to="/test">
+								Browse Tests
+							</Link>
+						</Button>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
 	return (
 		<div className="p-8">
 			<div className="mx-auto">
@@ -187,21 +213,6 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 						);
 					})}
 				</div>
-
-				{/* Empty State */}
-				{history.length === 0 && (
-					<Card className="py-12 text-center">
-						<CardContent>
-							<FileText className="w-12 h-12 mx-auto mb-3" />
-							<h3 className="text-lg font-semibold text-foreground mb-1">
-								No Test History
-							</h3>
-							<p className="text-sm text-muted-foreground">
-								Your test history will appear here once you complete a test.
-							</p>
-						</CardContent>
-					</Card>
-				)}
 			</div>
 		</div>
 	);

@@ -73,6 +73,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 				type: testSetup.type,
 				selectedPartIds: testSetup.selectedPartIds,
 				timeLimit: testSetup.timeLimit,
+				isContinue: false,
 			}
 		})
 	}

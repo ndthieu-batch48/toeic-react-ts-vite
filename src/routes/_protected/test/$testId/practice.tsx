@@ -4,20 +4,18 @@ import { TestProvider, type TestState } from '@/feature/test/context/TestContext
 import { TestScrollProvider } from '@/feature/test/context/TestScrollContext';
 import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
 import { TestPracticePage } from '@/feature/test/page/TestPracticePage';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod';
 import { testQuery } from '@/feature/test/service/testService';
 import { historyQuery } from '@/feature/history/service/historyService';
-import type { TestDetailRes } from '@/feature/test/type/testServiceType';
-import type { HistoryResp } from '@/feature/history/type/historyServiceType';
 
 const searchSchema = z.object({
 	testTitle: z.string(),
 	type: z.enum(TEST_TYPE),
 	selectedPartIds: z.array(z.number()).optional(),
 	timeLimit: z.number(),
-	isContinue: z.boolean().optional(),
+	isContinue: z.boolean(),
 })
 
 export const Route = createFileRoute('/_protected/test/$testId/practice')({
@@ -33,20 +31,13 @@ export const Route = createFileRoute('/_protected/test/$testId/practice')({
 	loader: ({ context, params, deps }) => {
 		const testId = Number(params.testId);
 
-		const promises: Promise<TestDetailRes | HistoryResp>[] = [
-			// Always fetch test data
-			context.queryClient.ensureQueryData(testQuery.byId(testId)),
-		];
+		// Always fetch test data
+		context.queryClient.ensureQueryData(testQuery.byId(testId));
 
+		// Only fetch saved history progress IF shouldContinue is true
 		if (deps.shouldContinue) {
-			promises.push(
-				// Only fetch saved history progress IF shouldContinue is true
-				context.queryClient.ensureQueryData(historyQuery.saveProgress(testId))
-			);
+			context.queryClient.ensureQueryData(historyQuery.saveProgress(testId));
 		}
-
-		Promise.all(promises);
-
 	},
 })
 
@@ -55,21 +46,18 @@ function TestPracticeRoute() {
 	const { testTitle, type, selectedPartIds, timeLimit, isContinue } = Route.useSearch();
 
 	const testIdParam = Number(testId);
-	const shouldContinueTest = isContinue ?? false
 
 	const { data: testData } = useSuspenseQuery(testQuery.byId(testIdParam));
-	const { data: historyData } = useQuery({
-		...historyQuery.saveProgress(testIdParam),
-		enabled: shouldContinueTest,
-	});
+	const { data: historyData } = useSuspenseQuery(historyQuery.saveProgress(testIdParam),);
 
+	const testDataFromHistory = isContinue ? historyData : undefined;
 
 	if (!testData) return null;
 
 	const setup = {
-		partIdList: historyData?.part_id_list.map(Number) ?? selectedPartIds,
-		answerMap: historyData?.dataprog ?? {},
-		duration: historyData?.dura ?? timeLimit,
+		partIdList: testDataFromHistory?.part_id_list.map(Number) ?? selectedPartIds,
+		answerMap: testDataFromHistory?.dataprog ?? {},
+		duration: testDataFromHistory?.dura ?? timeLimit,
 	};
 
 	const sortedPartList = testData.part_list
@@ -102,6 +90,7 @@ function TestPracticeRoute() {
 		selectedParts: setup.partIdList?.map(String) ?? [],
 		selectedAnswers: setup.answerMap,
 		remainingDuration: setup.duration,
+		isSubmitOrSave: false
 	}
 
 	return (
