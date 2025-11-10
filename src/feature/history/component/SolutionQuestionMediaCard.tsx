@@ -8,13 +8,12 @@ import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
-import { TranslationCard } from '@/feature/test/component/TranslationCard'
-import type { LANG_ID } from '@/feature/test/const/testConst'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
 import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
-import { ExplainationCard } from '@/feature/test/component/ExplainationCard'
+import { GeminiAssistComponent } from '@/feature/test/component/GeminiAssist'
 
 type SolutionQuestionMediaCardProps = {
+	mediaId: number,
 	mediaName: string,
 	paragraphMain: string,
 	translateScript?: GeminiTransQuesResp
@@ -29,27 +28,9 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 
 	const { selectedAnswers, setSelectedAnswer } = useSolutionContext()
 	const { setScrollTarget } = useSolutionScrollContext()
-	const {
-		translateScript: newTranslateScript,
-		isTranslateCardExpanded,
-		toggleTranslateCardExpanded,
-		getSelectedLanguage: getSelectedTranslateLanguage,
-		handleSelectLanguage: handleSelectTranslateLanguage,
-		handleTranslation,
-		isTranslatePending,
-		isTranslateError
-	} = useTranslationCard()
 
-	const {
-		explainScript: newExplainScript,
-		isExplainCardExpanded,
-		toggleExplainCardExpanded,
-		getSelectedLanguage: getSelectedExplainLanguage,
-		handleSelectLanguage: handleSelectExplainLanguage,
-		handlExplaination,
-		isExplainPending,
-		isExplainError
-	} = useExplainationCard()
+	const translationHook = useTranslationCard()
+	const explainationHook = useExplainationCard()
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
@@ -143,30 +124,12 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 											{question.ques_content}
 										</Label>
 									</div>
-
-
 								</div>
 
-								<TranslationCard
-									translateScript={newTranslateScript[question.ques_id]}
-									selectedLanguage={getSelectedTranslateLanguage(question.ques_id)}
-									isExpanded={isTranslateCardExpanded(question.ques_id)}
-									onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-									onLanguageChange={(lang: LANG_ID) => handleSelectTranslateLanguage(question.ques_id, lang)}
-									onTranslate={() => handleTranslation(question.ques_id)}
-									isTranslatePending={isTranslatePending}
-									isTranslateError={isTranslateError}
-								/>
-
-								<ExplainationCard
-									explainScript={newExplainScript[question.ques_id]}
-									isExpanded={isExplainCardExpanded(question.ques_id)}
-									onToggle={() => toggleExplainCardExpanded(question.ques_id)}
-									selectedLanguage={getSelectedExplainLanguage(question.ques_id)}
-									onLanguageChange={(lang: LANG_ID) => handleSelectExplainLanguage(question.ques_id, lang)}
-									onExplain={() => handlExplaination(question.ques_id)}
-									isExplainPending={isExplainPending}
-									isExplainError={isExplainError}
+								<GeminiAssistComponent
+									questionId={question.ques_id}
+									translationHook={translationHook}
+									explainationHook={explainationHook}
 								/>
 
 								<div>
@@ -199,7 +162,6 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 											)
 										})}
 									</RadioGroup>
-
 								</div>
 							</div>
 

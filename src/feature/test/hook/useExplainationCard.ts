@@ -4,79 +4,48 @@ import type { GeminiExplainQuesResp } from "../type/testServiceType";
 import type { LANG_ID } from "../const/testConst";
 
 export const useExplainationCard = () => {
-	const { explainQuesMutation } = useGeminiMutation()
+  const { explainQuesMutation } = useGeminiMutation()
 
-	const [explainScript, setExplainScript] = useState<Record<number, GeminiExplainQuesResp>>({});
-	const [expandedCardMap, setExpandedCardMap] = useState<Record<number, boolean>>({}); // { questionId : true/false }
-	const [selectedLanguages, setSelectedLanguages] = useState<Record<number, LANG_ID>>({});
+  const [explainScript, setExplainScript] = useState<Record<number, GeminiExplainQuesResp>>({});
+  const [selectedLanguages, setSelectedLanguages] = useState<Record<number, LANG_ID>>({});
 
-	// Helper functions for expand state
-	const isExplainCardExpanded = (questionId: number) => {
-		return expandedCardMap[questionId]
-	}
+  // Helper function for selecting language state
+  const getSelectedLanguage = (questionId: number) => {
+    return selectedLanguages[questionId]
+  }
 
-	const toggleExplainCardExpanded = (questionId: number) => {
-		setExpandedCardMap(prev => {
-			const newMap = { ...prev }
+  const handleSelectLanguage = (questionId: number, languageId: LANG_ID) => {
+    setSelectedLanguages(prev => ({
+      ...prev,
+      [questionId]: languageId
+    }));
+  }
 
-			if (newMap[questionId]) {
-				newMap[questionId] = false;
-			} else {
-				newMap[questionId] = true;
-				// Set default language when expanding for the first time
-				if (!selectedLanguages[questionId]) {
-					setSelectedLanguages(prevLang => ({
-						...prevLang,
-						[questionId]: 'vi'
-					}));
-				}
-			}
+  const handlExplaination = useCallback(async (questionId: number) => {
+    const selectedLang = selectedLanguages[questionId];
+    if (!selectedLang) return;
 
-			return newMap
-		});
-	};
+    const translation = await explainQuesMutation.mutateAsync({
+      ques_id: questionId,
+      lang_id: selectedLang
+    });
+    setExplainScript(prev => ({
+      ...prev,
+      [questionId]: translation
+    }));
 
-	// Helper function for selecting language state
-	const getSelectedLanguage = (questionId: number) => {
-		return selectedLanguages[questionId]
-	}
+  }, [selectedLanguages, explainQuesMutation]);
 
-	const handleSelectLanguage = (questionId: number, languageId: LANG_ID) => {
-		setSelectedLanguages(prev => ({
-			...prev,
-			[questionId]: languageId
-		}));
-	}
+  return {
+    explainScript,
 
-	const handlExplaination = useCallback(async (questionId: number) => {
-		const selectedLang = selectedLanguages[questionId];
-		if (!selectedLang) return;
+    // Language state and handlers
+    getSelectedLanguage,
+    handleSelectLanguage,
 
-		const translation = await explainQuesMutation.mutateAsync({
-			ques_id: questionId,
-			lang_id: selectedLang
-		});
-		setExplainScript(prev => ({
-			...prev,
-			[questionId]: translation
-		}));
-
-	}, [selectedLanguages, explainQuesMutation]);
-
-	return {
-		explainScript,
-
-		// Expand state and handlers
-		isExplainCardExpanded,
-		toggleExplainCardExpanded,
-
-		// Language state and handlers
-		getSelectedLanguage,
-		handleSelectLanguage,
-
-		// Explaination functions and state
-		handlExplaination,
-		isExplainPending: explainQuesMutation.isPending,
-		isExplainError: explainQuesMutation.isError,
-	}
+    // Explaination functions and state
+    handlExplaination,
+    isExplainPending: explainQuesMutation.isPending,
+    isExplainError: explainQuesMutation.isError,
+  }
 }

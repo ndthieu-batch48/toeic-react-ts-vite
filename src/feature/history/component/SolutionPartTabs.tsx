@@ -99,6 +99,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 								media.ques_list.length === 1 ? (
 									<SolutionQuestionCard
 										key={media.media_ques_id}
+										mediaId={media.media_ques_id}
 										questionData={media.ques_list[0]}
 										paragraphMain={media.media_ques_main_parag}
 										translateScript={media.media_ques_trans_script}
@@ -106,10 +107,12 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 								) : (
 									<SolutionQuestionMediaCard
 										key={key}
+										mediaId={media.media_ques_id}
 										mediaName={media.media_ques_name}
 										paragraphMain={media.media_ques_main_parag}
 										questionData={media.ques_list}
-										translateScript={media.media_ques_trans_script} />
+										translateScript={media.media_ques_trans_script}
+									/>
 								)
 							)}
 						</div>
