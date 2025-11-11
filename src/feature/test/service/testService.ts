@@ -1,5 +1,5 @@
 import { queryOptions, mutationOptions } from "@tanstack/react-query";
-import { axiosBase } from "@/lib/axios";
+import { axiosBase } from "@/common/lib/axios";
 import type {
   GetPartAudioUrlReq,
   TestDetailRes,

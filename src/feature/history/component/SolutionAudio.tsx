@@ -1,5 +1,5 @@
-import { Button } from "@/component/ui/button"
-import { Slider } from "@/component/ui/slider"
+import { Button } from "@/shadcn/component/ui/button"
+import { Slider } from "@/shadcn/component/ui/slider"
 import { LucidePlay, LucidePause, LucideVolumeX, LucideVolume2 } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
 import { useSolutionContext } from "../context/SolutionContext"

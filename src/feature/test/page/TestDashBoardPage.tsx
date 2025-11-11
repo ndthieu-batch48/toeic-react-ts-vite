@@ -1,7 +1,7 @@
 import { AllTestsSection } from "../component/AllTestsSection"
 import type { TestSummaryRes } from "../type/testServiceType"
-import { Card, CardContent } from "@/component/ui/card"
-import { Button } from "@/component/ui/button"
+import { Card, CardContent } from "@/shadcn/component/ui/card"
+import { Button } from "@/shadcn/component/ui/button"
 import { Link } from "@tanstack/react-router"
 import { ClipboardList, TrendingUp } from "lucide-react"
 

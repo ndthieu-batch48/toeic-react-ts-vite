@@ -1,7 +1,7 @@
-import { Card, CardContent } from '@/component/ui/card';
-import { Badge } from '@/component/ui/badge';
+import { Card, CardContent } from '@/shadcn/component/ui/card';
+import { Badge } from '@/shadcn/component/ui/badge';
 import { Calendar, Clock, FileText, CheckCircle2, XCircle } from 'lucide-react';
-import { Button } from '@/component/ui/button';
+import { Button } from '@/shadcn/component/ui/button';
 import { Link } from '@tanstack/react-router';
 import type { HistoryResultListRes } from '../type/historyServiceType';
 

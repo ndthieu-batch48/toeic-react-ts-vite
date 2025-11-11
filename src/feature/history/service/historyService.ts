@@ -1,5 +1,5 @@
 import { queryOptions, mutationOptions } from '@tanstack/react-query';
-import { axiosJWT } from '@/lib/axios';
+import { axiosJWT } from '@/common/lib/axios';
 import type {
   HistoryCreateReq,
   HistoryResp,

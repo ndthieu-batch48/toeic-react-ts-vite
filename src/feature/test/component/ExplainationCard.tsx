@@ -1,10 +1,10 @@
-import { Card, CardContent } from '@/component/ui/card';
-import { Button } from '@/component/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/component/ui/select';
+import { Card, CardContent } from '@/shadcn/component/ui/card';
+import { Button } from '@/shadcn/component/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shadcn/component/ui/select';
 import type { GeminiExplainQuesResp } from '@/feature/test/type/testServiceType';
 import { LANG_MAP, type LANG_ID } from '@/feature/test/const/testConst';
 import { Separator } from '@radix-ui/react-separator';
-import { Skeleton } from '@/component/ui/skeleton';
+import { Skeleton } from '@/shadcn/component/ui/skeleton';
 
 
 type ExplainationCardProps = {

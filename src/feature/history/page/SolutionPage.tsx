@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/component/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/component/ui/card"
 
 import type { PartDetailRes } from "@/feature/test/type/testServiceType"
 import { SolutionPartTab } from "../component/SolutionPartTabs"
 import { SolutionQuestionTab } from "../component/SolutionQuestionTab"
 import type { HistoryResultDetailResp } from "../type/historyServiceType"
-import { useScrollControl } from "@/hook/useScrollControl"
+import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useSolutionContext } from "../context/SolutionContext"
 
 

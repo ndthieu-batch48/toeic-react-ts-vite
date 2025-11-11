@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
-import { Button } from "@/component/ui/button";
-import { Badge } from '@/component/ui/badge'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/component/ui/card";
+import { Button } from "@/shadcn/component/ui/button";
+import { Badge } from '@/shadcn/component/ui/badge'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shadcn/component/ui/card";
 import { BookOpen, Clock, FileText, PlayCircle } from "lucide-react";
 import type { TestSummaryRes } from "../type/testServiceType";
 

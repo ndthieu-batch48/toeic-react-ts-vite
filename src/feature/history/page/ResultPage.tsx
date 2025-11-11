@@ -1,10 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/component/ui/card';
-import { Badge } from '@/component/ui/badge';
-import { Progress } from '@/component/ui/progress';
-import { Separator } from '@/component/ui/separator';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shadcn/component/ui/card';
+import { Badge } from '@/shadcn/component/ui/badge';
+import { Progress } from '@/shadcn/component/ui/progress';
+import { Separator } from '@/shadcn/component/ui/separator';
 import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye } from 'lucide-react';
 import type { HistoryResultDetailResp } from '../type/historyServiceType';
-import { Button } from '@/component/ui/button';
+import { Button } from '@/shadcn/component/ui/button';
 import { Link } from '@tanstack/react-router';
 
 type ResultPageProps = {

@@ -1,15 +1,15 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/component/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
 import type { PartDetailRes } from "../type/testServiceType"
 import { QuestionMediaCard } from "./QuestionMediaCard"
 import { QuestionCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
-import { cn } from "@/lib/util"
+import { cn } from "@/shadcn/lib/util"
 import { useTestContext } from "../context/TestContext"
 import React, { useEffect } from "react"
 import { Audio } from "./Audio"
 import { useTestScrollContext } from "../context/TestScrollContext"
-import { useScrollControl } from "@/hook/useScrollControl"
+import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "../helper/testHelper"
 
 

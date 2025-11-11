@@ -1,10 +1,10 @@
-import { Card, CardContent } from "@/component/ui/card"
+import { Card, CardContent } from "@/shadcn/component/ui/card"
 import { useAuthMutation } from "../hook/useAuthMutation";
 import { useState } from "react";
 import type { LoginRequest, RegisterRequest } from "../type/authServiceType";
 import { LoginForm } from "../component/LoginForm";
 import { RegisterForm } from "../component/RegisterForm";
-import { TmaLogo } from "@/component/shared/TmaLogo";
+import { TmaLogo } from "@/common/component/TmaLogo";
 
 type LoginPageProps = {
 	onAuthSuccess: () => Promise<void>

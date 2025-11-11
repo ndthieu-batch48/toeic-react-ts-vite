@@ -1,6 +1,6 @@
 import { CredentialType, OtpPurpose } from '../type/authEnum';
 import type { OtpSession, UserResponse } from '../type/authServiceType';
-import { getStorageJSON, removeStorageItem, setStorageJSON } from "@/util/localStorageUtil";
+import { getStorageJSON, removeStorageItem, setStorageJSON } from "@/common/util/localStorageUtil";
 
 export const STORAGE_KEYS = {
   USER: 'user_session',

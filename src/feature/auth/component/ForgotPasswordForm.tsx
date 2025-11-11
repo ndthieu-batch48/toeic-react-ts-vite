@@ -4,10 +4,10 @@ import { AUTH_FORM_TEXTS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS, VALIDATION
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/component/ui/form"
-import { TmaLogo } from "@/component/shared/TmaLogo"
-import { Input } from "@/component/ui/input"
-import { Button } from "@/component/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shadcn/component/ui/form"
+import { TmaLogo } from "@/common/component/TmaLogo"
+import { Input } from "@/shadcn/component/ui/input"
+import { Button } from "@/shadcn/component/ui/button"
 
 const forgotPasswordSchema = z.object({
 	credential: z

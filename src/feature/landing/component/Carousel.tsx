@@ -6,8 +6,8 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 	type CarouselApi,
-} from "@/component/ui/carousel"
-import { Card, CardContent } from "@/component/ui/card"
+} from "@/shadcn/component/ui/carousel"
+import { Card, CardContent } from "@/shadcn/component/ui/card"
 import { CAROUSEL_ITEMS } from "../const/landing_const"
 
 export function LandingCarousel() {

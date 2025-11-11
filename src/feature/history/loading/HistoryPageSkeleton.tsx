@@ -1,4 +1,4 @@
-import { Skeleton } from "@/component/ui/skeleton";
+import { Skeleton } from "@/shadcn/component/ui/skeleton";
 
 export default function HistoryPageSkeleton() {
 	return (

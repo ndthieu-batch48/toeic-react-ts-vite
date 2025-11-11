@@ -1,4 +1,4 @@
-import { Button } from "@/component/ui/button"
+import { Button } from "@/shadcn/component/ui/button"
 import { useTestContext } from "../context/TestContext"
 import type { HistoryCreateReq } from "@/feature/history/type/historyServiceType"
 import {
@@ -11,7 +11,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from "@/component/ui/alert-dialog"
+} from "@/shadcn/component/ui/alert-dialog"
 import { useNavigate } from "@tanstack/react-router"
 import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
 

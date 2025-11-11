@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/component/ui/card";
+import { Card, CardContent } from "@/shadcn/component/ui/card";
 import { Star } from "lucide-react";
 import { TESTIMONIALS, TESTIMONIALS_SECTION } from "../const/landing_const";
 

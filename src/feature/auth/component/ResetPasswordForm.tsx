@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Eye, EyeOff } from "lucide-react"
-import { Button } from "@/component/ui/button"
-import { Input } from "@/component/ui/input"
+import { Button } from "@/shadcn/component/ui/button"
+import { Input } from "@/shadcn/component/ui/input"
 import {
 	Form,
 	FormControl,
@@ -12,7 +12,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/component/ui/form"
+} from "@/shadcn/component/ui/form"
 import { AUTH_FORM_TEXTS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from "../const/authConst"
 
 const resetPasswordSchema = z.object({

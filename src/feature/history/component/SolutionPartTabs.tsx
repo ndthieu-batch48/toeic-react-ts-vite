@@ -1,13 +1,13 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/component/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
 import { SolutionQuestionMediaCard } from "./SolutionQuestionMediaCard"
 import { SolutionQuestionCard } from "./SolutionQuestionCard"
 import { SolutionAudio } from "./SolutionAudio"
-import { cn } from "@/lib/util"
+import { cn } from "@/shadcn/lib/util"
 import React, { useEffect } from "react"
 import type { PartDetailRes } from "@/feature/test/type/testServiceType"
 import { useSolutionContext } from "../context/SolutionContext"
 import { useSolutionScrollContext } from "../context/SolutionScrollContext"
-import { useScrollControl } from "@/hook/useScrollControl"
+import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "@/feature/test/helper/testHelper"
 
 type SolutionPartTabsProps = {

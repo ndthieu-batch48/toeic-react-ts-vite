@@ -1,4 +1,4 @@
-import { Button } from "@/component/ui/button";
+import { Button } from "@/shadcn/component/ui/button";
 import { CTA_SECTION } from "../const/landing_const";
 import { Link } from "@tanstack/react-router";
 

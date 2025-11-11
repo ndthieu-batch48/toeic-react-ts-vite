@@ -5,7 +5,7 @@ import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
-} from "@/component/ui/input-otp"
+} from "@/shadcn/component/ui/input-otp"
 import {
 	Form,
 	FormControl,
@@ -14,8 +14,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/component/ui/form"
-import { Button } from "@/component/ui/button"
+} from "@/shadcn/component/ui/form"
+import { Button } from "@/shadcn/component/ui/button"
 import { AUTH_FORM_TEXTS, AUTH_CONFIG } from "../const/authConst"
 import { useEffect, useState } from "react"
 import { CircleCheck, CircleX } from "lucide-react"

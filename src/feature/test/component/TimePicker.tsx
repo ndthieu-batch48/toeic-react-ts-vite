@@ -1,5 +1,5 @@
-import { Label } from "@/component/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/component/ui/select'
+import { Label } from "@/shadcn/component/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shadcn/component/ui/select'
 
 type TimePickerProps = {
 	timeLimit?: string

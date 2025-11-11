@@ -1,5 +1,5 @@
-import { Skeleton } from "@/component/ui/skeleton";
-import { Separator } from "@/component/ui/separator";
+import { Skeleton } from "@/shadcn/component/ui/skeleton";
+import { Separator } from "@/shadcn/component/ui/separator";
 
 export default function ResultPageSkeleton() {
 	return (

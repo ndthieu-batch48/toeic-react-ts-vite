@@ -1,7 +1,7 @@
-import { Progress } from "@/component/ui/progress"
+import { Progress } from "@/shadcn/component/ui/progress"
 import { useEffect, useRef, useState } from "react"
 import { AlarmClock } from "lucide-react"
-import { cn } from "@/lib/util"
+import { cn } from "@/shadcn/lib/util"
 import { useTestContext } from "../context/TestContext"
 
 type CountDownTimerProps = {

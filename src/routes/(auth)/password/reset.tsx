@@ -1,4 +1,4 @@
-import { Card } from '@/component/ui/card';
+import { Card } from '@/shadcn/component/ui/card';
 import { ResetPasswordForm } from '@/feature/auth/component/ResetPasswordForm'
 import { clearOtpSession, getOtpSession, updateOtpSession } from '@/feature/auth/helper/authHelper';
 import { useOtpMutation } from '@/feature/auth/hook/useOtpMutation';

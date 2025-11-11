@@ -1,4 +1,4 @@
-import { Button } from "@/component/ui/button";
+import { Button } from "@/shadcn/component/ui/button";
 import { ArrowRight } from "lucide-react";
 import { HERO_CONTENT } from "../const/landing_const";
 import { Link } from "@tanstack/react-router";

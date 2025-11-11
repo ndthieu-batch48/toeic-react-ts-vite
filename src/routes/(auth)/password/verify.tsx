@@ -1,4 +1,4 @@
-import { Card } from '@/component/ui/card'
+import { Card } from '@/shadcn/component/ui/card'
 import { VerifyOTPForm } from '@/feature/auth/component/VerifyOtpForm'
 import { getOtpSession } from '@/feature/auth/helper/authHelper'
 import { useOtpMutation } from '@/feature/auth/hook/useOtpMutation'

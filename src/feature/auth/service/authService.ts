@@ -1,5 +1,5 @@
 import { mutationOptions } from '@tanstack/react-query';
-import { axiosBase } from '@/lib/axios';
+import { axiosBase } from '@/common/lib/axios';
 import type {
   LoginRequest,
   UserResponse,

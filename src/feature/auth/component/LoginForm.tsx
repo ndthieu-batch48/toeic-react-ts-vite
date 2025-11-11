@@ -1,5 +1,5 @@
-import { Button } from "@/component/ui/button"
-import { Input } from "@/component/ui/input"
+import { Button } from "@/shadcn/component/ui/button"
+import { Input } from "@/shadcn/component/ui/input"
 import { Link } from "@tanstack/react-router"
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +13,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/component/ui/form";
+} from "@/shadcn/component/ui/form";
 import type { LoginRequest } from "../type/authServiceType";
 
 // TODO: Implement OAuth in the future

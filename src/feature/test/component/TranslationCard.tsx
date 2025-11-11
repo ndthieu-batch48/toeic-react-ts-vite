@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@/component/ui/card';
-import { Button } from '@/component/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/component/ui/select';
-import { Separator } from '@/component/ui/separator';
-import { Skeleton } from '@/component/ui/skeleton';
+import { Card, CardContent } from '@/shadcn/component/ui/card';
+import { Button } from '@/shadcn/component/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shadcn/component/ui/select';
+import { Separator } from '@/shadcn/component/ui/separator';
+import { Skeleton } from '@/shadcn/component/ui/skeleton';
 import type { GeminiTransQuesResp } from '../type/testServiceType';
 import { LANG_MAP, type LANG_ID } from '../const/testConst';
 

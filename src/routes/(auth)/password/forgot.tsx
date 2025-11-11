@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ForgotPasswordForm } from '@/feature/auth/component/ForgotPasswordForm'
 import { useOtpMutation } from '@/feature/auth/hook/useOtpMutation'
 import { CredentialType, OtpPurpose } from '@/feature/auth/type/authEnum'
-import { Card } from '@/component/ui/card'
+import { Card } from '@/shadcn/component/ui/card'
 import { toast } from 'sonner'
 import { clearOtpSession } from '@/feature/auth/helper/authHelper'
 
