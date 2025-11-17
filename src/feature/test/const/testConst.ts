@@ -1,12 +1,17 @@
-export type LANG_ID = "vi" | "ja" | "en"
+export type LANG_ID = "vi" | "ja" | "en";
 
-export type LANG_MAP = Record<LANG_ID, string>
+type LANG_MAP_TYPE = {
+  id: LANG_ID;
+  name: string;
+  flag: string;
+};
 
-export const LANG_MAP: LANG_MAP = {
-  "vi": "Vietnamese",
-  "ja": "Japanese",
-  "en": "English",
-}
+export const LANG_MAP: LANG_MAP_TYPE[] = [
+  { id: "vi", name: "Vietnamese", flag: "🇻🇳" },
+  { id: "en", name: "English", flag: "🇬🇧" },
+  { id: "ja", name: "Japanese", flag: "🇯🇵" }
+];
+
 
 export const TEST_TYPE = {
   PRACTICE: "practice",

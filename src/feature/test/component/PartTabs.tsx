@@ -112,6 +112,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 										questionData={media.ques_list[0]}
 										paragraphMain={media.media_ques_main_parag}
 										translateScript={media.media_ques_trans_script}
+										audioScript={media.media_ques_audio_script}
 									/>
 								) : (
 									<QuestionMediaCard
@@ -119,7 +120,9 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 										mediaName={media.media_ques_name}
 										questionData={media.ques_list}
 										paragraphMain={media.media_ques_main_parag}
-										translateScript={media.media_ques_trans_script} />
+										translateScript={media.media_ques_trans_script}
+										audioScript={media.media_ques_audio_script}
+									/>
 								)
 							)}
 						</div>

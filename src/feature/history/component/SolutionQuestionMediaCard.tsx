@@ -6,11 +6,11 @@ import { Separator } from '@/shadcn/component/ui/separator'
 import type { QuesDetailRes, GeminiTransQuesResp } from '@/feature/test/type/testServiceType'
 import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
-import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
+import { GeminiAssistCard } from '@/feature/test/component/GeminiAssist'
+import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
-import { GeminiAssistComponent } from '@/feature/test/component/GeminiAssist'
 
 type SolutionQuestionMediaCardProps = {
 	mediaId: number,
@@ -126,7 +126,7 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									</div>
 								</div>
 
-								<GeminiAssistComponent
+								<GeminiAssistCard
 									questionId={question.ques_id}
 									translationHook={translationHook}
 									explainationHook={explainationHook}

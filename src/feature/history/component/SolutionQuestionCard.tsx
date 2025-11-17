@@ -7,7 +7,7 @@ import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
-import { GeminiAssistComponent } from '@/feature/test/component/GeminiAssist'
+import { GeminiAssistCard } from '@/feature/test/component/GeminiAssist'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
 
@@ -59,7 +59,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 
 	return (
 		<Card
-			className="w-full mx-auto mb-3 shadow-md py-3"
+			className="w-full mx-auto mb-3 shadow-md py-3 border border-border"
 			ref={(el: HTMLDivElement | null) => { setScrollTarget(ques_id, el) }}
 		>
 			<CardHeader>
@@ -73,7 +73,7 @@ export const SolutionQuestionCard: React.FC<SolutionQuestionCardProps> = ({
 					</Label>
 				</div>
 
-				<GeminiAssistComponent
+				<GeminiAssistCard
 					questionId={ques_id}
 					translationHook={translationHook}
 					explainationHook={explainationHook}

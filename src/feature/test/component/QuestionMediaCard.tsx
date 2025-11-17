@@ -5,25 +5,27 @@ import { Badge } from '@/shadcn/component/ui/badge'
 import { Separator } from '@/shadcn/component/ui/separator'
 import { MainParagraph } from './MainParagraph'
 import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testServiceType'
-import { TranslationCard } from './TranslationCard'
 import { useTestContext } from '../context/TestContext'
-import { useTranslationCard } from '../hook/useTranslationCard'
-import type { LANG_ID } from '../const/testConst'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Button } from '@/shadcn/component/ui/button'
 import { Flag } from 'lucide-react'
 import { useTestScrollContext } from '../context/TestScrollContext'
+import { GeminiAssistCard } from './GeminiAssist'
+import { useTranslationCard } from '../hook/useTranslationCard'
+import { useExplainationCard } from '../hook/useExplainationCard'
 
 type QuestionMediaCardProps = {
 	mediaName: string,
 	paragraphMain: string,
 	translateScript?: GeminiTransQuesResp
+	audioScript?: string
 	questionData: QuesDetailRes[],
 }
 
 export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	mediaName,
 	paragraphMain,
+	audioScript,
 	questionData,
 }) => {
 
@@ -31,16 +33,9 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 	const { setScrollTarget } = useTestScrollContext()
 
 	const { testType, selectedAnswers, setSelectedAnswer } = useTestContext()
-	const {
-		translateScript: newTranslateScript,
-		isTranslateCardExpanded,
-		toggleTranslateCardExpanded,
-		getSelectedLanguage,
-		handleSelectLanguage,
-		handleTranslation,
-		isTranslatePending,
-		isTranslateError
-	} = useTranslationCard()
+
+	const translationHook = useTranslationCard()
+	const explainationHook = useExplainationCard()
 
 	const hasContent = isMainParagraphHasContent(paragraphMain);
 
@@ -127,15 +122,11 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 									</div>
 								</div>
 								{testType === 'practice' &&
-									<TranslationCard
-										translateScript={newTranslateScript[question.ques_id]}
-										selectedLanguage={getSelectedLanguage(question.ques_id)}
-										isExpanded={isTranslateCardExpanded(question.ques_id)}
-										onToggle={() => toggleTranslateCardExpanded(question.ques_id)}
-										onLanguageChange={(lang: LANG_ID) => handleSelectLanguage(question.ques_id, lang)}
-										onTranslate={() => handleTranslation(question.ques_id)}
-										isTranslatePending={isTranslatePending}
-										isTranslateError={isTranslateError}
+									<GeminiAssistCard
+										questionId={question.ques_id}
+										translationHook={translationHook}
+										explainationHook={explainationHook}
+										audioScript={audioScript}
 									/>
 								}
 

@@ -1,115 +1,176 @@
 import { Button } from '@/shadcn/component/ui/button'
 import { Card, CardContent } from '@/shadcn/component/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shadcn/component/ui/tabs'
-import { Globe, Lightbulb, ChevronDown, ChevronUp, Headphones, Sparkles } from 'lucide-react'
-import { useState } from 'react'
-import { TranslationCard } from '@/feature/test/component/TranslationCard'
-import { ExplainationCard } from '@/feature/test/component/ExplainationCard'
-import type { LANG_ID } from '@/feature/test/const/testConst'
-import type { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
-import type { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
+import { Globe, Lightbulb, ChevronDown, ChevronUp, Headphones, Sparkles, NotebookText } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { LANG_MAP, type LANG_ID } from '@/feature/test/const/testConst'
+import { TranslateAudioScriptCard } from './TranslateAudioScriptCard'
+import { TranslateMainParagraphCard } from './TranslateMainParagraphCard'
+import { useTranslationCard } from '../hook/useTranslationCard'
+import { useExplainationCard } from '../hook/useExplainationCard'
+import { TranslationCard } from './TranslationCard'
+import { ExplainationCard } from './ExplainationCard'
 
-interface GeminiAssistComponentProps {
+interface GeminiAssistCardProps {
 	questionId: number
+	audioScript?: string
 	translationHook: ReturnType<typeof useTranslationCard>
 	explainationHook: ReturnType<typeof useExplainationCard>
 }
 
-export const GeminiAssistComponent: React.FC<GeminiAssistComponentProps> = ({
+export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 	questionId,
+	audioScript,
 	translationHook,
 	explainationHook
 }) => {
 	const [isHelpExpanded, setIsHelpExpanded] = useState(false)
+	const [selectedLang, setSelectedLang] = useState<LANG_ID>('vi');
 
-	const {
-		translateScript,
-		getSelectedLanguage: getSelectedTranslateLanguage,
-		handleSelectLanguage: handleSelectTranslateLanguage,
-		handleTranslation,
-		isTranslatePending,
-		isTranslateError
-	} = translationHook
+	// Initialize default language on mount
+	useEffect(() => {
+		translationHook.handleSelectLanguage(questionId, 'vi');
+		explainationHook.handleSelectLanguage(questionId, 'vi');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [questionId]);
 
-	const {
-		explainScript,
-		getSelectedLanguage: getSelectedExplainLanguage,
-		handleSelectLanguage: handleSelectExplainLanguage,
-		handlExplaination,
-		isExplainPending,
-		isExplainError
-	} = explainationHook
+	const handleLanguageChange = (lang: LANG_ID) => {
+		setSelectedLang(lang);
+		translationHook.handleSelectLanguage(questionId, lang);
+		explainationHook.handleSelectLanguage(questionId, lang);
+	};
+
+	const handleTranslate = () => {
+		translationHook.handleTranslation(questionId);
+	};
+
+	const handleExplain = () => {
+		explainationHook.handlExplaination(questionId);
+	};
+
+	// Available tabs
+	const availableTabs = [
+		{ id: 'translate', label: 'Translate', icon: Globe, show: true },
+		{ id: 'explain', label: 'Explain', icon: Lightbulb, show: true },
+		{ id: 'audio', label: 'Audio', icon: Headphones, show: true },
+		{ id: 'paragraph', label: 'Paragraph', icon: NotebookText, show: true },
+	].filter(tab => tab.show);
+
+	// Shared Tabs Content Component
+	const TabsContentComponent = () => (
+		<div className="space-y-4">
+			{/* Shared Language Selector */}
+			<div className="flex items-center gap-3 flex-wrap p-3 rounded-lg border bg-muted/50">
+				<span className="text-sm font-medium text-foreground">Language:</span>
+				<div className="flex gap-2 flex-wrap">
+					{LANG_MAP.map((lang) => (
+						<Button
+							key={lang.id}
+							size="sm"
+							variant={selectedLang === lang.id ? "default" : "outline"}
+							onClick={() => handleLanguageChange(lang.id)}
+							className="text-xs"
+						>
+							<span className="mr-1">{lang.flag}</span>
+							<span className="hidden sm:inline">{lang.name}</span>
+						</Button>
+					))}
+				</div>
+			</div>
+
+			<Tabs defaultValue="translate" className="w-full">
+				<TabsList
+					className="grid w-full bg-background/80"
+					style={{ gridTemplateColumns: `repeat(${availableTabs.length}, minmax(0, 1fr))` }}
+				>
+					{availableTabs.map(tab => (
+						<TabsTrigger
+							key={tab.id}
+							value={tab.id}
+							className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4"
+						>
+							<tab.icon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+							<span className="text-xs sm:text-sm truncate">{tab.label}</span>
+						</TabsTrigger>
+					))}
+				</TabsList>
+
+				<TabsContent value="translate" className="mt-4 space-y-3">
+					<div className="flex justify-center">
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={handleTranslate}
+							disabled={translationHook.isTranslatePending}
+							className="w-full max-w-xs text-sm font-semibold border-primary"
+						>
+							{translationHook.isTranslatePending ? 'Translating...' : 'Translate this question'}
+						</Button>
+					</div>
+					<TranslationCard
+						translateScript={translationHook.translateScript[questionId]}
+						isTranslatePending={translationHook.isTranslatePending}
+					/>
+				</TabsContent>
+
+				<TabsContent value="explain" className="mt-4 space-y-3">
+					<div className="flex justify-center">
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={handleExplain}
+							disabled={explainationHook.isExplainPending}
+							className="w-full max-w-xs text-sm font-semibold border-primary"
+						>
+							{explainationHook.isExplainPending ? 'Explaining...' : 'Explain this question'}
+						</Button>
+					</div>
+					<ExplainationCard
+						explainScript={explainationHook.explainScript[questionId]}
+						isExplainPending={explainationHook.isExplainPending}
+					/>
+				</TabsContent>
+
+				<TabsContent value="audio" className="mt-4 space-y-3">
+					<div className="flex justify-center">
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={() => console.log(questionId)}
+							className="w-full max-w-xs text-sm font-semibold border-primary"
+						>
+							Translate this audio script
+						</Button>
+					</div>
+					<TranslateAudioScriptCard audioScript={audioScript} />
+				</TabsContent>
+
+				<TabsContent value="paragraph" className="mt-4">
+					<TranslateMainParagraphCard />
+				</TabsContent>
+			</Tabs>
+		</div>
+	);
 
 	return (
-		<div className="space-y-2">
-			{/* Toggle Button for AI Help Section */}
+		<div className="mb-4">
 			<Button
 				size="sm"
 				variant="outline"
 				onClick={() => setIsHelpExpanded(!isHelpExpanded)}
-				className="flex items-center gap-2 text-sm font-semibold w-fit"
+				className="flex items-center gap-2 text-sm font-semibold bg-primary/5 border-primary/20 hover:bg-primary/10 w-full sm:w-auto"
 			>
-				<Sparkles className="fill-primary text-primary" />
-				{isHelpExpanded ? 'Hide AI Help' : 'Show AI Help'}
+				<Sparkles className="fill-primary text-primary w-4 h-4" />
+				<span>AI Assistant</span>
 				{isHelpExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
 			</Button>
 
-			{/* Tabbed AI Help Section */}
 			{isHelpExpanded && (
-				<Tabs defaultValue="translation" className="w-full">
-					<TabsList className="grid w-full grid-cols-3">
-						<TabsTrigger value="translation" className="flex items-center gap-2">
-							<Globe className="w-4 h-4" />
-							<span className="hidden sm:inline">Translation</span>
-							<span className="sm:hidden">Trans.</span>
-						</TabsTrigger>
-						<TabsTrigger value="explanation" className="flex items-center gap-2">
-							<Lightbulb className="w-4 h-4" />
-							<span className="hidden sm:inline">Explanation</span>
-							<span className="sm:hidden">Explain</span>
-						</TabsTrigger>
-						<TabsTrigger value="audio-script" className="flex items-center gap-2">
-							<Headphones className="w-4 h-4" />
-							<span className="hidden sm:inline">Audio Script</span>
-							<span className="sm:hidden">Audio</span>
-						</TabsTrigger>
-					</TabsList>
-
-					<TabsContent value="translation" className="mt-2">
-						<TranslationCard
-							translateScript={translateScript[questionId]}
-							selectedLanguage={getSelectedTranslateLanguage(questionId)}
-							onLanguageChange={(lang: LANG_ID) => handleSelectTranslateLanguage(questionId, lang)}
-							onTranslate={() => handleTranslation(questionId)}
-							isTranslatePending={isTranslatePending}
-							isTranslateError={isTranslateError}
-						/>
-					</TabsContent>
-
-					<TabsContent value="explanation" className="mt-2">
-						<ExplainationCard
-							explainScript={explainScript[questionId]}
-							selectedLanguage={getSelectedExplainLanguage(questionId)}
-							onLanguageChange={(lang: LANG_ID) => handleSelectExplainLanguage(questionId, lang)}
-							onExplain={() => handlExplaination(questionId)}
-							isExplainPending={isExplainPending}
-							isExplainError={isExplainError}
-						/>
-					</TabsContent>
-
-					<TabsContent value="audio-script" className="mt-2">
-						<Card className="bg-primary/5 border-primary/20 p-0">
-							<CardContent className="p-3">
-								<div className="space-y-2">
-									<p className="text-sm font-medium text-muted-foreground">
-										Audio script translation will be available here
-									</p>
-									{/* TODO: Add AudioScriptCard component here */}
-								</div>
-							</CardContent>
-						</Card>
-					</TabsContent>
-				</Tabs>
+				<Card className="mt-3 border-primary/20 bg-primary/5">
+					<CardContent className="p-3 sm:p-4">
+						<TabsContentComponent />
+					</CardContent>
+				</Card>
 			)}
 		</div>
 	)

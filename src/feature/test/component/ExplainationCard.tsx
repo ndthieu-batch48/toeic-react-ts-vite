@@ -1,61 +1,22 @@
 import { Card, CardContent } from '@/shadcn/component/ui/card';
-import { Button } from '@/shadcn/component/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shadcn/component/ui/select';
 import type { GeminiExplainQuesResp } from '@/feature/test/type/testServiceType';
-import { LANG_MAP, type LANG_ID } from '@/feature/test/const/testConst';
 import { Separator } from '@radix-ui/react-separator';
 import { Skeleton } from '@/shadcn/component/ui/skeleton';
 
-
 type ExplainationCardProps = {
 	explainScript?: GeminiExplainQuesResp;
-	selectedLanguage: LANG_ID;
-	onLanguageChange: (lang: LANG_ID) => void;
-	onExplain: () => void
 	isExplainPending: boolean;
-	isExplainError: boolean;
 }
-
 
 export const ExplainationCard: React.FC<ExplainationCardProps> = ({
 	explainScript,
-	selectedLanguage = 'vi',
-	onLanguageChange,
-	onExplain,
 	isExplainPending,
 }) => {
 	return (
 		<div className="space-y-1">
-
-
 			<Card className="bg-primary/5 border-primary/20 p-0">
 				<CardContent className="p-3">
 					<div className="space-y-2">
-						<div className="flex gap-1">
-							<Select value={selectedLanguage} onValueChange={onLanguageChange}>
-								<SelectTrigger className="w-[130px] h-8">
-									<SelectValue placeholder="Select language" />
-								</SelectTrigger>
-								<SelectContent>
-									{Object.entries(LANG_MAP).map(([langId, langName]) => (
-										<SelectItem key={langId} value={langId}>
-											{langName}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-
-							<Button
-								size="sm"
-								variant="outline"
-								onClick={onExplain}
-								disabled={isExplainPending || !selectedLanguage}
-								className="text-sm font-semibold border border-primary"
-							>
-								Explain
-							</Button>
-						</div>
-
 						<Separator />
 
 						<div className="space-y-2">

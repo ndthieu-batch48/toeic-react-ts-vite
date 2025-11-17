@@ -1,5 +1,5 @@
 import TMA_LOGO from "@/asset/image/tma_logo.png";
-import { cn } from "@/common/lib/util";
+import { cn } from "@/shadcn/lib/util";
 
 export function TmaLogo({ className, ...props }: React.ComponentProps<"div">) {
 	return (
