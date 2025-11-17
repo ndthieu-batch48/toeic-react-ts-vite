@@ -7,9 +7,9 @@ type LANG_MAP_TYPE = {
 };
 
 export const LANG_MAP: LANG_MAP_TYPE[] = [
-  { id: "vi", name: "Vietnamese", flag: "🇻🇳" },
-  { id: "en", name: "English", flag: "🇬🇧" },
-  { id: "ja", name: "Japanese", flag: "🇯🇵" }
+  { id: "vi", name: "VN", flag: "vn" },
+  { id: "en", name: "EN", flag: "uk" },
+  { id: "ja", name: "JP", flag: "jp" }
 ];
 
 

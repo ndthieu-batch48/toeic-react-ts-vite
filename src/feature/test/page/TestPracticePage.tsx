@@ -18,7 +18,7 @@ type TestPracticePageProps = {
 export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, testTitle, partData }) => {
 	const navigate = useNavigate()
 	const { isScrolling, scrollPosition } = useScrollControl('window');
-	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitOrSave, setIsSubmitOrSave } = useTestContext()
+	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitOrSave, isCancel, setIsSubmitOrSave } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const getTotalQuestion = () => {
@@ -58,11 +58,11 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, test
 
 	useBlocker({
 		shouldBlockFn: () => {
-			if (isSubmitOrSave) {
-				return false; // User is submitting/saving - allow navigation
+			if (isSubmitOrSave || isCancel) {
+				return false; // User is submitting/saving/canceling - allow navigation
 			}
 
-			// User is NOT submitting/saving - Block and show confirmation
+			// User is NOT submitting/saving/canceling - Block and show confirmation
 			const shouldLeave = confirm(
 				"You're about to quit the test. Your current answers will be submitted. Are you sure you want to continue?"
 			);

@@ -1,7 +1,7 @@
 import { Headphones } from "lucide-react"
 
 interface TranslateAudioScriptCardProps {
-	audioScript?: string
+	audioScript: string
 }
 
 export const TranslateAudioScriptCard: React.FC<TranslateAudioScriptCardProps> = ({ audioScript }) => {
@@ -11,15 +11,9 @@ export const TranslateAudioScriptCard: React.FC<TranslateAudioScriptCardProps> =
 				<Headphones className="w-4 h-4 text-primary" />
 				Audio Script
 			</h4>
-			{audioScript ? (
-				<p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-					{audioScript}
-				</p>
-			) : (
-				<p className="text-sm text-muted-foreground italic">
-					No audio script available for this question.
-				</p>
-			)}
+			<p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+				{audioScript}
+			</p>
 		</div>
 	)
 }

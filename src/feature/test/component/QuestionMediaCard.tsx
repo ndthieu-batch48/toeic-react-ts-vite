@@ -4,30 +4,33 @@ import { Label } from '@/shadcn/component/ui/label'
 import { Badge } from '@/shadcn/component/ui/badge'
 import { Separator } from '@/shadcn/component/ui/separator'
 import { MainParagraph } from './MainParagraph'
-import type { QuesDetailRes, GeminiTransQuesResp } from '../type/testServiceType'
+import type { MediaQuesDetailRes } from '../type/testServiceType'
 import { useTestContext } from '../context/TestContext'
 import { isMainParagraphHasContent } from '../helper/testHelper'
 import { Button } from '@/shadcn/component/ui/button'
 import { Flag } from 'lucide-react'
 import { useTestScrollContext } from '../context/TestScrollContext'
-import { GeminiAssistCard } from './GeminiAssist'
+import { GeminiAssistCard } from './GeminiAssistCard'
 import { useTranslationCard } from '../hook/useTranslationCard'
 import { useExplainationCard } from '../hook/useExplainationCard'
 
 type QuestionMediaCardProps = {
-	mediaName: string,
-	paragraphMain: string,
-	translateScript?: GeminiTransQuesResp
-	audioScript?: string
-	questionData: QuesDetailRes[],
+	media: MediaQuesDetailRes,
 }
 
 export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
-	mediaName,
-	paragraphMain,
-	audioScript,
-	questionData,
+	media,
 }) => {
+	const {
+		media_ques_id: mediaId,
+		media_ques_name: mediaName,
+		media_ques_main_parag: paragraphMain,
+		media_ques_audio_script: audioScript,
+		// media_ques_explain,
+		// media_ques_trans_script,
+		ques_list: questionData,
+	} = media
+
 
 	// SCROLL LOGIC
 	const { setScrollTarget } = useTestScrollContext()
@@ -73,11 +76,13 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 
 	return (
 		<Card className="w-full mx-auto mb-3">
-			<CardHeader>
-				<Badge className="text-lg font-semibold">
-					Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
-				</Badge>
-			</CardHeader>
+			{questionData.length > 1 && (
+				<CardHeader>
+					<Badge className="text-lg font-semibold">
+						Questions {mediaName.replace(/<\/?p>/g, '')} refer to the following
+					</Badge>
+				</CardHeader>
+			)}
 
 			<CardContent className="flex flex-col md:flex-row gap-2">
 				{hasContent && (
@@ -110,11 +115,19 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 											className="hover:bg-background" >
 											<Flag className="fill-marker text-marker" />
 										</Button>
-										<Badge
-											variant='outline'
-											className="text-base font-semibold border-primary">
-											{question.ques_number}
-										</Badge>
+										{questionData.length > 1 ? (
+											<Badge
+												variant='outline'
+												className="text-base font-semibold border-primary">
+												{question.ques_number}
+											</Badge>
+										) :
+											<Badge
+												variant='default'
+												className="text-base font-semibold ">
+												Question {question.ques_number}
+											</Badge>
+										}
 
 										<Label className="text-base font-medium flex-1 min-w-0">
 											{question.ques_content}
@@ -123,13 +136,13 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								</div>
 								{testType === 'practice' &&
 									<GeminiAssistCard
+										mediaId={mediaId}
 										questionId={question.ques_id}
 										translationHook={translationHook}
 										explainationHook={explainationHook}
 										audioScript={audioScript}
 									/>
 								}
-
 
 								<div>
 									<Label className="mb-2">

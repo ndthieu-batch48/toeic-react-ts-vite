@@ -8,7 +8,7 @@ import { useSolutionContext } from '../context/SolutionContext'
 import { useSolutionScrollContext } from '../context/SolutionScrollContext'
 import { MainParagraph } from '@/feature/test/component/MainParagraph'
 import { isMainParagraphHasContent } from '@/feature/test/helper/testHelper'
-import { GeminiAssistCard } from '@/feature/test/component/GeminiAssist'
+import { GeminiAssistCard } from '@/feature/test/component/GeminiAssistCard'
 import { useTranslationCard } from '@/feature/test/hook/useTranslationCard'
 import { useExplainationCard } from '@/feature/test/hook/useExplainationCard'
 

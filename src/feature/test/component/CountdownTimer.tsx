@@ -70,7 +70,7 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 	const isExpired = remainingDuration === 0 && seconds === 0
 
 	return (
-		<div className={cn("h-auto bg-transparent", className)}>
+		<div className={cn("h-auto bg-transparent text-sm", className)}>
 			{hasTimeLimit ? (
 				<div>
 					<div className="flex gap-1 pb-1">

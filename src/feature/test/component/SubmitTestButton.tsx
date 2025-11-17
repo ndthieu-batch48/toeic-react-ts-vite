@@ -17,10 +17,17 @@ import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
-	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitOrSave } = useTestContext()
+	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitOrSave, setIsCancel } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
+
+	const handleCancel = () => {
+		setIsCancel(true)
+		setTimeout(() => {
+			navigate({ to: "/test", replace: true })
+		}, 0)
+	}
 
 	const handleSubmitTest = async () => {
 		const submitPayload: HistoryCreateReq = {
@@ -69,7 +76,7 @@ export const SubmitTestButton = () => {
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
 					<Button
-						className={`font-bold h-8 text-sm ${isPracticeMode ? 'w-15 flex-1' : 'w-30'}`}
+						className="font-bold h-8 text-sm p-1"
 						variant="destructive"
 						onClick={() => { setIsSubmitOrSave(true) }}
 					>
@@ -104,7 +111,7 @@ export const SubmitTestButton = () => {
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
 						<Button
-							className="font-bold h-8 text-sm w-15 flex-1 bg-marker hover:bg-marker text-primary-foreground"
+							className="font-bold h-8 p-1 text-sm bg-marker hover:bg-marker text-primary-foreground"
 							variant="default"
 							onClick={() => { setIsSubmitOrSave(true) }}
 						>
@@ -122,7 +129,8 @@ export const SubmitTestButton = () => {
 							<AlertDialogCancel
 								className="text-base"
 								onClick={() => setIsSubmitOrSave(false)}
-							>Cancel
+							>
+								Cancel
 							</AlertDialogCancel>
 							<AlertDialogAction
 								className="text-base"
@@ -135,6 +143,34 @@ export const SubmitTestButton = () => {
 					</AlertDialogContent>
 				</AlertDialog>
 			)}
+
+			<AlertDialog>
+				<AlertDialogTrigger asChild>
+					<Button
+						className="font-bold h-8 text-sm p-1"
+						variant="outline"
+					>
+						Cancel
+					</Button>
+				</AlertDialogTrigger>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle className="text-lg">Are you sure you want to quit the test?</AlertDialogTitle>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel className="text-base">
+							Keep going
+						</AlertDialogCancel>
+						<AlertDialogAction
+							className="text-base"
+							onClick={handleCancel}
+						>
+							Confirm
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+
 		</div>
 	)
 }

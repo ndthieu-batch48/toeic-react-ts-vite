@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
 import type { PartDetailRes } from "../type/testServiceType"
 import { QuestionMediaCard } from "./QuestionMediaCard"
-import { QuestionCard } from "./QuestionCard"
+// import { QuestionCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/shadcn/lib/util"
@@ -91,7 +91,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 					</div>
 
 					{/* Right side */}
-					<div className="flex items-center gap-2 md:max-w-60">
+					<div className="flex items-center gap-2 flex-shrink-0">
 						<CountDownTimer />
 						<SubmitTestButton />
 					</div>
@@ -105,26 +105,12 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 						value={`part-${part.part_id}`}
 					>
 						<div>
-							{part.media_ques_list?.map((media, key) =>
-								media.ques_list.length === 1 ? (
-									<QuestionCard
-										key={media.media_ques_id}
-										questionData={media.ques_list[0]}
-										paragraphMain={media.media_ques_main_parag}
-										translateScript={media.media_ques_trans_script}
-										audioScript={media.media_ques_audio_script}
-									/>
-								) : (
-									<QuestionMediaCard
-										key={key}
-										mediaName={media.media_ques_name}
-										questionData={media.ques_list}
-										paragraphMain={media.media_ques_main_parag}
-										translateScript={media.media_ques_trans_script}
-										audioScript={media.media_ques_audio_script}
-									/>
-								)
-							)}
+							{part.media_ques_list?.map((media) => (
+								<QuestionMediaCard
+									key={media.media_ques_id}
+									media={media}
+								/>
+							))}
 						</div>
 					</TabsContent>
 				))
