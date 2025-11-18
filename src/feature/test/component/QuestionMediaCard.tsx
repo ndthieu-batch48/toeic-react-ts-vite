@@ -11,8 +11,9 @@ import { Button } from '@/shadcn/component/ui/button'
 import { Flag } from 'lucide-react'
 import { useTestScrollContext } from '../context/TestScrollContext'
 import { GeminiAssistCard } from './GeminiAssistCard'
-import { useTranslationCard } from '../hook/useTranslationCard'
-import { useExplainationCard } from '../hook/useExplainationCard'
+import { useState } from 'react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/component/ui/tooltip'
+import { GeminiIconFill, GeminiIconOutline } from '@/common/component/GeminiIcon'
 
 type QuestionMediaCardProps = {
 	media: MediaQuesDetailRes,
@@ -31,16 +32,9 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 		ques_list: questionData,
 	} = media
 
-
-	// SCROLL LOGIC
+	// Context data
 	const { setScrollTarget } = useTestScrollContext()
-
 	const { testType, selectedAnswers, setSelectedAnswer } = useTestContext()
-
-	const translationHook = useTranslationCard()
-	const explainationHook = useExplainationCard()
-
-	const hasContent = isMainParagraphHasContent(paragraphMain);
 
 	const handleSelectAnswer = (data: string) => {
 		const [questionId, answerId] = data.split('-');
@@ -49,6 +43,11 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 			[questionId]: answerId
 		});
 	}
+
+	// Helper function to check whether the main paragraph has content.
+	// The main paragraph can be an image for Listening Parts 1, 3, and 4,
+	// or an image/passage for Reading Parts 6 and 7.
+	const hasContent = isMainParagraphHasContent(paragraphMain);
 
 	// Helper function to get current answer value for a question
 	const getCurrentAnswerValue = (questionId: number) => {
@@ -73,6 +72,8 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 			? `${baseClass} border-primary bg-primary-foreground`
 			: `${baseClass} hover:border-primary/50 hover:bg-primary-foreground`;
 	}
+
+	const [isGemniniCardExpanded, setIsGemniniCardExpanded] = useState(false)
 
 	return (
 		<Card className="w-full mx-auto mb-3">
@@ -101,20 +102,12 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 							key={question.ques_id || index}
 							ref={(el: HTMLDivElement | null) => { setScrollTarget(question.ques_id, el) }}
 						>
-
 							{/* Question Block */}
-							<div className="flex flex-col space-y-4">
+							<div className="flex flex-col gap-2">
 
 								{/* Question Header */}
-								<div className="flex flex-col mb-5">
-
-									<div className="flex items-start gap-1">
-										<Button
-											size="icon"
-											variant="outline"
-											className="hover:bg-background" >
-											<Flag className="fill-marker text-marker" />
-										</Button>
+								<div className="flex flex-col">
+									<div className="flex gap-1">
 										{questionData.length > 1 ? (
 											<Badge
 												variant='outline'
@@ -129,21 +122,54 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 											</Badge>
 										}
 
-										<Label className="text-base font-medium flex-1 min-w-0">
-											{question.ques_content}
-										</Label>
+										<Button
+											size="icon"
+											variant="outline"
+											className="hover:bg-background">
+											<Flag className="fill-marker text-marker" />
+										</Button>
+
+										<TooltipProvider>
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<Button
+														variant='outline'
+														size="icon"
+														onClick={() => setIsGemniniCardExpanded(!isGemniniCardExpanded)}
+														className={`ml-auto ${isGemniniCardExpanded ? 'border-primary' : ''}`}
+													>
+														{isGemniniCardExpanded ? (
+															<GeminiIconFill size={30} withGlow={true} />
+														) : (
+															<GeminiIconOutline size={30} strokeWidth={2} />
+														)}
+													</Button>
+												</TooltipTrigger>
+												<TooltipContent align="end" side="bottom">
+													Get AI Help ?
+												</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+
+
 									</div>
+
+									{/* Question content */}
+									<Label className="text-base font-medium flex-1">
+										{question.ques_content}
+									</Label>
 								</div>
+
 								{testType === 'practice' &&
 									<GeminiAssistCard
+										isExpanded={isGemniniCardExpanded}
 										mediaId={mediaId}
 										questionId={question.ques_id}
-										translationHook={translationHook}
-										explainationHook={explainationHook}
 										audioScript={audioScript}
 									/>
 								}
 
+								{/* Question content */}
 								<div>
 									<Label className="mb-2">
 										Select your answer:
@@ -170,7 +196,6 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 											</Label>
 										))}
 									</RadioGroup>
-
 								</div>
 							</div>
 
@@ -179,6 +204,7 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 								<Separator className="my-6 border-border" />
 							)}
 						</div>
+
 					))}
 				</div>
 			</CardContent>

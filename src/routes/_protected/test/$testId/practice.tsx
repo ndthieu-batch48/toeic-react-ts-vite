@@ -90,7 +90,8 @@ function TestPracticeRoute() {
 		selectedParts: setup.partIdList?.map(String) ?? [],
 		selectedAnswers: setup.answerMap,
 		remainingDuration: setup.duration,
-		isSubmitOrSave: false
+		isSubmitOrSave: false,
+		isCancel: false
 	}
 
 	return (

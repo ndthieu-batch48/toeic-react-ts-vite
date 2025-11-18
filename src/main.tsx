@@ -6,6 +6,7 @@ import { routeTree } from './routeTree.gen'
 import './index.css'
 
 import { AuthProvider, useAuth } from './common/context/AuthContext'
+import { GeminiGradientDefs } from './common/component/GeminiIcon'
 
 
 const queryClient = new QueryClient({
@@ -59,6 +60,7 @@ if (!rootElement.innerHTML) {
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
 				<AuthProvider>
+					<GeminiGradientDefs />
 					<MainApp />
 				</AuthProvider>
 			</QueryClientProvider>,

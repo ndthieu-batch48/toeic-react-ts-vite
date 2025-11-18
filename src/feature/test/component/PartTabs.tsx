@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
 import type { PartDetailRes } from "../type/testServiceType"
 import { QuestionMediaCard } from "./QuestionMediaCard"
-// import { QuestionCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/shadcn/lib/util"
@@ -11,7 +10,6 @@ import { Audio } from "./Audio"
 import { useTestScrollContext } from "../context/TestScrollContext"
 import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "../helper/testHelper"
-
 
 type PartTabsProps = {
 	partData: PartDetailRes[]
@@ -66,7 +64,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 				<div className="w-full flex items-center justify-between mb-2">
 					{/* TabsList */}
 					<TabsList
-						className="h-auto w-auto grid gap-1 bg-transparent p-0"
+						className="h-auto w-auto grid gap-1 bg-transparent p-0 z-55"
 						style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
 					>
 						{partData.map((part, index) => (
@@ -85,7 +83,6 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 						))}
 					</TabsList>
 
-
 					<div className="w-full max-w-2xl flex-1 mx-2">
 						<Audio />
 					</div>
@@ -98,22 +95,21 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 				</div>
 			</div>
 
-			{
-				partData.map((part, index) => (
-					<TabsContent
-						key={part.part_id || index}
-						value={`part-${part.part_id}`}
-					>
-						<div>
-							{part.media_ques_list?.map((media) => (
-								<QuestionMediaCard
-									key={media.media_ques_id}
-									media={media}
-								/>
-							))}
-						</div>
-					</TabsContent>
-				))
+			{partData.map((part, index) => (
+				<TabsContent
+					key={part.part_id || index}
+					value={`part-${part.part_id}`}
+				>
+					<div>
+						{part.media_ques_list?.map((media) => (
+							<QuestionMediaCard
+								key={media.media_ques_id}
+								media={media}
+							/>
+						))}
+					</div>
+				</TabsContent>
+			))
 			}
 		</Tabs >
 	)

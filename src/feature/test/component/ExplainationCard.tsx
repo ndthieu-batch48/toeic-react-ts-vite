@@ -13,8 +13,8 @@ export const ExplainationCard: React.FC<ExplainationCardProps> = ({
 	isExplainPending,
 }) => {
 	return (
-		<div className="space-y-1">
-			<Card className="bg-primary/5 border-primary/20 p-0">
+		<div className="w-full">
+			<Card className="bg-primary/5 border-primary/20 p-0 w-full">
 				<CardContent className="p-3">
 					<div className="space-y-2">
 						<Separator />
