@@ -1,33 +1,33 @@
 import type { TestType } from "@/feature/test/const/testConst";
 
-export interface HistoryResp {
+export interface HistoryResponse {
   id: number;
-  dataprog: Record<string, string>;
+  data_progress: Record<string, string>;
   type: TestType;
   part_id_list: string[];
-  dura: number;
+  duration: number;
   test_id: number;
   user_id: number;
   create_at: string;
   status: "save" | "submit";
 }
 
-export interface HistoryCreateReq {
-  dataprog: Record<string, string>;
+export interface HistoryCreateRequest {
+  data_progress: Record<string, string>;
   type: TestType;
   part_id_list: string[];
-  dura: number;
+  duration: number;
   test_id: number;
   status: "save" | "submit";
 }
 
-export interface HistoryCreateResp {
+export interface HistoryCreateResponse {
   history_id: number
   status: string
   message: string
 }
 
-export interface HistoryResultDetailResp {
+export interface HistoryResultDetailResponse {
   history_id: number;
   test_id: number;
   test_type: TestType;
@@ -36,12 +36,12 @@ export interface HistoryResultDetailResp {
   incorrect_count: number;
   correct_listening: number;
   correct_reading: number;
-  no_ans: number;
-  total_ques: number;
+  no_answer: number;
+  total_question: number;
   accuracy: number;
-  dura: number;
+  duration: number;
   create_at: string;
-  dataprog: Record<string, string>
+  data_progress: Record<string, string>
   part_id_list: string[];
 }
 
@@ -51,7 +51,7 @@ export interface HistoryResultListRes {
   test_id: number;
   test_type: TestType;
   test_name: string;
-  dura: number;
+  duration: number;
   part_id_list: string[];
   part_order_list: string[];
   create_at: string;

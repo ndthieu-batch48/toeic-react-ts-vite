@@ -187,7 +187,7 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 										</div>
 										<div className="flex items-center gap-1.5">
 											<Clock className="w-3.5 h-3.5" />
-											<span>{formatDuration(history.dura)}</span>
+											<span>{formatDuration(history.duration)}</span>
 										</div>
 									</div>
 

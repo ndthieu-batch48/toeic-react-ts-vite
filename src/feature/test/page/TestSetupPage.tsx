@@ -4,17 +4,16 @@ import { Button } from '@/shadcn/component/ui/button'
 import { Checkbox } from '@/shadcn/component/ui/checkbox'
 import { Separator } from '@/shadcn/component/ui/separator'
 import { Clock, Info } from 'lucide-react'
-import type { TestSummaryRes, PartSummaryRes } from '../type/testServiceType'
+import type { TestSummaryResponse, PartSummaryResponse } from '../type/testServiceType'
 import { useNavigate } from '@tanstack/react-router'
-import { TimePicker } from '../component/TimePicker'
-import type { HistoryResp } from '@/feature/history/type/historyServiceType'
+import type { HistoryResponse } from '@/feature/history/type/historyServiceType'
 import { Label } from '@/shadcn/component/ui/label'
 import { getToeicPartDescription, getToeicPartTopic } from '../helper/testHelper'
 import { TEST_TYPE } from '../const/testConst'
 
 interface TestSetupProps {
-	currentTest: TestSummaryRes
-	saveHistoryData?: HistoryResp
+	currentTest: TestSummaryResponse
+	saveHistoryData?: HistoryResponse
 }
 
 const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData }) => {
@@ -22,7 +21,6 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 
 	const [isPracticeTest, setIsPracticeTest] = useState<boolean>(true)
 	const [selectedPartIds, setSelectedPartIds] = useState<Set<number>>(new Set())
-	const [timeLimit, setTimeLimit] = useState<string>("")
 
 	const handlePartSelect = (partId: number) => {
 		setSelectedPartIds(prev => {
@@ -38,7 +36,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 
 	const isPartsSelected = selectedPartIds.size > 0
 
-	const getSelectedParts = (): PartSummaryRes[] | [] => {
+	const getSelectedParts = (): PartSummaryResponse[] | [] => {
 		if (isPracticeTest) {
 			return currentTest.part_list.filter(part => selectedPartIds.has(part.part_id))
 		}
@@ -50,7 +48,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 	}
 
 	const getTotalQuestions = (): number => {
-		return getSelectedParts().reduce((total, part) => total + part.total_ques, 0)
+		return getSelectedParts().reduce((total, part) => total + part.total_question, 0)
 	}
 
 	const handleStartTest = () => {
@@ -61,8 +59,8 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 			type: getTestType(),
 			selectedPartIds: selectedParts.map(p => p.part_id),
 			timeLimit: isPracticeTest
-				? (timeLimit ? parseInt(timeLimit) : 0)
-				: currentTest.test_dura,
+				? 0
+				: currentTest.test_duration,
 		}
 
 		navigate({
@@ -85,7 +83,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 			testTitle: currentTest.test_title,
 			testId: String(saveHistoryData.test_id),
 			selectedPartIds: saveHistoryData.part_id_list,
-			timeLimit: saveHistoryData.dura,
+			timeLimit: saveHistoryData.duration,
 		}
 
 		navigate({
@@ -142,7 +140,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 				<div className="flex items-start text-muted-foreground text-base gap-1 pb-2">
 					<h1 className="text-2xl font-bold text-foreground pr-2">{currentTest.test_title}</h1>
 					<Clock />
-					<span>Standard duration: {currentTest.test_dura} minutes</span>
+					<span>Standard duration: {currentTest.test_duration} minutes</span>
 				</div>
 			</div>
 
@@ -206,11 +204,6 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 										Deselect All
 									</Button>
 								</div>
-								<TimePicker
-									timeLimit={timeLimit}
-									onTimeLimitChange={setTimeLimit}
-									testDuration={String(currentTest.test_dura)}
-								/>
 							</div>
 
 							<Separator className="my-3" />
@@ -230,7 +223,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 										<span>{part.part_order}:</span>
 										<span>{getToeicPartTopic(part.part_order)}</span>
 										<span className="text-muted-foreground">-</span>
-										<span className="text-muted-foreground">{part.total_ques} questions</span>
+										<span className="text-muted-foreground">{part.total_question} questions</span>
 									</Label>
 
 									<p className="text-muted-foreground text-sm pl-6">
@@ -274,7 +267,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 										<span>{part.part_order}:</span>
 										<span>{getToeicPartTopic(part.part_order)}</span>
 										<span className="text-muted-foreground">-</span>
-										<span className="text-muted-foreground">{part.total_ques} questions</span>
+										<span className="text-muted-foreground">{part.total_question} questions</span>
 									</Label>
 
 									<p className="text-muted-foreground text-sm pl-6">

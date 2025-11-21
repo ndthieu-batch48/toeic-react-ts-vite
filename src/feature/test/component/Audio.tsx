@@ -64,7 +64,6 @@ export const Audio = () => {
 		const audioElement = audioRef.current;
 
 		if (audioElement && audioUrl) {
-			console.log("Resetting audio state and loading new URL");
 
 			// Reset all states
 			setIsPlaying(false);
@@ -78,7 +77,6 @@ export const Audio = () => {
 
 			// Add a one-time listener for when metadata loads
 			const handleLoadedMetadata = () => {
-				console.log("Metadata loaded, duration:", audioElement.duration);
 				setDuration(audioElement.duration || 0);
 				setAudioLoading(false);
 			};

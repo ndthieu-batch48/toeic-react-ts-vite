@@ -1,24 +1,24 @@
 import { queryOptions, mutationOptions } from '@tanstack/react-query';
 import { axiosJWT } from '@/common/lib/axios';
 import type {
-  HistoryCreateReq,
-  HistoryResp,
-  HistoryResultDetailResp,
+  HistoryCreateRequest,
+  HistoryResponse,
+  HistoryResultDetailResponse,
   HistoryResultListRes,
-  HistoryCreateResp
+  HistoryCreateResponse
 } from '../type/historyServiceType';
 
 // ========== Services ==========
 const historyService = {
-  create: async (request: HistoryCreateReq) => {
+  create: async (request: HistoryCreateRequest) => {
     const url = 'histories';
-    const response = await axiosJWT.post<HistoryCreateResp>(url, request);
+    const response = await axiosJWT.post<HistoryCreateResponse>(url, request);
     return response.data;
   },
 
-  getSaveProgress: async (testId: number): Promise<HistoryResp> => {
+  getSaveProgress: async (testId: number): Promise<HistoryResponse> => {
     const url = 'histories/save';
-    const response = await axiosJWT.get<HistoryResp>(url, {
+    const response = await axiosJWT.get<HistoryResponse>(url, {
       params: { test_id: testId },
     });
     return response.data;
@@ -30,9 +30,9 @@ const historyService = {
     return response.data;
   },
 
-  getResultDetail: async (historyId: number): Promise<HistoryResultDetailResp> => {
+  getResultDetail: async (historyId: number): Promise<HistoryResultDetailResponse> => {
     const url = 'histories/result/detail';
-    const response = await axiosJWT.get<HistoryResultDetailResp>(url, {
+    const response = await axiosJWT.get<HistoryResultDetailResponse>(url, {
       params: { history_id: historyId },
     });
     return response.data;

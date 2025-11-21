@@ -10,13 +10,17 @@ type CountDownTimerProps = {
 
 export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => {
 	const { remainingDuration, setRemainingDuration } = useTestContext()
+
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
-	const [seconds, setSeconds] = useState<number>(0) // Track seconds within the current minute
 	const initialDurationRef = useRef<number>(remainingDuration) // Store initial duration to calculate progress
+
+	const [seconds, setSeconds] = useState<number>(0) // Track seconds within the current minute (countdown mode)
+	const [elapsedSeconds, setElapsedSeconds] = useState<number>(0) // Track total elapsed seconds when counting up
 	const [hasTimeLimit] = useState<boolean>(remainingDuration > 0) // Initialize hasTimeLimit and keep it constant
 
 	// Convert minutes to total seconds for display
 	const totalSecondsLeft = (remainingDuration * 60) + seconds
+	const displaySeconds = hasTimeLimit ? totalSecondsLeft : elapsedSeconds
 
 	// Set initial duration on first render
 	useEffect(() => {
@@ -25,26 +29,28 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 		}
 	}, [remainingDuration])
 
-	// Start the countdown timer (count down every second)
+	// Start the timer interval depending on mode
 	useEffect(() => {
 		if (hasTimeLimit) {
 			intervalRef.current = setInterval(() => {
 				setSeconds(prevSeconds => {
+					if (remainingDuration === 0 && prevSeconds === 0) {
+						return 0
+					}
 					if (prevSeconds > 0) {
-						// Decrement seconds
 						return prevSeconds - 1
-					} else if (remainingDuration > 0) {
-						// When seconds reach 0, decrement minutes and reset seconds to 59
-						setRemainingDuration(remainingDuration - 1)
+					} else {
+						if (remainingDuration > 0) {
+							setRemainingDuration(Math.max(remainingDuration - 1, 0))
+						}
 						return 59
 					}
-					return 0
 				})
 			}, 1000)
 		} else {
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current)
-			}
+			intervalRef.current = setInterval(() => {
+				setElapsedSeconds(prev => prev + 1)
+			}, 1000)
 		}
 
 		return () => {
@@ -82,7 +88,7 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 							</span>
 						) : (
 							<span className="text-primary font-semibold">
-								{formatTime(totalSecondsLeft)}
+								{formatTime(displaySeconds)}
 							</span>
 						)}
 
@@ -94,8 +100,14 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 					/>
 				</div>
 			) : (
-				<>
-				</>
+				<div>
+					<div className="flex gap-1 pb-1">
+						<AlarmClock className="text-primary" />
+						<span className="text-primary font-semibold">
+							{formatTime(displaySeconds)}
+						</span>
+					</div>
+				</div>
 			)}
 		</div>
 	)

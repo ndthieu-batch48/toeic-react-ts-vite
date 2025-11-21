@@ -1,21 +1,25 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
-import { SolutionQuestionMediaCard } from "./SolutionQuestionMediaCard"
-import { SolutionQuestionCard } from "./SolutionQuestionCard"
+import { SolutionQuestionMediaCard } from "./SolutionQuestionCard"
 import { SolutionAudio } from "./SolutionAudio"
 import { cn } from "@/shadcn/lib/util"
 import React, { useEffect } from "react"
-import type { PartDetailRes } from "@/feature/test/type/testServiceType"
+import type { PartDetailResponse } from "@/feature/test/type/testServiceType"
 import { useSolutionContext } from "../context/SolutionContext"
 import { useSolutionScrollContext } from "../context/SolutionScrollContext"
 import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "@/feature/test/helper/testHelper"
+import { Button } from "@/shadcn/component/ui/button"
+import { useNavigate } from "@tanstack/react-router"
+import { Home } from "lucide-react"
 
 type SolutionPartTabsProps = {
-	partData: PartDetailRes[]
+	partData: PartDetailResponse[]
 	className?: string,
 }
 
 const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, partData }) => {
+	const navigate = useNavigate()
+
 	// TAB CHANGE LOGIC
 	const { activeQuestion, setActivePart } = useSolutionContext()
 
@@ -26,8 +30,8 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 		const partId = parseInt(value.replace('part-', ''))
 		const part = partData.find(p => p.part_id === partId)
 
-		if (part && part.media_ques_list?.[0]?.ques_list?.[0]) {
-			const firstQuestionId = part.media_ques_list[0].ques_list[0].ques_id
+		if (part && part.media_question_list?.[0]?.question_list?.[0]) {
+			const firstQuestionId = part.media_question_list[0].question_list[0].question_id
 			setActivePart(partId, firstQuestionId)
 		}
 	}
@@ -85,7 +89,23 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 						<SolutionAudio />
 					</div>
 
+					<div className="flex">
+						<Button
+							size='lg'
+							variant="outline"
+							className="gap-2 border-primary"
+							onClick={() => {
+								navigate({ to: '/test' })
+							}}
+						>
+							<Home className="text-primary" />
+							Go to home page
+						</Button>
+					</div>
+
 				</div>
+
+
 			</div>
 
 			{
@@ -95,25 +115,11 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 						value={`part-${part.part_id}`}
 					>
 						<div>
-							{part.media_ques_list?.map((media, key) =>
-								media.ques_list.length === 1 ? (
-									<SolutionQuestionCard
-										key={media.media_ques_id}
-										mediaId={media.media_ques_id}
-										questionData={media.ques_list[0]}
-										paragraphMain={media.media_ques_main_parag}
-										translateScript={media.media_ques_trans_script}
-									/>
-								) : (
-									<SolutionQuestionMediaCard
-										key={key}
-										mediaId={media.media_ques_id}
-										mediaName={media.media_ques_name}
-										paragraphMain={media.media_ques_main_parag}
-										questionData={media.ques_list}
-										translateScript={media.media_ques_trans_script}
-									/>
-								)
+							{part.media_question_list?.map((media) =>
+								<SolutionQuestionMediaCard
+									key={media.media_question_id}
+									mediaQuestion={media}
+								/>
 							)}
 						</div>
 					</TabsContent>

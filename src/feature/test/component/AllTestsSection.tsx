@@ -3,10 +3,10 @@ import { Button } from "@/shadcn/component/ui/button";
 import { Badge } from '@/shadcn/component/ui/badge'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/shadcn/component/ui/card";
 import { BookOpen, Clock, FileText, PlayCircle } from "lucide-react";
-import type { TestSummaryRes } from "../type/testServiceType";
+import type { TestSummaryResponse } from "../type/testServiceType";
 
 type AllTestsSection = React.ComponentProps<"section"> & {
-	availableTests: TestSummaryRes[]
+	availableTests: TestSummaryResponse[]
 	testProgressMap: Record<number, boolean>
 }
 
@@ -22,13 +22,13 @@ export function AllTestsSection({ availableTests, testProgressMap }: AllTestsSec
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{availableTests.map((test) => {
-					const totalQues = test.part_list.reduce((sum, part) => sum + part.total_ques, 0);
+					const totalQues = test.part_list.reduce((sum, part) => sum + part.total_question, 0);
 					const hasSavedProgress = testProgressMap[test.test_id] || false;
 
 					return (
 						<Card
 							key={test.test_id}
-							className={`hover:shadow-lg hover:cursor-pointer transition-shadow bg-card border-border md:min-w-[300px] ${hasSavedProgress ? 'border-primary/50' : ''}`}
+							className={`hover:shadow-lg transition-shadow bg-card border-border md:min-w-[300px] ${hasSavedProgress ? 'border-primary/50' : ''}`}
 						>
 
 							<CardHeader className="space-y-3">
@@ -52,7 +52,7 @@ export function AllTestsSection({ availableTests, testProgressMap }: AllTestsSec
 										)}
 									</div>
 								</div>
-								<p className="text-sm text-muted-foreground">{test.test_descrip}</p>
+								<p className="text-sm text-muted-foreground">{test.test_description}</p>
 							</CardHeader>
 
 							<CardContent className="space-y-4">
@@ -68,7 +68,7 @@ export function AllTestsSection({ availableTests, testProgressMap }: AllTestsSec
 								<div className="flex items-center gap-4 text-sm text-muted-foreground">
 									<div className="flex items-center gap-2">
 										<Clock className="w-4 h-4" />
-										<span>{test.test_dura} minutes</span>
+										<span>{test.test_duration} minutes</span>
 									</div>
 									<div className="flex items-center gap-2">
 										<FileText className="w-4 h-4" />

@@ -1,4 +1,4 @@
-import type { PartDetailRes } from "../type/testServiceType"
+import type { PartDetailResponse } from "../type/testServiceType"
 import { PartTab } from "../component/PartTabs"
 import { QuestionTab } from "../component/QuestionTab"
 
@@ -7,12 +7,12 @@ import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useTestContext } from "../context/TestContext"
 import { useBlocker, useNavigate } from "@tanstack/react-router"
 import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
-import type { HistoryCreateReq } from "@/feature/history/type/historyServiceType"
+import type { HistoryCreateRequest } from "@/feature/history/type/historyServiceType"
 
 type TestPracticePageProps = {
 	testId: number
 	testTitle: string
-	partData: PartDetailRes[],
+	partData: PartDetailResponse[],
 }
 
 export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, testTitle, partData }) => {
@@ -23,20 +23,20 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, test
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
-			const partQuestions = part.media_ques_list?.reduce((partTotal, media) => {
-				return partTotal + (media.ques_list?.length || 0);
+			const partQuestions = part.media_question_list?.reduce((partTotal, media) => {
+				return partTotal + (media.question_list?.length || 0);
 			}, 0) || 0;
 			return totalQuestions + partQuestions;
 		}, 0);
 	}
 
 	const handleAutoSubmit = async () => {
-		const submitPayload: HistoryCreateReq = {
+		const submitPayload: HistoryCreateRequest = {
 			test_id: testId,
 			type: testType,
-			dataprog: selectedAnswers,
+			data_progress: selectedAnswers,
 			part_id_list: selectedParts,
-			dura: remainingDuration / 60,
+			duration: remainingDuration / 60,
 			status: 'submit'
 		}
 

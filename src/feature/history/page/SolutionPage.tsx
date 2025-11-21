@@ -1,16 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/component/ui/card"
 
-import type { PartDetailRes } from "@/feature/test/type/testServiceType"
+import type { PartDetailResponse } from "@/feature/test/type/testServiceType"
 import { SolutionPartTab } from "../component/SolutionPartTabs"
 import { SolutionQuestionTab } from "../component/SolutionQuestionTab"
-import type { HistoryResultDetailResp } from "../type/historyServiceType"
+import type { HistoryResultDetailResponse } from "../type/historyServiceType"
 import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useSolutionContext } from "../context/SolutionContext"
 
 
 type SolutionPageProps = {
-	detailHistory: HistoryResultDetailResp
-	partData: PartDetailRes[]
+	detailHistory: HistoryResultDetailResponse
+	partData: PartDetailResponse[]
 	testTitle: string
 }
 
@@ -20,8 +20,8 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData, testTitle 
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
-			const partQuestions = part.media_ques_list?.reduce((partTotal, media) => {
-				return partTotal + (media.ques_list?.length || 0);
+			const partQuestions = part.media_question_list?.reduce((partTotal, media) => {
+				return partTotal + (media.question_list?.length || 0);
 			}, 0) || 0;
 			return totalQuestions + partQuestions;
 		}, 0);
@@ -30,7 +30,7 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData, testTitle 
 	return (
 		<div className="bg-background">
 
-			<div className="flex flex-col md:flex-row pb-10">
+			<div className="flex flex-col md:flex-row pt-20 pb-10">
 
 				<SolutionPartTab
 					className="flex-1 min-w-0"

@@ -56,8 +56,8 @@ function TestPracticeRoute() {
 
 	const setup = {
 		partIdList: testDataFromHistory?.part_id_list.map(Number) ?? selectedPartIds,
-		answerMap: testDataFromHistory?.dataprog ?? {},
-		duration: testDataFromHistory?.dura ?? timeLimit,
+		answerMap: testDataFromHistory?.data_progress ?? {},
+		duration: testDataFromHistory?.duration ?? timeLimit,
 	};
 
 	const sortedPartList = testData.part_list
@@ -71,15 +71,15 @@ function TestPracticeRoute() {
 		})
 		.map((part) => ({
 			...part,
-			media_ques_list: part.media_ques_list ? mediaQuestionSorter(part.media_ques_list) : [],
+			media_question_list: part.media_question_list ? mediaQuestionSorter(part.media_question_list) : [],
 		}));
 
 
 	const firstPart = sortedPartList[0];
-	const firstQuestion = firstPart?.media_ques_list?.[0]?.ques_list?.[0];
+	const firstQuestion = firstPart?.media_question_list?.[0]?.question_list?.[0];
 	const initialActive = {
 		part_id: firstPart?.part_id ?? 0,
-		question_id: firstQuestion?.ques_id ?? 0,
+		question_id: firstQuestion?.question_id ?? 0,
 	};
 
 	const initialState: TestState = {

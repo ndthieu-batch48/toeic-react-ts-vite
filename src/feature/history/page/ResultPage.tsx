@@ -2,19 +2,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shadcn/component/ui/
 import { Badge } from '@/shadcn/component/ui/badge';
 import { Progress } from '@/shadcn/component/ui/progress';
 import { Separator } from '@/shadcn/component/ui/separator';
-import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye } from 'lucide-react';
-import type { HistoryResultDetailResp } from '../type/historyServiceType';
+import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye, Home } from 'lucide-react';
+import type { HistoryResultDetailResponse } from '../type/historyServiceType';
 import { Button } from '@/shadcn/component/ui/button';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 type ResultPageProps = {
-	detailResult: HistoryResultDetailResp;
+	detailResult: HistoryResultDetailResponse;
 };
 
 const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
+	const navigate = useNavigate();
+
 	const isFailed = detailResult.accuracy < 50
-	const durationMinutes = Math.floor(detailResult.dura / 60);
-	const durationSeconds = detailResult.dura % 60;
+	const durationMinutes = Math.floor(detailResult.duration / 60);
+	const durationSeconds = detailResult.duration % 60;
 
 	// Format date
 	const testDate = new Date(detailResult.create_at).toLocaleDateString('en-US', {
@@ -27,6 +29,22 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 
 	return (
 		<div className="max-w-4xl mx-auto p-6 space-y-6">
+
+			{/* Home Button  */}
+			<div className="flex">
+				<Button
+					size='lg'
+					variant="outline"
+					className="gap-2 border-primary"
+					onClick={() => {
+						navigate({ to: '/test' })
+					}}
+				>
+					<Home className="text-primary" />
+					Go to home page
+				</Button>
+			</div>
+
 			{/* Header Section */}
 			<div className="text-center space-y-4">
 				<div className="flex items-center justify-center gap-3">
@@ -58,8 +76,8 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 						<CardTitle className="text-sm font-medium text-muted-foreground">Questions Answered</CardTitle>
 					</CardHeader>
 					<CardContent className="text-center">
-						<div className="text-4xl font-bold mb-2">{detailResult.total_ques - detailResult.no_ans}</div>
-						<p className="text-sm text-muted-foreground">of {detailResult.total_ques} total</p>
+						<div className="text-4xl font-bold mb-2">{detailResult.total_question - detailResult.no_answer}</div>
+						<p className="text-sm text-muted-foreground">of {detailResult.total_question} total</p>
 					</CardContent>
 				</Card>
 
@@ -87,7 +105,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<div className="space-y-3">
 						<div className="flex justify-between items-center">
 							<span className="text-sm font-medium">Overall Progress</span>
-							<span className="text-sm text-muted-foreground">{detailResult.correct_count}/{detailResult.total_ques}</span>
+							<span className="text-sm text-muted-foreground">{detailResult.correct_count}/{detailResult.total_question}</span>
 						</div>
 						<Progress value={detailResult.accuracy} />
 					</div>
@@ -126,7 +144,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 										<span>No Answer</span>
 									</div>
 									<Badge variant="secondary">
-										{detailResult.no_ans}
+										{detailResult.no_answer}
 									</Badge>
 								</div>
 

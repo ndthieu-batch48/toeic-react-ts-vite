@@ -1,6 +1,6 @@
 import { Button } from "@/shadcn/component/ui/button"
 import { useTestContext } from "../context/TestContext"
-import type { HistoryCreateReq } from "@/feature/history/type/historyServiceType"
+import type { HistoryCreateRequest } from "@/feature/history/type/historyServiceType"
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -30,12 +30,12 @@ export const SubmitTestButton = () => {
 	}
 
 	const handleSubmitTest = async () => {
-		const submitPayload: HistoryCreateReq = {
+		const submitPayload: HistoryCreateRequest = {
 			test_id: testId,
 			type: testType,
-			dataprog: selectedAnswers,
+			data_progress: selectedAnswers,
 			part_id_list: selectedParts,
-			dura: remainingDuration / 60,
+			duration: remainingDuration / 60,
 			status: 'submit'
 		}
 		try {
@@ -54,12 +54,12 @@ export const SubmitTestButton = () => {
 	}
 
 	const handleSaveTest = async () => {
-		const savePayload: HistoryCreateReq = {
+		const savePayload: HistoryCreateRequest = {
 			test_id: testId,
 			type: testType,
-			dataprog: selectedAnswers,
+			data_progress: selectedAnswers,
 			part_id_list: selectedParts,
-			dura: remainingDuration / 60,
+			duration: remainingDuration / 60,
 			status: 'save'
 		}
 		try {
@@ -144,33 +144,34 @@ export const SubmitTestButton = () => {
 				</AlertDialog>
 			)}
 
-			<AlertDialog>
-				<AlertDialogTrigger asChild>
-					<Button
-						className="font-bold h-8 text-sm p-1"
-						variant="outline"
-					>
-						Cancel
-					</Button>
-				</AlertDialogTrigger>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle className="text-lg">Are you sure you want to quit the test?</AlertDialogTitle>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel className="text-base">
-							Keep going
-						</AlertDialogCancel>
-						<AlertDialogAction
-							className="text-base"
-							onClick={handleCancel}
+			{isPracticeMode &&
+				<AlertDialog>
+					<AlertDialogTrigger asChild>
+						<Button
+							className="font-bold h-8 text-sm p-1"
+							variant="outline"
 						>
-							Confirm
-						</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-
+							Cancel
+						</Button>
+					</AlertDialogTrigger>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle className="text-lg">Are you sure you want to quit the test?</AlertDialogTitle>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel className="text-base">
+								Keep going
+							</AlertDialogCancel>
+							<AlertDialogAction
+								className="text-base"
+								onClick={handleCancel}
+							>
+								Confirm
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+			}
 		</div>
 	)
 }

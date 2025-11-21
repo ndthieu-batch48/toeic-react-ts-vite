@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
-import type { PartDetailRes } from "../type/testServiceType"
-import { QuestionMediaCard } from "./QuestionMediaCard"
+import type { PartDetailResponse } from "../type/testServiceType"
+import { QuestionMediaCard } from "./QuestionCard"
 import { CountDownTimer } from "./CountdownTimer"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/shadcn/lib/util"
@@ -12,7 +12,7 @@ import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "../helper/testHelper"
 
 type PartTabsProps = {
-	partData: PartDetailRes[]
+	partData: PartDetailResponse[]
 	className?: string,
 }
 
@@ -28,8 +28,8 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 		const partId = parseInt(value.replace('part-', ''))
 		const part = partData.find(p => p.part_id === partId)
 
-		if (part && part.media_ques_list?.[0]?.ques_list?.[0]) {
-			const firstQuestionId = part.media_ques_list[0].ques_list[0].ques_id
+		if (part && part.media_question_list?.[0]?.question_list?.[0]) {
+			const firstQuestionId = part.media_question_list[0].question_list[0].question_id
 			setActivePart(partId, firstQuestionId)
 		}
 	}
@@ -60,7 +60,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 		>
 
 			{/* Full Part Tab control */}
-			<div className="w-full fixed top-0 bg-background p-1">
+			<div className="w-full fixed top-0 z-25 bg-background p-1">
 				<div className="w-full flex items-center justify-between mb-2">
 					{/* TabsList */}
 					<TabsList
@@ -101,10 +101,10 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 					value={`part-${part.part_id}`}
 				>
 					<div>
-						{part.media_ques_list?.map((media) => (
+						{part.media_question_list?.map((media) => (
 							<QuestionMediaCard
-								key={media.media_ques_id}
-								media={media}
+								key={media.media_question_id}
+								mediaQuestion={media}
 							/>
 						))}
 					</div>

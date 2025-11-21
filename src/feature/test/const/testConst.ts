@@ -1,12 +1,12 @@
-export type LANG_ID = "vi" | "ja" | "en";
+export type LANGUAGE_ID = "vi" | "ja" | "en";
 
-type LANG_MAP_TYPE = {
-  id: LANG_ID;
+type LANGUAGE_MAP_TYPE = {
+  id: LANGUAGE_ID;
   name: string;
   flag: string;
 };
 
-export const LANG_MAP: LANG_MAP_TYPE[] = [
+export const LANGUAGE_MAP: LANGUAGE_MAP_TYPE[] = [
   { id: "vi", name: "VN", flag: "vn" },
   { id: "en", name: "EN", flag: "uk" },
   { id: "ja", name: "JP", flag: "jp" }

@@ -1,12 +1,12 @@
 import { AllTestsSection } from "../component/AllTestsSection"
-import type { TestSummaryRes } from "../type/testServiceType"
+import type { TestSummaryResponse } from "../type/testServiceType"
 import { Card, CardContent } from "@/shadcn/component/ui/card"
 import { Button } from "@/shadcn/component/ui/button"
 import { Link } from "@tanstack/react-router"
 import { ClipboardList, TrendingUp } from "lucide-react"
 
 type TestDashBoardPageProps = {
-	testData: TestSummaryRes[]
+	testData: TestSummaryResponse[]
 	hasHistory: boolean,
 	savedProgressMap: Record<number, boolean>
 }

@@ -1,42 +1,42 @@
 import { queryOptions, mutationOptions } from "@tanstack/react-query";
 import { axiosBase } from "@/common/lib/axios";
 import type {
-  GetPartAudioUrlReq,
-  TestDetailRes,
-  TestSummaryRes,
-  GeminiTransQuesReq,
-  GeminiTransQuesResp,
-  GeminiExplainQuesReq,
-  GeminiExplainQuesResp
+  GetPartAudioUrlRequest,
+  TestDetailResponse,
+  TestSummaryResponse,
+  GeminiTranslateQuestionRequest,
+  GeminiTranslateQuestionResponse,
+  GeminiExplainQuesRequest,
+  GeminiExplainQuestionResponse
 } from "../type/testServiceType";
 
 // ========== Services ==========
 const testService = {
-  getAll: async (): Promise<TestSummaryRes[]> => {
+  getAll: async (): Promise<TestSummaryResponse[]> => {
     const url = 'tests';
     const res = await axiosBase.get(url);
     return res.data;
   },
 
-  getById: async (id: number): Promise<TestDetailRes> => {
+  getById: async (id: number): Promise<TestDetailResponse> => {
     const url = `tests/${id}`;
     const res = await axiosBase.get(url);
     return res.data;
   },
 
-  transQuesWithGemini: async (request: GeminiTransQuesReq): Promise<GeminiTransQuesResp> => {
-    const url = 'tests/gemini/trans/ques';
+  transQuesWithGemini: async (request: GeminiTranslateQuestionRequest): Promise<GeminiTranslateQuestionResponse> => {
+    const url = 'tests/gemini/translate/question';
     const res = await axiosBase.post(url, request);
     return res.data;
   },
 
-  explainQuesWithGemini: async (request: GeminiExplainQuesReq): Promise<GeminiExplainQuesResp> => {
-    const url = 'tests/gemini/explain/ques';
+  explainQuesWithGemini: async (request: GeminiExplainQuesRequest): Promise<GeminiExplainQuestionResponse> => {
+    const url = 'tests/gemini/explain/question';
     const res = await axiosBase.post(url, request);
     return res.data;
   },
 
-  getPartAudioUrl: async (request: GetPartAudioUrlReq): Promise<string | null> => {
+  getPartAudioUrl: async (request: GetPartAudioUrlRequest): Promise<string | null> => {
     const url = `tests/${request.test_id}/part/${request.part_id}/audio/url`;
     const res = await axiosBase.get(url);
 
