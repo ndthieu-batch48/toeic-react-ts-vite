@@ -182,6 +182,8 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									mediaId={mediaId}
 									questionId={question.question_id}
 									audioScript={audioScript}
+									questionContent={question.question_content}
+									answerList={question.answer_list}
 								/>
 
 								{/* Question content */}
