@@ -14,7 +14,8 @@ export type TestState = {
 	selectedAnswers: Record<string, string> // { questionId: answerId }
 	selectedParts: string[]
 	remainingDuration: number
-	isSubmitOrSave: boolean
+	isSubmitting: boolean
+	isSaving: boolean
 	isCancel: boolean
 }
 
@@ -26,7 +27,8 @@ type TestAction =
 	| { type: 'SET_SELECTED_ANSWERS', payload: Record<string, string> }
 	| { type: 'SET_SELECTED_PARTS', payload: string[] }
 	| { type: 'SET_REMAINING_DURATION'; payload: number }
-	| { type: 'SET_IS_SUBMIT_OR_SAVE'; payload: boolean }
+	| { type: 'SET_IS_SUBMITTING'; payload: boolean }
+	| { type: 'SET_IS_SAVING'; payload: boolean }
 	| { type: 'SET_IS_CANCEL'; payload: boolean }
 
 
@@ -61,8 +63,11 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_REMAINING_DURATION':
 			newState = { ...state, remainingDuration: action.payload }
 			break
-		case 'SET_IS_SUBMIT_OR_SAVE':
-			newState = { ...state, isSubmitOrSave: action.payload }
+		case 'SET_IS_SUBMITTING':
+			newState = { ...state, isSubmitting: action.payload }
+			break
+		case 'SET_IS_SAVING':
+			newState = { ...state, isSaving: action.payload }
 			break
 		case 'SET_IS_CANCEL':
 			newState = { ...state, isCancel: action.payload }
@@ -83,7 +88,8 @@ type TestContextType = {
 	selectedAnswers: Record<string, string>
 	selectedParts: string[]
 	remainingDuration: number
-	isSubmitOrSave: boolean
+	isSubmitting: boolean
+	isSaving: boolean
 	isCancel: boolean
 
 	// Actions
@@ -94,7 +100,8 @@ type TestContextType = {
 	setSelectedAnswer: (answers: Record<string, string>) => void
 	setSelectedParts: (parts: string[]) => void
 	setRemainingDuration: (duration: number) => void
-	setIsSubmitOrSave: (action: boolean) => void
+	setIsSubmitting: (action: boolean) => void
+	setIsSaving: (action: boolean) => void
 	setIsCancel: (action: boolean) => void
 }
 
@@ -118,7 +125,8 @@ export const TestProvider = ({
 		selectedAnswers: state.selectedAnswers,
 		selectedParts: state.selectedParts,
 		remainingDuration: state.remainingDuration,
-		isSubmitOrSave: state.isSubmitOrSave,
+		isSubmitting: state.isSubmitting,
+		isSaving: state.isSaving,
 		isCancel: state.isCancel,
 
 		// Actions
@@ -143,8 +151,11 @@ export const TestProvider = ({
 		setRemainingDuration: (duration: number) =>
 			dispatch({ type: 'SET_REMAINING_DURATION', payload: duration }),
 
-		setIsSubmitOrSave: (action: boolean) =>
-			dispatch({ type: 'SET_IS_SUBMIT_OR_SAVE', payload: action }),
+		setIsSubmitting: (action: boolean) =>
+			dispatch({ type: 'SET_IS_SUBMITTING', payload: action }),
+
+		setIsSaving: (action: boolean) =>
+			dispatch({ type: 'SET_IS_SAVING', payload: action }),
 
 		setIsCancel: (action: boolean) =>
 			dispatch({ type: 'SET_IS_CANCEL', payload: action })

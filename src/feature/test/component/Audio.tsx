@@ -5,9 +5,10 @@ import { useState, useRef, useEffect } from "react"
 import { useTestContext } from "../context/TestContext"
 import { useQuery } from "@tanstack/react-query"
 import { testQuery } from "../service/testService"
+import { getAudioPlaybackPosition, saveAudioPlaybackPosition } from "../helper/testHelper"
 
 export const Audio = () => {
-	const { testId, activePart: partId, testType } = useTestContext()
+	const { testId, activePart: partId, testType, isSaving } = useTestContext()
 
 	const { data: audioUrl } = useQuery(testQuery.partAudioUrl(testId, partId))
 
@@ -18,6 +19,8 @@ export const Audio = () => {
 	const [isMuted, setIsMuted] = useState<boolean>(false)
 	const [audioLoading, setAudioLoading] = useState<boolean>(false)
 	const audioRef = useRef<HTMLAudioElement>(null)
+	const previousPartIdRef = useRef<number>(partId)
+	const currentTimeRef = useRef<number>(0)
 
 
 	useEffect(() => {
@@ -26,6 +29,7 @@ export const Audio = () => {
 
 		const updateTime = () => {
 			setCurrentTime(audioElement.currentTime);
+			currentTimeRef.current = audioElement.currentTime;
 		}
 		const handleLoadStart = () => {
 			setAudioLoading(true);
@@ -59,9 +63,24 @@ export const Audio = () => {
 		}
 	}, [volume, isMuted])
 
+	// Save all audio playback positions when user saves the test
+	useEffect(() => {
+		if (isSaving && currentTimeRef.current > 0) {
+			saveAudioPlaybackPosition(testId, partId, currentTimeRef.current);
+		}
+	}, [isSaving, testId, partId])
+
 	// Reset audio state when audio URL changes (switching parts)
 	useEffect(() => {
 		const audioElement = audioRef.current;
+
+		// Only save if we're actually switching to a different part
+		if (partId !== previousPartIdRef.current && currentTimeRef.current > 0) {
+			saveAudioPlaybackPosition(testId, previousPartIdRef.current, currentTimeRef.current);
+		}
+
+		// Update previous part ID for next switch
+		previousPartIdRef.current = partId;
 
 		if (audioElement && audioUrl) {
 
@@ -79,6 +98,12 @@ export const Audio = () => {
 			const handleLoadedMetadata = () => {
 				setDuration(audioElement.duration || 0);
 				setAudioLoading(false);
+
+				const savedPlaybackPosition = getAudioPlaybackPosition(testId, partId);
+				if (savedPlaybackPosition) {
+					audioElement.currentTime = savedPlaybackPosition;
+					setCurrentTime(savedPlaybackPosition);
+				}
 			};
 
 			const handleError = () => {
@@ -89,7 +114,7 @@ export const Audio = () => {
 			audioElement.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
 			audioElement.addEventListener('error', handleError, { once: true });
 		}
-	}, [audioUrl])
+	}, [audioUrl, testId, partId])
 
 	const togglePlayPause = () => {
 		if (!audioRef.current) return

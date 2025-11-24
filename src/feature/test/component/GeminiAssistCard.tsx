@@ -8,7 +8,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { LANGUAGE_MAP, type LANGUAGE_ID } from '@/feature/test/const/testConst'
 import { useGeminiMutation } from '../hook/useGeminiMutation'
 import { TranslateAudioScriptCard } from './TranslateAudioScriptCard'
-import { TranslateMainParagraphCard } from './TranslateMainParagraphCard'
+// import { TranslateMainParagraphCard } from './TranslateMainParagraphCard'
 import { TranslationCard } from './TranslationCard'
 import { ExplainationCard } from './ExplainationCard'
 import { GeminiGradientDefs } from '@/common/component/GeminiIcon'
@@ -149,9 +149,10 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 					</TabsContent>
 				)}
 
-				<TabsContent value="paragraph" className="mt-2">
+				{/* TODO: Implement translate main paragraph feature */}
+				{/* <TabsContent value="paragraph" className="mt-2">
 					<TranslateMainParagraphCard />
-				</TabsContent>
+				</TabsContent> */}
 			</Tabs>
 		</TooltipProvider>
 	);

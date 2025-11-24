@@ -14,15 +14,17 @@ import {
 } from "@/shadcn/component/ui/alert-dialog"
 import { useNavigate } from "@tanstack/react-router"
 import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
+import { clearAllAudioPlaybackPositions } from "../helper/testHelper"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
-	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitOrSave, setIsCancel } = useTestContext()
+	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitting, setIsSaving, setIsCancel } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
 
 	const handleCancel = () => {
+		clearAllAudioPlaybackPositions(testId)
 		setIsCancel(true)
 		setTimeout(() => {
 			navigate({ to: "/test", replace: true })
@@ -41,6 +43,7 @@ export const SubmitTestButton = () => {
 		try {
 			const result = await createHistoryMutation.mutateAsync(submitPayload)
 			if (result.status === 'submit') {
+				clearAllAudioPlaybackPositions(testId)
 				navigate({
 					to: "/history/$historyId",
 					params: { historyId: String(result.history_id) },
@@ -48,7 +51,7 @@ export const SubmitTestButton = () => {
 				})
 			}
 		} catch (error) {
-			setIsSubmitOrSave(false)
+			setIsSubmitting(false)
 			console.error('Failed to submit test:', error)
 		}
 	}
@@ -66,7 +69,7 @@ export const SubmitTestButton = () => {
 			await createHistoryMutation.mutateAsync(savePayload)
 			navigate({ to: "/test", replace: true })
 		} catch (error) {
-			setIsSubmitOrSave(false)
+			setIsSaving(false)
 			console.error('Failed to save test:', error)
 		}
 	}
@@ -78,7 +81,7 @@ export const SubmitTestButton = () => {
 					<Button
 						className="font-bold h-8 text-sm p-1"
 						variant="destructive"
-						onClick={() => { setIsSubmitOrSave(true) }}
+						onClick={() => { setIsSubmitting(true) }}
 					>
 						Submit
 					</Button>
@@ -93,7 +96,7 @@ export const SubmitTestButton = () => {
 					<AlertDialogFooter>
 						<AlertDialogCancel
 							className="text-base"
-							onClick={() => setIsSubmitOrSave(false)}
+							onClick={() => setIsSubmitting(false)}
 						>Cancel
 						</AlertDialogCancel>
 						<AlertDialogAction
@@ -113,7 +116,7 @@ export const SubmitTestButton = () => {
 						<Button
 							className="font-bold h-8 p-1 text-sm bg-marker hover:bg-marker text-primary-foreground"
 							variant="default"
-							onClick={() => { setIsSubmitOrSave(true) }}
+							onClick={() => { setIsSaving(true) }}
 						>
 							Save
 						</Button>
@@ -128,7 +131,7 @@ export const SubmitTestButton = () => {
 						<AlertDialogFooter>
 							<AlertDialogCancel
 								className="text-base"
-								onClick={() => setIsSubmitOrSave(false)}
+								onClick={() => setIsSaving(false)}
 							>
 								Cancel
 							</AlertDialogCancel>

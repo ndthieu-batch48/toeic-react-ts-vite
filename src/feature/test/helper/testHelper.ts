@@ -1,4 +1,5 @@
 import type { MediaQuestionDetailResponse } from "../type/testServiceType"
+import { getStorageItem, setStorageItem, removeStorageItem } from "@/common/util/localStorageUtil"
 
 export const mediaQuestionSorter = (mediaQuestion: MediaQuestionDetailResponse[]) => {
   return [...mediaQuestion].sort((a, b) => {
@@ -60,4 +61,34 @@ export const getToeicPartDescription = (partOrder: string): string => {
   const normalizedInput = partOrder.toLowerCase().replace(/\s+/g, '');
   const part = partDescriptionMap.find(p => p.partOrder.toLowerCase().replace(/\s+/g, '') === normalizedInput);
   return part ? part.description : '';
+}
+
+export const saveAudioPlaybackPosition = (testId: number, partId: number, position: number) => {
+  const key = `audio_playback_position_test_${testId}_part_${partId}`;
+  setStorageItem(key, position.toString());
+}
+
+export const getAudioPlaybackPosition = (testId: number, partId: number): number => {
+  const key = `audio_playback_position_test_${testId}_part_${partId}`;
+  const position = getStorageItem(key);
+  return position ? parseFloat(position) : 0;
+}
+
+export const clearAudioPlaybackPosition = (testId: number, partId: number): boolean => {
+  const key = `audio_playback_position_test_${testId}_part_${partId}`;
+  return removeStorageItem(key);
+}
+
+export const clearAllAudioPlaybackPositions = (testId: number): void => {
+  try {
+    const keys = Object.keys(localStorage);
+    const prefix = `audio_playback_position_test_${testId}_part_`;
+    keys.forEach(key => {
+      if (key.startsWith(prefix)) {
+        removeStorageItem(key);
+      }
+    });
+  } catch (error) {
+    console.error('Failed to clear all audio playback positions:', error);
+  }
 }

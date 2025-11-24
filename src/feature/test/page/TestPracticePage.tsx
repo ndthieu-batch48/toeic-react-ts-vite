@@ -18,7 +18,7 @@ type TestPracticePageProps = {
 export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, testTitle, partData }) => {
 	const navigate = useNavigate()
 	const { isScrolling, scrollPosition } = useScrollControl('window');
-	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitOrSave, isCancel, setIsSubmitOrSave } = useTestContext()
+	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitting, isSaving, isCancel, setIsSubmitting } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const getTotalQuestion = () => {
@@ -41,7 +41,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, test
 		}
 
 		try {
-			setIsSubmitOrSave(true)
+			setIsSubmitting(true)
 			const result = await createHistoryMutation.mutateAsync(submitPayload)
 			if (result.status === 'submit') {
 				navigate({
@@ -51,14 +51,14 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, test
 				})
 			}
 		} catch (error) {
-			setIsSubmitOrSave(false)
+			setIsSubmitting(false)
 			console.error('Failed to auto-submit test:', error)
 		}
 	}
 
 	useBlocker({
 		shouldBlockFn: () => {
-			if (isSubmitOrSave || isCancel) {
+			if (isSubmitting || isSaving || isCancel) {
 				return false; // User is submitting/saving/canceling - allow navigation
 			}
 
