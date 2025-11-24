@@ -58,7 +58,9 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 		{ id: 'translate', label: 'Translate', icon: Languages, show: true, tooltip: 'Translate the content of this question.', buttonText: 'Translate this question' },
 		{ id: 'explain', label: 'Explain', icon: Lightbulb, show: true, tooltip: 'Show an explanation for this question.', buttonText: 'Explain this question' },
 		{ id: 'audio', label: 'Audio script', icon: Headphones, show: !!audioScript, tooltip: 'Show the audio script for this listening question.', buttonText: 'Translate the audio content' },
-		{ id: 'paragraph', label: 'Paragraph', icon: NotebookText, show: true, tooltip: 'Translate the content of the paragraphs.', buttonText: 'Translate the paragraph content' },
+
+		//TODO: Implement translate main paragraph feature
+		{ id: 'paragraph', label: 'Paragraph', icon: NotebookText, show: false, tooltip: 'Translate the content of the paragraphs.', buttonText: 'Translate the paragraph content' },
 	].filter(tab => tab.show);
 
 	const activeTabConfig = availableTabs.find(tab => tab.id === activeTab) ?? availableTabs[0];
