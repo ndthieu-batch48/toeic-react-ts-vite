@@ -34,6 +34,7 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 }) => {
 	const [selectedLang, setSelectedLang] = useState<LANGUAGE_ID>('vi');
 	const [activeTab, setActiveTab] = useState('translate');
+	const [clickedTab, setClickedTab] = useState('');
 	const hasInitializedRef = useRef(false);
 
 	// Determine if translate and explain tabs should be hidden
@@ -89,6 +90,10 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 	const handleTabClick = useCallback((tabId: string) => {
 		setActiveTab(tabId);
 
+		// Trigger visual feedback
+		setClickedTab(tabId);
+		setTimeout(() => setClickedTab(''), 200);
+
 		// Trigger mutation based on tab type
 		if (tabId === 'translate') {
 			handleTranslate();
@@ -140,7 +145,12 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 											variant={activeTab === tab.id ? "default" : "outline"}
 											size="sm"
 											onClick={() => handleTabClick(tab.id)}
-											className="flex flex-col items-center gap-1 min-w-[80px] h-auto py-1"
+											className={`
+                                  flex flex-col items-center gap-1 min-w-[90px] h-auto py-2
+                                  transition-all duration-200
+                                  ${clickedTab === tab.id ? 'scale-95' : 'scale-100'}
+                                  ${activeTab === tab.id && clickedTab === tab.id ? 'brightness-90' : ''}
+                                `}
 										>
 											<tab.icon className="w-4 h-4" />
 											<span className="md:text-xs xl:text-base">{tab.label}</span>
