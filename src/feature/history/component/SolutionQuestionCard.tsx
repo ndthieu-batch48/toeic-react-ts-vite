@@ -13,6 +13,7 @@ import { GeminiIconFill, GeminiIconOutline } from '@/common/component/GeminiIcon
 import { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/component/ui/tooltip'
 import { Button } from '@/shadcn/component/ui/button'
+import { shouldShowGeminiAssistButton } from '@/feature/test/helper/testHelper'
 
 type SolutionQuestionMediaCardProps = {
 	mediaQuestion: MediaQuestionDetailResponse,
@@ -114,14 +115,14 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 				{hasContent && (
 					<>
 						{/* Left side - Main Paragraph */}
-						<div className="flex-1 min-w-0">
+						<div className="flex-1 min-w-0 w-full">
 							<MainParagraph mainParagraph={mainParagraph} />
 						</div>
 					</>
 				)}
 
 				{/* Right side - Questions */}
-				<div className={`space-y-6 ${hasContent ? 'flex-shrink-0 md:w-80 lg:w-120' : 'w-full'}`}>
+				<div className={`space-y-6 ml-auto ${hasContent ? 'flex-shrink-0 lg:w-100' : 'w-full'}`}>
 					{questionList.map((question, index) => (
 						<div
 							key={question.question_id || index}
@@ -153,28 +154,30 @@ export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps>
 									</Label>
 
 									{/* Button to expand GeminiAssistCard */}
-									<TooltipProvider>
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<Button
-													variant='outline'
-													onClick={() => handleExpandGeminiCard(question.question_id)}
-													className={`mr-auto mt-2 p-1 h-auto w-auto gap-2 ${isGeminiCardExpanded(question.question_id) ? 'border-primary' : ''}`}
-												>
+									{shouldShowGeminiAssistButton(audioScript, question.question_content, question.answer_list) &&
+										<TooltipProvider>
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<Button
+														variant='outline'
+														onClick={() => handleExpandGeminiCard(question.question_id)}
+														className={`mr-auto mt-2 p-1 h-auto w-auto gap-2 ${isGeminiCardExpanded(question.question_id) ? 'border-primary' : ''}`}
+													>
 
-													{isGeminiCardExpanded(question.question_id) ? (
-														<GeminiIconFill size={30} withGlow={true} />
-													) : (
-														<GeminiIconOutline size={30} strokeWidth={2} />
-													)}
-													<span className="font-semibold">AI Assistant</span>
-												</Button>
-											</TooltipTrigger>
-											<TooltipContent align="end" side="bottom">
-												Get AI Help ?
-											</TooltipContent>
-										</Tooltip>
-									</TooltipProvider>
+														{isGeminiCardExpanded(question.question_id) ? (
+															<GeminiIconFill size={30} withGlow={true} />
+														) : (
+															<GeminiIconOutline size={30} strokeWidth={2} />
+														)}
+														<span className="font-semibold">AI Assistant</span>
+													</Button>
+												</TooltipTrigger>
+												<TooltipContent align="end" side="bottom">
+													Get AI Help ?
+												</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+									}
 								</div>
 
 								<GeminiAssistCard

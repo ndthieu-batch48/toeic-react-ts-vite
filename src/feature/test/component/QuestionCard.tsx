@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/component/ui/tooltip'
 import { GeminiIconFill, GeminiIconOutline } from '@/common/component/GeminiIcon'
 import { GeminiAssistCard } from './GeminiAssistCard'
+import { shouldShowGeminiAssistButton } from '../helper/testHelper'
 
 type QuestionMediaCardProps = {
 	mediaQuestion: MediaQuestionDetailResponse,
@@ -151,9 +152,8 @@ export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
 									<Label className="text-base font-semibold flex-1">
 										{question.question_content}
 									</Label>
-
 									{/* Button to expand GeminiAssistCard */}
-									{testType === 'practice' &&
+									{testType === 'practice' && shouldShowGeminiAssistButton(audioScript, question.question_content, question.answer_list) &&
 										<TooltipProvider>
 											<Tooltip>
 												<TooltipTrigger asChild>

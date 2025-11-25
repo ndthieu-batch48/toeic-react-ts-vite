@@ -13,6 +13,7 @@ import { TranslationCard } from './TranslationCard'
 import { ExplainationCard } from './ExplainationCard'
 import { GeminiGradientDefs } from '@/common/component/GeminiIcon'
 import type { AnswerDetailResponse } from '../type/testServiceType'
+import { hasNoMeaningfulContent } from '../helper/testHelper'
 
 interface GeminiAssistCardProps {
 	isExpanded: boolean
@@ -35,24 +36,12 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 	const [activeTab, setActiveTab] = useState('translate');
 	const hasInitializedRef = useRef(false);
 
-	// Helper function to check if content is empty or only contains single letters
-	const isContentMeaningless = (content: string): boolean => {
-		const trimmed = content.trim()
-		// Check if empty or only contains A, B, C, D (single letter)
-		return trimmed === '' || /^[A-D]$/i.test(trimmed)
-	}
-
-	// Check if question and all answers are meaningless
-	const hasNoMeaningfulContent = (): boolean => {
-		const questionMeaningless = isContentMeaningless(questionContent)
-		const allAnswersMeaningless = answerList.every(answer =>
-			isContentMeaningless(answer.content)
-		)
-		return questionMeaningless && allAnswersMeaningless
-	}
-
 	// Determine if translate and explain tabs should be hidden
-	const shouldHideTranslateExplain = hasNoMeaningfulContent()
+	const shouldHideTranslateExplain = hasNoMeaningfulContent(questionContent, answerList)
+
+	// Check if all features are hidden
+	const hasAnyFeature = !shouldHideTranslateExplain || !!audioScript
+	const shouldHideEntireCard = !hasAnyFeature
 
 	// Initiate target language on mount
 	useEffect(() => {
@@ -82,7 +71,7 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 	useEffect(() => {
 		if (isExpanded && !hasInitializedRef.current && !shouldHideTranslateExplain) {
 			hasInitializedRef.current = true;
-			handleTranslate();
+			// handleTranslate();
 		}
 	}, [isExpanded, shouldHideTranslateExplain, handleTranslate]);
 
@@ -142,7 +131,7 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 					</div>
 
 					{/* Tabs row - scrollable on small screens */}
-					<div className="w-full overflow-x-auto py-1 xl:py-2">
+					<div className="w-full overflow-x-auto py-3 xl:py-2">
 						<TabsList className="inline-flex bg-transparent gap-1">
 							{availableTabs.map(tab => (
 								<Tooltip key={tab.id}>
@@ -151,7 +140,7 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 											variant={activeTab === tab.id ? "default" : "outline"}
 											size="sm"
 											onClick={() => handleTabClick(tab.id)}
-											className="flex flex-col items-center gap-1 min-w-[80px] h-auto py-2"
+											className="flex flex-col items-center gap-1 min-w-[80px] h-auto py-1"
 										>
 											<tab.icon className="w-4 h-4" />
 											<span className="md:text-xs xl:text-base">{tab.label}</span>
@@ -167,14 +156,14 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 				</div>
 
 				{/* Tab Contents */}
-				<TabsContent value="translate" className="mt-2">
+				<TabsContent value="translate" hidden={shouldHideTranslateExplain}>
 					<TranslationCard
 						translateScript={transQuesMutation.data}
 						isTranslatePending={transQuesMutation.isPending}
 					/>
 				</TabsContent>
 
-				<TabsContent value="explain" className="mt-2">
+				<TabsContent value="explain" hidden={shouldHideTranslateExplain}>
 					<ExplainationCard
 						explainScript={explainQuesMutation.data}
 						isExplainPending={explainQuesMutation.isPending}
@@ -182,13 +171,13 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 				</TabsContent>
 
 				{audioScript && (
-					<TabsContent value="audio" className="mt-2">
+					<TabsContent value="audio">
 						<TranslateAudioScriptCard audioScript={audioScript} />
 					</TabsContent>
 				)}
 
 				{/* TODO: Implement translate main paragraph feature */}
-				{/* <TabsContent value="paragraph" className="mt-2">
+				{/* <TabsContent value="paragraph">
 					<TranslateMainParagraphCard />
 				</TabsContent> */}
 			</Tabs>
@@ -197,18 +186,22 @@ export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
 
 	return (
 		<>
-			<GeminiGradientDefs />
-			<div>
-				{isExpanded && (
-					<div className="rounded-xl p-[1.5px] bg-[linear-gradient(135deg,_var(--gemini-blue)_0%,_var(--gemini-blue)_55%,_var(--gemini-red)_75%,_var(--gemini-yellow)_90%,_var(--gemini-green)_100%)]">
-						<Card className="p-0 rounded-xl border-none bg-background">
-							<CardContent className="p-2">
-								<TabsContentComponent />
-							</CardContent>
-						</Card>
+			{!shouldHideEntireCard && (
+				<>
+					<GeminiGradientDefs />
+					<div>
+						{isExpanded && (
+							<div className="rounded-xl p-[1.5px] bg-[linear-gradient(135deg,_var(--gemini-blue)_0%,_var(--gemini-blue)_55%,_var(--gemini-red)_75%,_var(--gemini-yellow)_90%,_var(--gemini-green)_100%)]">
+								<Card className="p-0 rounded-xl border-none bg-background">
+									<CardContent className="p-2">
+										<TabsContentComponent />
+									</CardContent>
+								</Card>
+							</div>
+						)}
 					</div>
-				)}
-			</div>
+				</>
+			)}
 		</>
 	)
 }

@@ -1,4 +1,4 @@
-import type { MediaQuestionDetailResponse } from "../type/testServiceType"
+import type { MediaQuestionDetailResponse, AnswerDetailResponse } from "../type/testServiceType"
 import { getStorageItem, setStorageItem, removeStorageItem } from "@/common/util/localStorageUtil"
 
 export const mediaQuestionSorter = (mediaQuestion: MediaQuestionDetailResponse[]) => {
@@ -91,4 +91,27 @@ export const clearAllAudioPlaybackPositions = (testId: number): void => {
   } catch (error) {
     console.error('Failed to clear all audio playback positions:', error);
   }
+}
+
+// Helper function to check if content is empty or only contains single letters
+export const isContentMeaningless = (content: string): boolean => {
+  const trimmed = content.trim()
+  // Check if empty or only contains A, B, C, D (single letter)
+  return trimmed === '' || /^[A-D]$/i.test(trimmed)
+}
+
+// Helper function to check if question and all answers are meaningless
+export const hasNoMeaningfulContent = (questionContent: string, answerList: AnswerDetailResponse[]): boolean => {
+  const questionMeaningless = isContentMeaningless(questionContent)
+  const allAnswersMeaningless = answerList.every(answer =>
+    isContentMeaningless(answer.content)
+  )
+  return questionMeaningless && allAnswersMeaningless
+}
+
+// Helper function to check if GeminiAssistCard should be shown
+export const shouldShowGeminiAssistButton = (audioScript: string | undefined, questionContent: string, answerList: AnswerDetailResponse[]): boolean => {
+  const shouldHideTranslateExplain = hasNoMeaningfulContent(questionContent, answerList)
+  const hasAnyFeature = !shouldHideTranslateExplain || !!audioScript
+  return hasAnyFeature
 }

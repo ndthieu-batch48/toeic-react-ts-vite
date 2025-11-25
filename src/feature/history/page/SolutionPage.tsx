@@ -30,7 +30,7 @@ export const SolutionPage: React.FC<SolutionPageProps> = ({ partData, testTitle 
 	return (
 		<div className="bg-background">
 
-			<div className="flex flex-col md:flex-row pt-20 pb-10">
+			<div className="flex flex-col md:flex-row ">
 
 				<SolutionPartTab
 					className="flex-1 min-w-0"

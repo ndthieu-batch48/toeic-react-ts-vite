@@ -65,7 +65,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 				<div className="w-full flex items-center justify-between mb-2">
 					{/* TabsList */}
 					<TabsList
-						className="h-auto w-auto grid gap-1 bg-transparent p-0"
+						className="h-auto w-auto grid gap-1 bg-transparent p-0 z-55"
 						style={{ gridTemplateColumns: `repeat(${partData.length}, 1fr)` }}
 					>
 						{partData.map((part, index) => (
@@ -74,7 +74,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 								value={`part-${part.part_id}`}
 								className="h-auto min-h-10 text-sm font-bold cursor-pointer border border-border shadow bg-background hover:bg-primary/20 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
 							>
-								<div className="flex flex-col w-full justify-center h-12 max-w-[80px]">
+								<div className="flex flex-col w-full justify-center min-h-13 max-w-[80px]">
 									<span className="font-semibold">{part.part_order || `Part ${index + 1}`}</span>
 									<span className="font-medium opacity-80 text-wrap text-xs">
 										{getToeicPartTopic(part.part_order || `Part ${index + 1}`)}
@@ -85,11 +85,13 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 					</TabsList>
 
 
-					<div className="w-full flex-1 mx-2">
+
+					<div className="w-full max-w-2xl flex-1 mx-2">
 						<SolutionAudio />
 					</div>
 
-					<div className="flex">
+					{/* Right side */}
+					<div className="flex items-center gap-2 flex-shrink-0">
 						<Button
 							size='lg'
 							variant="outline"
@@ -101,9 +103,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 							<Home className="text-primary" />
 							Go to home page
 						</Button>
-					</div>
-
-				</div>
+					</div>				</div>
 
 
 			</div>
