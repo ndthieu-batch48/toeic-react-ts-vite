@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 type ScrollTarget = 'window' | 'container';
 
@@ -18,7 +18,7 @@ export const useScrollControl = (
   });
   const [isScrolling, setIsScrolling] = useState<boolean>(false);
 
-  const scrollTo = (x: number, y: number): void => {
+  const scrollTo = useCallback((x: number, y: number): void => {
     if (target === 'window') {
       window.scrollTo({
         left: x,
@@ -32,9 +32,9 @@ export const useScrollControl = (
         behavior: "smooth"
       });
     }
-  };
+  }, [target]);
 
-  const scrollBy = (deltaX: number, deltaY: number): void => {
+  const scrollBy = useCallback((deltaX: number, deltaY: number): void => {
     if (target === 'window') {
       window.scrollBy({
         left: deltaX,
@@ -48,7 +48,7 @@ export const useScrollControl = (
         behavior: "smooth"
       });
     }
-  };
+  }, [target]);
 
   // Set initial scroll position for container
   useEffect(() => {

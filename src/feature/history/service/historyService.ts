@@ -4,7 +4,7 @@ import type {
   HistoryCreateRequest,
   HistoryResponse,
   HistoryResultDetailResponse,
-  HistoryResultListRes,
+  HistoryResultListResponse,
   HistoryCreateResponse
 } from '../type/historyServiceType';
 
@@ -24,7 +24,7 @@ const historyService = {
     return response.data;
   },
 
-  getResultList: async (): Promise<HistoryResultListRes[]> => {
+  getResultList: async (): Promise<HistoryResultListResponse[]> => {
     const url = 'histories/result/list';
     const response = await axiosJWT.get(url);
     return response.data;

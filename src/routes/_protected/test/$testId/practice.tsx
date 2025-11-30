@@ -28,16 +28,14 @@ export const Route = createFileRoute('/_protected/test/$testId/practice')({
 		shouldContinue: search.isContinue
 	}),
 
-	loader: ({ context, params, deps }) => {
+	loader: ({ context, params }) => {
 		const testId = Number(params.testId);
 
 		// Always fetch test data
 		context.queryClient.ensureQueryData(testQuery.byId(testId));
 
-		// Only fetch saved history progress IF shouldContinue is true
-		if (deps.shouldContinue) {
-			context.queryClient.ensureQueryData(historyQuery.saveProgress(testId));
-		}
+		// Always fetch saved history progress (needed for reload scenarios)
+		context.queryClient.ensureQueryData(historyQuery.saveProgress(testId));
 	},
 })
 
@@ -57,7 +55,7 @@ function TestPracticeRoute() {
 	const setup = {
 		partIdList: testDataFromHistory?.part_id_list.map(Number) ?? selectedPartIds,
 		answerMap: testDataFromHistory?.data_progress ?? {},
-		duration: testDataFromHistory?.duration ?? timeLimit,
+		duration: testDataFromHistory?.practice_duration ?? timeLimit,
 	};
 
 	const sortedPartList = testData.part_list
@@ -89,17 +87,17 @@ function TestPracticeRoute() {
 		activeQuestion: initialActive,
 		selectedParts: setup.partIdList?.map(String) ?? [],
 		selectedAnswers: setup.answerMap,
-		remainingDuration: setup.duration,
+		practiceDuration: 0, // Always start at 0 for practice mode (count up)
+		examDuration: setup.duration * 60, // Convert minutes to seconds for exam mode (count down)
 		isSubmitting: false,
 		isSaving: false,
-		isCancel: false
+		isClose: false
 	}
 
 	return (
 		<TestProvider initialState={initialState}>
 			<TestScrollProvider>
 				<TestPracticePage
-					testId={testIdParam}
 					testTitle={testTitle || "TOEIC English practice"}
 					partData={sortedPartList}
 				/>

@@ -5,7 +5,8 @@ export interface HistoryResponse {
   data_progress: Record<string, string>;
   type: TestType;
   part_id_list: string[];
-  duration: number;
+  practice_duration: number;
+  exam_duration: number;
   test_id: number;
   user_id: number;
   create_at: string;
@@ -16,7 +17,8 @@ export interface HistoryCreateRequest {
   data_progress: Record<string, string>;
   type: TestType;
   part_id_list: string[];
-  duration: number;
+  practice_duration?: number;
+  exam_duration?: number;
   test_id: number;
   status: "save" | "submit";
 }
@@ -39,19 +41,21 @@ export interface HistoryResultDetailResponse {
   no_answer: number;
   total_question: number;
   accuracy: number;
-  duration: number;
+  practice_duration: number;
+  exam_duration: number;
   create_at: string;
   data_progress: Record<string, string>
   part_id_list: string[];
 }
 
-export interface HistoryResultListRes {
+export interface HistoryResultListResponse {
   history_id: number;
   score: string;
   test_id: number;
   test_type: TestType;
   test_name: string;
-  duration: number;
+  practice_duration: number;
+  exam_duration: number;
   part_id_list: string[];
   part_order_list: string[];
   create_at: string;

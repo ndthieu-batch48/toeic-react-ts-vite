@@ -83,7 +83,7 @@ const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData 
 			testTitle: currentTest.test_title,
 			testId: String(saveHistoryData.test_id),
 			selectedPartIds: saveHistoryData.part_id_list,
-			timeLimit: saveHistoryData.duration,
+			timeLimit: saveHistoryData.practice_duration,
 		}
 
 		navigate({

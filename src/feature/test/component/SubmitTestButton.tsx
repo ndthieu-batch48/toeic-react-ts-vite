@@ -15,19 +15,26 @@ import {
 import { useNavigate } from "@tanstack/react-router"
 import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
 import { clearAllAudioPlaybackPositions } from "../helper/testHelper"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
-	const { testId, testType, selectedAnswers, selectedParts, remainingDuration, setIsSubmitting, setIsSaving, setIsCancel } = useTestContext()
+	const queryClient = useQueryClient()
+	const { testId, testType, selectedAnswers, selectedParts, practiceDuration, examDuration, setIsSubmitting, setIsSaving, setIsClose } = useTestContext()
 	const createHistoryMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
+	const isExamMode = testType.toLowerCase().trim() === "exam"
 
-	const handleCancel = () => {
+	const handleClose = () => {
 		clearAllAudioPlaybackPositions(testId)
-		setIsCancel(true)
+		setIsClose(true)
 		setTimeout(() => {
-			navigate({ to: "/test", replace: true })
+			navigate({
+				to: "/test/$testId",
+				params: { testId: String(testId) },
+				replace: true
+			})
 		}, 0)
 	}
 
@@ -37,7 +44,8 @@ export const SubmitTestButton = () => {
 			type: testType,
 			data_progress: selectedAnswers,
 			part_id_list: selectedParts,
-			duration: remainingDuration / 60,
+			practice_duration: isPracticeMode ? practiceDuration : undefined,
+			exam_duration: isExamMode ? examDuration : undefined,
 			status: 'submit'
 		}
 		try {
@@ -57,17 +65,25 @@ export const SubmitTestButton = () => {
 	}
 
 	const handleSaveTest = async () => {
+		setIsSaving(true)
 		const savePayload: HistoryCreateRequest = {
 			test_id: testId,
 			type: testType,
 			data_progress: selectedAnswers,
 			part_id_list: selectedParts,
-			duration: remainingDuration / 60,
+			practice_duration: isPracticeMode ? practiceDuration : undefined,
+			exam_duration: isExamMode ? examDuration : undefined,
 			status: 'save'
 		}
 		try {
 			await createHistoryMutation.mutateAsync(savePayload)
-			navigate({ to: "/test", replace: true })
+			// Invalidate history queries to refetch the saved progress
+			await queryClient.invalidateQueries({ queryKey: ['historyProgress', testId] })
+			await queryClient.invalidateQueries({ queryKey: ['historyList'] })
+			// Add delay to prevent animation glitching
+			setTimeout(() => {
+				setIsSaving(false)
+			}, 5000)
 		} catch (error) {
 			setIsSaving(false)
 			console.error('Failed to save test:', error)
@@ -111,40 +127,14 @@ export const SubmitTestButton = () => {
 			</AlertDialog>
 
 			{isPracticeMode && (
-				<AlertDialog>
-					<AlertDialogTrigger asChild>
-						<Button
-							className="font-bold h-8 p-1 text-sm bg-marker hover:bg-marker text-primary-foreground"
-							variant="default"
-							onClick={() => { setIsSaving(true) }}
-						>
-							Save
-						</Button>
-					</AlertDialogTrigger>
-					<AlertDialogContent>
-						<AlertDialogHeader>
-							<AlertDialogTitle className="text-lg">Do you want to save your progress?</AlertDialogTitle>
-							<AlertDialogDescription className="text-base">
-								You can continue your test later.
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel
-								className="text-base"
-								onClick={() => setIsSaving(false)}
-							>
-								Cancel
-							</AlertDialogCancel>
-							<AlertDialogAction
-								className="text-base"
-								onClick={handleSaveTest}
-								disabled={createHistoryMutation.isPending}
-							>
-								{createHistoryMutation.isPending ? 'Saving...' : 'Confirm'}
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
+				<Button
+					className="font-bold h-8 p-1 text-sm bg-marker hover:bg-marker text-primary-foreground"
+					variant="default"
+					onClick={handleSaveTest}
+					disabled={createHistoryMutation.isPending}
+				>
+					{createHistoryMutation.isPending ? 'Saving...' : 'Save'}
+				</Button>
 			)}
 
 			{isPracticeMode &&
@@ -154,7 +144,7 @@ export const SubmitTestButton = () => {
 							className="font-bold h-8 text-sm p-1"
 							variant="outline"
 						>
-							Cancel
+							Close
 						</Button>
 					</AlertDialogTrigger>
 					<AlertDialogContent>
@@ -167,7 +157,7 @@ export const SubmitTestButton = () => {
 							</AlertDialogCancel>
 							<AlertDialogAction
 								className="text-base"
-								onClick={handleCancel}
+								onClick={handleClose}
 							>
 								Confirm
 							</AlertDialogAction>

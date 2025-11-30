@@ -48,8 +48,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 				}
 			}, 100);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [activeQuestion, getScrollTarget])
+	}, [activeQuestion, getScrollTarget, scrollTo])
 
 
 	return (

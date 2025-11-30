@@ -16,7 +16,10 @@ export const TranslationCard: React.FC<TranslationCardProps> = ({
 	return (
 		<div className="w-full border border-foreground bg-background rounded-lg p-3">
 			{isTranslatePending ? (
-				<Skeleton className="h-5 w-full" />
+				<>
+					<span className="font-semibold">AI is working...</span>
+					<Skeleton className="h-5 w-full" />
+				</>
 			) : shouldShowPlaceholder ? (
 				<div className="text-sm text-muted-foreground">
 					Select a <span className="font-semibold">language</span> and click <span className="font-semibold"> Translate this question</span> to view the AI translation here.

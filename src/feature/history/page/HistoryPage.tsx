@@ -3,10 +3,10 @@ import { Badge } from '@/shadcn/component/ui/badge';
 import { Calendar, Clock, FileText, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/shadcn/component/ui/button';
 import { Link } from '@tanstack/react-router';
-import type { HistoryResultListRes } from '../type/historyServiceType';
+import type { HistoryResultListResponse } from '../type/historyServiceType';
 
 interface HistoryPageProps {
-	historyList: HistoryResultListRes[];
+	historyList: HistoryResultListResponse[];
 }
 
 const HistoryPage = ({ historyList }: HistoryPageProps) => {
@@ -187,7 +187,7 @@ const HistoryPage = ({ historyList }: HistoryPageProps) => {
 										</div>
 										<div className="flex items-center gap-1.5">
 											<Clock className="w-3.5 h-3.5" />
-											<span>{formatDuration(history.duration)}</span>
+											<span>{formatDuration(history.practice_duration)}</span>
 										</div>
 									</div>
 

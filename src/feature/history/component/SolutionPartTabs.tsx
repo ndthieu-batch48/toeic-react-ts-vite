@@ -10,7 +10,7 @@ import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "@/feature/test/helper/testHelper"
 import { Button } from "@/shadcn/component/ui/button"
 import { useNavigate } from "@tanstack/react-router"
-import { Home } from "lucide-react"
+import { Home, RotateCcw } from "lucide-react"
 
 type SolutionPartTabsProps = {
 	partData: PartDetailResponse[]
@@ -21,7 +21,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 	const navigate = useNavigate()
 
 	// TAB CHANGE LOGIC
-	const { activeQuestion, setActivePart } = useSolutionContext()
+	const { testId, activeQuestion, setActivePart } = useSolutionContext()
 
 	const tabValue = `part-${activeQuestion.part_id}`
 
@@ -90,7 +90,7 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 						<SolutionAudio />
 					</div>
 
-					{/* Right side */}
+					{/* Right side - Navigation Buttons */}
 					<div className="flex items-center gap-2 flex-shrink-0">
 						<Button
 							size='lg'
@@ -103,7 +103,19 @@ const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, 
 							<Home className="text-primary" />
 							Go to home page
 						</Button>
-					</div>				</div>
+						<Button
+							size='lg'
+							variant="outline"
+							className="gap-2 border-marker"
+							onClick={() => {
+								navigate({ to: '/test/$testId', params: { testId: String(testId) } })
+							}}
+						>
+							<RotateCcw className="text-marker" />
+							Retry this test
+						</Button>
+					</div>
+				</div>
 
 
 			</div>

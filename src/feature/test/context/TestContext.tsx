@@ -13,10 +13,11 @@ export type TestState = {
 	activeQuestion: ActiveQuestion
 	selectedAnswers: Record<string, string> // { questionId: answerId }
 	selectedParts: string[]
-	remainingDuration: number
+	practiceDuration: number // count up from 0 (in seconds)
+	examDuration: number // count down from initial time limit (in seconds)
 	isSubmitting: boolean
 	isSaving: boolean
-	isCancel: boolean
+	isClose: boolean
 }
 
 type TestAction =
@@ -26,10 +27,11 @@ type TestAction =
 	| { type: 'SET_ACTIVE_QUESTION', payload: ActiveQuestion }
 	| { type: 'SET_SELECTED_ANSWERS', payload: Record<string, string> }
 	| { type: 'SET_SELECTED_PARTS', payload: string[] }
-	| { type: 'SET_REMAINING_DURATION'; payload: number }
+	| { type: 'SET_PRACTICE_DURATION'; payload: number }
+	| { type: 'SET_EXAM_DURATION'; payload: number }
 	| { type: 'SET_IS_SUBMITTING'; payload: boolean }
 	| { type: 'SET_IS_SAVING'; payload: boolean }
-	| { type: 'SET_IS_CANCEL'; payload: boolean }
+	| { type: 'SET_IS_CLOSE'; payload: boolean }
 
 
 const testReducer = (state: TestState, action: TestAction): TestState => {
@@ -60,8 +62,11 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_SELECTED_PARTS':
 			newState = { ...state, selectedParts: action.payload }
 			break
-		case 'SET_REMAINING_DURATION':
-			newState = { ...state, remainingDuration: action.payload }
+		case 'SET_PRACTICE_DURATION':
+			newState = { ...state, practiceDuration: action.payload }
+			break
+		case 'SET_EXAM_DURATION':
+			newState = { ...state, examDuration: action.payload }
 			break
 		case 'SET_IS_SUBMITTING':
 			newState = { ...state, isSubmitting: action.payload }
@@ -69,8 +74,8 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_IS_SAVING':
 			newState = { ...state, isSaving: action.payload }
 			break
-		case 'SET_IS_CANCEL':
-			newState = { ...state, isCancel: action.payload }
+		case 'SET_IS_CLOSE':
+			newState = { ...state, isClose: action.payload }
 			break
 		default:
 			newState = state
@@ -87,10 +92,11 @@ type TestContextType = {
 	activeQuestion: ActiveQuestion
 	selectedAnswers: Record<string, string>
 	selectedParts: string[]
-	remainingDuration: number
+	practiceDuration: number
+	examDuration: number
 	isSubmitting: boolean
 	isSaving: boolean
-	isCancel: boolean
+	isClose: boolean
 
 	// Actions
 	setTestId: (testId: number) => void
@@ -99,10 +105,11 @@ type TestContextType = {
 	setActiveQuestion: (activeQuestion: ActiveQuestion) => void
 	setSelectedAnswer: (answers: Record<string, string>) => void
 	setSelectedParts: (parts: string[]) => void
-	setRemainingDuration: (duration: number) => void
+	setPracticeDuration: (duration: number) => void
+	setExamDuration: (duration: number) => void
 	setIsSubmitting: (action: boolean) => void
 	setIsSaving: (action: boolean) => void
-	setIsCancel: (action: boolean) => void
+	setIsClose: (action: boolean) => void
 }
 
 const TestContext = createContext<TestContextType | null>(null)
@@ -124,10 +131,11 @@ export const TestProvider = ({
 		activeQuestion: state.activeQuestion,
 		selectedAnswers: state.selectedAnswers,
 		selectedParts: state.selectedParts,
-		remainingDuration: state.remainingDuration,
+		practiceDuration: state.practiceDuration,
+		examDuration: state.examDuration,
 		isSubmitting: state.isSubmitting,
 		isSaving: state.isSaving,
-		isCancel: state.isCancel,
+		isClose: state.isClose,
 
 		// Actions
 		setTestId: (testId: number) =>
@@ -148,8 +156,11 @@ export const TestProvider = ({
 		setSelectedParts: (parts: string[]) =>
 			dispatch({ type: 'SET_SELECTED_PARTS', payload: parts }),
 
-		setRemainingDuration: (duration: number) =>
-			dispatch({ type: 'SET_REMAINING_DURATION', payload: duration }),
+		setPracticeDuration: (duration: number) =>
+			dispatch({ type: 'SET_PRACTICE_DURATION', payload: duration }),
+
+		setExamDuration: (duration: number) =>
+			dispatch({ type: 'SET_EXAM_DURATION', payload: duration }),
 
 		setIsSubmitting: (action: boolean) =>
 			dispatch({ type: 'SET_IS_SUBMITTING', payload: action }),
@@ -157,8 +168,8 @@ export const TestProvider = ({
 		setIsSaving: (action: boolean) =>
 			dispatch({ type: 'SET_IS_SAVING', payload: action }),
 
-		setIsCancel: (action: boolean) =>
-			dispatch({ type: 'SET_IS_CANCEL', payload: action })
+		setIsClose: (action: boolean) =>
+			dispatch({ type: 'SET_IS_CLOSE', payload: action })
 
 	}), [state])
 

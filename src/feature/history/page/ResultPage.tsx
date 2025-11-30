@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shadcn/component/ui/
 import { Badge } from '@/shadcn/component/ui/badge';
 import { Progress } from '@/shadcn/component/ui/progress';
 import { Separator } from '@/shadcn/component/ui/separator';
-import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye, Home } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye, Home, RotateCcw } from 'lucide-react';
 import type { HistoryResultDetailResponse } from '../type/historyServiceType';
 import { Button } from '@/shadcn/component/ui/button';
 import { Link, useNavigate } from '@tanstack/react-router';
@@ -11,12 +11,26 @@ type ResultPageProps = {
 	detailResult: HistoryResultDetailResponse;
 };
 
+const STANDARD_EXAM_DURATION = 7200 // 120 minutes
+
 const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 	const navigate = useNavigate();
 
 	const isFailed = detailResult.accuracy < 50
-	const durationMinutes = Math.floor(detailResult.duration / 60);
-	const durationSeconds = detailResult.duration % 60;
+
+	// Determine which duration to use based on test type
+	const isExamMode = detailResult.test_type.toLowerCase().trim() === 'exam'
+	const totalDurationSeconds = isExamMode ? (STANDARD_EXAM_DURATION - detailResult.exam_duration) : detailResult.practice_duration
+
+	// Format duration
+	const formatDuration = (seconds: number) => {
+		const hours = Math.floor(seconds / 3600)
+		const minutes = Math.floor((seconds % 3600) / 60)
+		const secs = seconds % 60
+		return { hours, minutes, seconds: secs }
+	}
+
+	const duration = formatDuration(totalDurationSeconds)
 
 	// Format date
 	const testDate = new Date(detailResult.create_at).toLocaleDateString('en-US', {
@@ -30,8 +44,8 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 	return (
 		<div className="max-w-4xl mx-auto p-6 space-y-6">
 
-			{/* Home Button  */}
-			<div className="flex">
+			{/* Navigation Buttons  */}
+			<div className="flex gap-4">
 				<Button
 					size='lg'
 					variant="outline"
@@ -43,16 +57,27 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<Home className="text-primary" />
 					Go to home page
 				</Button>
+				<Button
+					size='lg'
+					variant="outline"
+					className="gap-2 border-marker"
+					onClick={() => {
+						navigate({ to: '/test/$testId', params: { testId: String(detailResult.test_id) } })
+					}}
+				>
+					<RotateCcw className="text-marker" />
+					Retry this test
+				</Button>
 			</div>
 
 			{/* Header Section */}
 			<div className="text-center space-y-4">
 				<div className="flex items-center justify-center gap-3">
 					<BookOpen className="h-8 w-8 text-primary" />
-					<h1 className="text-3xl font-bold">TOEIC Test Results</h1>
+					<h1 className="text-3xl font-bold">Results for {detailResult.test_name}</h1>
 				</div>
 				<Badge variant="secondary" className="text-lg px-4 py-2 capitalize">
-					{detailResult.test_type} Test
+					{detailResult.test_type}
 				</Badge>
 			</div>
 
@@ -86,8 +111,13 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 						<CardTitle className="text-sm font-medium text-muted-foreground">Test Duration</CardTitle>
 					</CardHeader>
 					<CardContent className="text-center">
-						<div className="text-4xl font-bold mb-2">{durationMinutes}m</div>
-						<p className="text-sm text-muted-foreground">{durationSeconds}s</p>
+						<div className="text-3xl font-bold mb-2">
+							{duration.hours > 0 && `${duration.hours}h `}
+							{duration.minutes}m {duration.seconds}s
+						</div>
+						<p className="text-sm text-muted-foreground">
+							{isExamMode ? 'Exam Mode' : 'Practice Mode'}
+						</p>
 					</CardContent>
 				</Card>
 			</div>
@@ -202,7 +232,10 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 							<div className="flex items-center gap-2">
 								<Clock className="h-4 w-4 text-muted-foreground" />
 								<span className="text-muted-foreground">Duration:</span>
-								<span className="font-medium">{durationMinutes}m {durationSeconds}s</span>
+								<span className="font-medium">
+									{duration.hours > 0 && `${duration.hours}h `}
+									{duration.minutes}m {duration.seconds}s
+								</span>
 							</div>
 						</div>
 					</div>

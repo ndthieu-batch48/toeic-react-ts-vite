@@ -5,21 +5,16 @@ import { QuestionTab } from "../component/QuestionTab"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/component/ui/card"
 import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useTestContext } from "../context/TestContext"
-import { useBlocker, useNavigate } from "@tanstack/react-router"
-import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
-import type { HistoryCreateRequest } from "@/feature/history/type/historyServiceType"
+import { useBlocker } from "@tanstack/react-router"
 
 type TestPracticePageProps = {
-	testId: number
 	testTitle: string
 	partData: PartDetailResponse[],
 }
 
-export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, testTitle, partData }) => {
-	const navigate = useNavigate()
+export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, partData }) => {
 	const { isScrolling, scrollPosition } = useScrollControl('window');
-	const { testType, selectedAnswers, selectedParts, remainingDuration, isSubmitting, isSaving, isCancel, setIsSubmitting } = useTestContext()
-	const createHistoryMutation = useCreateHistory(testId)
+	const { testType, selectedAnswers, isSubmitting, isClose } = useTestContext()
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
@@ -30,49 +25,35 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testId, test
 		}, 0);
 	}
 
-	const handleAutoSubmit = async () => {
-		const submitPayload: HistoryCreateRequest = {
-			test_id: testId,
-			type: testType,
-			data_progress: selectedAnswers,
-			part_id_list: selectedParts,
-			duration: remainingDuration / 60,
-			status: 'submit'
-		}
-
-		try {
-			setIsSubmitting(true)
-			const result = await createHistoryMutation.mutateAsync(submitPayload)
-			if (result.status === 'submit') {
-				navigate({
-					to: "/history/$historyId",
-					params: { historyId: String(result.history_id) },
-					replace: true
-				})
-			}
-		} catch (error) {
-			setIsSubmitting(false)
-			console.error('Failed to auto-submit test:', error)
-		}
-	}
-
+	// This hook is used for blocking the navigation when user click the back button on browser.
+	// It return either true or false
+	// Logic: true -> allow navigation; false -> block navigation
 	useBlocker({
 		shouldBlockFn: () => {
-			if (isSubmitting || isSaving || isCancel) {
-				return false; // User is submitting/saving/canceling - allow navigation
+			// Allow navigation during submit/close operations
+			if (isSubmitting || isClose) {
+				return false;
 			}
 
-			// User is NOT submitting/saving/canceling - Block and show confirmation
-			const shouldLeave = confirm(
-				"You're about to quit the test. Your current answers will be submitted. Are you sure you want to continue?"
-			);
-
-			if (shouldLeave) {
-				// User confirmed - submit the test
-				handleAutoSubmit()
+			// In exam mode, show alert and always block
+			if (testType === 'exam') {
+				alert("You cannot leave the exam. Please complete or submit the test.");
+				return true; // Always block navigation
 			}
 
-			return !shouldLeave; // Block if user wants to stay (clicked Cancel)
+			// In practice mode, show confirmation
+			if (testType === 'practice') {
+				const shouldLeave = confirm(
+					"You're about to quit the test. Are you sure you want to continue?"
+				);
+
+				// If user clicks OK, allow navigation (return false)
+				// If user clicks Cancel, block navigation (return true)
+				return !shouldLeave;
+			}
+
+			// Default: don't block
+			return false;
 		},
 	});
 

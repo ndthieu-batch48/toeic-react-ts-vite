@@ -21,7 +21,8 @@ export const ExplainationCard: React.FC<ExplainationCardProps> = ({
 
 	if (isExplainPending) {
 		return (
-			<div className="w-full border border-foreground bg-background rounded-lg p-3">
+			<div className="w-full border border-foreground bg-background rounded-lg p-3 space-y-2">
+				<span className="font-semibold">AI is working...</span>
 				<Skeleton className="h-5 w-full" />
 			</div>
 		)
