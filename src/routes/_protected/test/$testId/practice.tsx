@@ -2,7 +2,7 @@ import TestPracticeSkeleton from '@/feature/test/loading/TestPracticeSkeleton';
 import { TEST_TYPE } from '@/feature/test/const/testConst';
 import { TestProvider, type TestState } from '@/feature/test/context/TestContext';
 import { TestScrollProvider } from '@/feature/test/context/TestScrollContext';
-import { mediaQuestionSorter } from '@/feature/test/helper/testHelper';
+import { mediaQuestionSorter, getPracticeDuration } from '@/feature/test/helper/testHelper';
 import { TestPracticePage } from '@/feature/test/page/TestPracticePage';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
@@ -56,6 +56,7 @@ function TestPracticeRoute() {
 		partIdList: testDataFromHistory?.part_id_list.map(Number) ?? selectedPartIds,
 		answerMap: testDataFromHistory?.data_progress ?? {},
 		duration: testDataFromHistory?.practice_duration ?? timeLimit,
+		savedPracticeDuration: getPracticeDuration(testIdParam),
 	};
 
 	const sortedPartList = testData.part_list
@@ -87,11 +88,11 @@ function TestPracticeRoute() {
 		activeQuestion: initialActive,
 		selectedParts: setup.partIdList?.map(String) ?? [],
 		selectedAnswers: setup.answerMap,
-		practiceDuration: 0, // Always start at 0 for practice mode (count up)
+		practiceDuration: setup.savedPracticeDuration, // Restore from saved duration
 		examDuration: setup.duration * 60, // Convert minutes to seconds for exam mode (count down)
 		isSubmitting: false,
 		isSaving: false,
-		isClose: false
+		isClosing: false
 	}
 
 	return (

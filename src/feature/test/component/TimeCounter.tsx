@@ -1,21 +1,16 @@
 import { Progress } from "@/shadcn/component/ui/progress"
 import { useEffect, useRef } from "react"
 import { AlarmClock } from "lucide-react"
-import { cn } from "@/shadcn/lib/util"
 import { useTestContext } from "../context/TestContext"
+import { savePracticeDuration } from "../helper/testHelper"
 
-type CountDownTimerProps = {
-	className?: string
-}
-
-export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => {
-	const { testType, practiceDuration, setPracticeDuration, examDuration, setExamDuration } = useTestContext()
+export const TimeCounter = () => {
+	const { testId, testType, practiceDuration, setPracticeDuration, examDuration, setExamDuration, isSaving } = useTestContext()
 
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
 	// Determine if exam mode based on test type
-	const isExamMode = testType.toLowerCase().trim() === "exam"
-	const hasTimeLimit = isExamMode
+	const isExamMode = testType === "exam"
 
 	// Store initial duration for progress calculation
 	const initialDurationRef = useRef<number>(isExamMode ? examDuration : 0)
@@ -29,6 +24,13 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 			initialDurationRef.current = examDuration
 		}
 	}, [isExamMode, examDuration])
+
+	// Save duration when user saves the test (practice mode only)
+	useEffect(() => {
+		if (isSaving && !isExamMode) {
+			savePracticeDuration(testId, practiceDuration)
+		}
+	}, [isSaving, testId, isExamMode, practiceDuration])
 
 	// Start the timer interval depending on mode
 	useEffect(() => {
@@ -66,8 +68,8 @@ export const CountDownTimer: React.FC<CountDownTimerProps> = ({ className }) => 
 		: 0
 	const isExpired = isExamMode && examDuration === 0
 	return (
-		<div className={cn("h-auto bg-transparent text-sm", className)}>
-			{hasTimeLimit ? (
+		<div className="h-auto bg-transparent text-sm">
+			{isExamMode ? (
 				<div>
 					<div className="flex gap-1 pb-1">
 						<AlarmClock className="text-primary" />

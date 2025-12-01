@@ -35,13 +35,13 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-type LoginFormProps = React.ComponentProps<"div"> & {
+type LoginFormProp = React.ComponentProps<"div"> & {
 	switchToRegister?: () => void
 	onFormSubmit: (data: LoginRequest) => Promise<void>,
 	loginStatus: "error" | "idle" | "success" | "pending"
 }
 
-export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: LoginFormProps) {
+export function LoginForm({ switchToRegister, onFormSubmit, loginStatus }: LoginFormProp) {
 
 	const form = useForm<LoginFormData>({
 		resolver: zodResolver(loginSchema),

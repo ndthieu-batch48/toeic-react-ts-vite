@@ -6,7 +6,7 @@ import { useSolutionContext } from "../context/SolutionContext"
 import { useQuery } from "@tanstack/react-query"
 import { testQuery } from "@/feature/test/service/testService"
 
-export const SolutionAudio: React.FC = () => {
+export const SolutionAudio = () => {
 	const { testId, activePart: partId } = useSolutionContext()
 
 	const { data: audioUrl } = useQuery(testQuery.partAudioUrl(testId, partId))

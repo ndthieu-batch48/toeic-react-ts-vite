@@ -14,21 +14,25 @@ import {
 } from "@/shadcn/component/ui/alert-dialog"
 import { useNavigate } from "@tanstack/react-router"
 import { useCreateHistory } from "@/feature/history/hook/useCreateHistory"
-import { clearAllAudioPlaybackPositions } from "../helper/testHelper"
+import { clearAllAudioPlaybackPosition, clearPracticeDuration } from "../helper/testHelper"
 import { useQueryClient } from "@tanstack/react-query"
 
 export const SubmitTestButton = () => {
 	const navigate = useNavigate()
 	const queryClient = useQueryClient()
-	const { testId, testType, selectedAnswers, selectedParts, practiceDuration, examDuration, setIsSubmitting, setIsSaving, setIsClose } = useTestContext()
-	const createHistoryMutation = useCreateHistory(testId)
+	const { testId, testType, selectedAnswers, selectedParts, practiceDuration, examDuration, setIsSubmitting, setIsSaving, setIsClosing } = useTestContext()
+
+	// Submit and Save features using the same useCreateHistory hook 
+	// but different payloads, and different actions
+	// Hence, we create two separate mutation instancses to avoid conflicts
+	const submitMutation = useCreateHistory(testId)
+	const saveMutation = useCreateHistory(testId)
 
 	const isPracticeMode = testType.toLowerCase().trim() === "practice"
 	const isExamMode = testType.toLowerCase().trim() === "exam"
 
 	const handleClose = () => {
-		clearAllAudioPlaybackPositions(testId)
-		setIsClose(true)
+		setIsClosing(true)
 		setTimeout(() => {
 			navigate({
 				to: "/test/$testId",
@@ -49,15 +53,17 @@ export const SubmitTestButton = () => {
 			status: 'submit'
 		}
 		try {
-			const result = await createHistoryMutation.mutateAsync(submitPayload)
+			const result = await submitMutation.mutateAsync(submitPayload)
 			if (result.status === 'submit') {
-				clearAllAudioPlaybackPositions(testId)
+				clearAllAudioPlaybackPosition(testId)
+				clearPracticeDuration(testId)
 				navigate({
 					to: "/history/$historyId",
 					params: { historyId: String(result.history_id) },
 					replace: true
 				})
 			}
+			setIsSubmitting(false)
 		} catch (error) {
 			setIsSubmitting(false)
 			console.error('Failed to submit test:', error)
@@ -76,14 +82,14 @@ export const SubmitTestButton = () => {
 			status: 'save'
 		}
 		try {
-			await createHistoryMutation.mutateAsync(savePayload)
+			await saveMutation.mutateAsync(savePayload)
+
 			// Invalidate history queries to refetch the saved progress
 			await queryClient.invalidateQueries({ queryKey: ['historyProgress', testId] })
 			await queryClient.invalidateQueries({ queryKey: ['historyList'] })
-			// Add delay to prevent animation glitching
-			setTimeout(() => {
-				setIsSaving(false)
-			}, 5000)
+
+			// Set to false after save completes
+			setIsSaving(false)
 		} catch (error) {
 			setIsSaving(false)
 			console.error('Failed to save test:', error)
@@ -118,9 +124,9 @@ export const SubmitTestButton = () => {
 						<AlertDialogAction
 							className="text-base"
 							onClick={handleSubmitTest}
-							disabled={createHistoryMutation.isPending}
+							disabled={submitMutation.isPending}
 						>
-							{createHistoryMutation.isPending ? 'Submitting...' : 'Confirm'}
+							{submitMutation.isPending ? 'Submitting...' : 'Confirm'}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -131,13 +137,11 @@ export const SubmitTestButton = () => {
 					className="font-bold h-8 p-1 text-sm bg-marker hover:bg-marker text-primary-foreground"
 					variant="default"
 					onClick={handleSaveTest}
-					disabled={createHistoryMutation.isPending}
+					disabled={saveMutation.isPending}
 				>
-					{createHistoryMutation.isPending ? 'Saving...' : 'Save'}
+					{saveMutation.isPending ? 'Saving...' : 'Save'}
 				</Button>
-			)}
-
-			{isPracticeMode &&
+			)}			{isPracticeMode &&
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
 						<Button

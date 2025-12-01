@@ -6,17 +6,13 @@ import type { PartDetailResponse } from "@/feature/test/type/testServiceType"
 import { useSolutionContext, type ActiveQuestion } from "../context/SolutionContext"
 import { getToeicPartTopic } from "@/feature/test/helper/testHelper"
 
-type SolutionQuestionTabProps = {
+type SolutionQuestionTabProp = {
 	partData: PartDetailResponse[]
 	className?: string,
 	onQuestionActive?: (mediaId: number) => void
 }
 
-const SolutionQuestionTabComponent: React.FC<SolutionQuestionTabProps> = ({
-	className,
-	partData,
-	onQuestionActive,
-}) => {
+const SolutionQuestionTabComponent = ({ className, partData, onQuestionActive }: SolutionQuestionTabProp) => {
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useSolutionContext()
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null);

@@ -21,14 +21,14 @@ const forgotPasswordSchema = z.object({
 })
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>
 
-type ForgotPasswordFormProps = {
+type ForgotPasswordFormProp = {
 	onFormSubmit: (credential: string) => Promise<void>
 	isSending: boolean
 	isError: boolean
 
 }
 
-export function ForgotPasswordForm({ onFormSubmit, isSending, isError }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm({ onFormSubmit, isSending, isError }: ForgotPasswordFormProp) {
 	const form = useForm<ForgotPasswordFormData>({
 		resolver: zodResolver(forgotPasswordSchema),
 		defaultValues: {

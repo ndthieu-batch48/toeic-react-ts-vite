@@ -5,13 +5,13 @@ import { Button } from "@/shadcn/component/ui/button"
 import { Link } from "@tanstack/react-router"
 import { ClipboardList, TrendingUp } from "lucide-react"
 
-type TestDashBoardPageProps = {
+type TestDashBoardPageProp = {
 	testData: TestSummaryResponse[]
 	hasHistory: boolean,
 	savedProgressMap: Record<number, boolean>
 }
 
-export const TestDashBoardPage: React.FC<TestDashBoardPageProps> = ({ testData, hasHistory, savedProgressMap }) => {
+export const TestDashBoardPage = ({ testData, hasHistory, savedProgressMap }: TestDashBoardPageProp) => {
 
 	return (
 		<>

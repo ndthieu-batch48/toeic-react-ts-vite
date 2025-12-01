@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shadcn/component/ui/tabs"
 import type { PartDetailResponse } from "../type/testServiceType"
 import { QuestionMediaCard } from "./QuestionCard"
-import { CountDownTimer } from "./CountdownTimer"
+import { TimeCounter } from "./TimeCounter"
 import { SubmitTestButton } from "./SubmitTestButton"
 import { cn } from "@/shadcn/lib/util"
 import { useTestContext } from "../context/TestContext"
@@ -11,12 +11,12 @@ import { useTestScrollContext } from "../context/TestScrollContext"
 import { useScrollControl } from "@/common/hook/useScrollControl"
 import { getToeicPartTopic } from "../helper/testHelper"
 
-type PartTabsProps = {
+type PartTabsProp = {
 	partData: PartDetailResponse[]
 	className?: string,
 }
 
-const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
+const PartTabComponent = ({ className, partData }: PartTabsProp) => {
 
 	// TAB CHANGE LOGIC
 	const { activeQuestion, setActivePart } = useTestContext()
@@ -88,7 +88,7 @@ const PartTabComponent: React.FC<PartTabsProps> = ({ className, partData }) => {
 
 					{/* Right side */}
 					<div className="flex items-center gap-2 flex-shrink-0">
-						<CountDownTimer />
+						<TimeCounter />
 						<SubmitTestButton />
 					</div>
 				</div>

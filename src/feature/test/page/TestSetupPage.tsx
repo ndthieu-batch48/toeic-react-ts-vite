@@ -11,12 +11,12 @@ import { Label } from '@/shadcn/component/ui/label'
 import { getToeicPartDescription, getToeicPartTopic } from '../helper/testHelper'
 import { TEST_TYPE } from '../const/testConst'
 
-interface TestSetupProps {
+interface TestSetupProp {
 	currentTest: TestSummaryResponse
 	saveHistoryData?: HistoryResponse
 }
 
-const TestSetupPage: React.FC<TestSetupProps> = ({ currentTest, saveHistoryData }) => {
+const TestSetupPage = ({ currentTest, saveHistoryData }: TestSetupProp) => {
 	const navigate = useNavigate();
 
 	const [isPracticeTest, setIsPracticeTest] = useState<boolean>(true)

@@ -29,12 +29,12 @@ const resetPasswordSchema = z.object({
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
 
-type ResetPasswordFormProps = {
+type ResetPasswordFormProp = {
 	onSubmit: (password: string) => Promise<void>
 	isLoading?: boolean
 }
 
-export function ResetPasswordForm({ onSubmit, isLoading = false }: ResetPasswordFormProps) {
+export function ResetPasswordForm({ onSubmit, isLoading = false }: ResetPasswordFormProp) {
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 

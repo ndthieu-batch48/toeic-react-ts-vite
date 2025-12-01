@@ -7,15 +7,12 @@ import React, { useEffect, useRef } from "react"
 import { useTestScrollContext } from "../context/TestScrollContext"
 import { getToeicPartTopic } from "../helper/testHelper"
 
-type QuestionTabProps = {
+type QuestionTabProp = {
 	partData: PartDetailResponse[]
 	className?: string,
 }
 
-const QuestionTabComponent: React.FC<QuestionTabProps> = ({
-	className,
-	partData,
-}) => {
+const QuestionTabComponent = ({ className, partData }: QuestionTabProp) => {
 	const { getScrollTarget } = useTestScrollContext()
 
 	const { activeQuestion, setActiveQuestion, selectedAnswers } = useTestContext()

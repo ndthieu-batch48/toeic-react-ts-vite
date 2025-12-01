@@ -29,6 +29,26 @@ export const isMainParagraphHasContent = (mainParagraph: string): boolean => {
   return true;
 }
 
+// Duration helper functions - Save and restore practice duration
+export const savePracticeDuration = (testId: number, duration: number) => {
+  const key = `practice_duration_test_${testId}`;
+  setStorageItem(key, duration.toString());
+}
+
+export const getPracticeDuration = (testId: number): number => {
+  const key = `practice_duration_test_${testId}`;
+  const duration = getStorageItem(key);
+  return duration ? parseInt(duration) : 0;
+}
+
+export const clearPracticeDuration = (testId: number): void => {
+  try {
+    removeStorageItem(`practice_duration_test_${testId}`);
+  } catch (error) {
+    console.error('Failed to clear test durations:', error);
+  }
+}
+
 export const getToeicPartTopic = (partOrder: string): string => {
 
   const partTopicMap = [
@@ -79,7 +99,7 @@ export const clearAudioPlaybackPosition = (testId: number, partId: number): bool
   return removeStorageItem(key);
 }
 
-export const clearAllAudioPlaybackPositions = (testId: number): void => {
+export const clearAllAudioPlaybackPosition = (testId: number): void => {
   try {
     const keys = Object.keys(localStorage);
     const prefix = `audio_playback_position_test_${testId}_part_`;

@@ -5,11 +5,11 @@ import { Button } from '@/shadcn/component/ui/button';
 import { Link } from '@tanstack/react-router';
 import type { HistoryResultListResponse } from '../type/historyServiceType';
 
-interface HistoryPageProps {
+interface HistoryPageProp {
 	historyList: HistoryResultListResponse[];
 }
 
-const HistoryPage = ({ historyList }: HistoryPageProps) => {
+const HistoryPage = ({ historyList }: HistoryPageProp) => {
 
 	const getTestTypeBadgeColor = (testType: string) => {
 		if (testType === "exam") {

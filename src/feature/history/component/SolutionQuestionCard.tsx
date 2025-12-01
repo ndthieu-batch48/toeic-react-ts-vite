@@ -15,14 +15,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shad
 import { Button } from '@/shadcn/component/ui/button'
 import { shouldShowGeminiAssistButton } from '@/feature/test/helper/testHelper'
 
-type SolutionQuestionMediaCardProps = {
+type SolutionQuestionMediaCardProp = {
 	mediaQuestion: MediaQuestionDetailResponse,
 }
 
-export const SolutionQuestionMediaCard: React.FC<SolutionQuestionMediaCardProps> = ({
-	mediaQuestion
-}) => {
-
+export const SolutionQuestionMediaCard = ({ mediaQuestion }: SolutionQuestionMediaCardProp) => {
 	const {
 		media_question_id: mediaId,
 		media_question_name: mediaName,

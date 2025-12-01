@@ -12,12 +12,12 @@ import { Button } from "@/shadcn/component/ui/button"
 import { useNavigate } from "@tanstack/react-router"
 import { Home, RotateCcw } from "lucide-react"
 
-type SolutionPartTabsProps = {
+type SolutionPartTabsProp = {
 	partData: PartDetailResponse[]
 	className?: string,
 }
 
-const SolutionPartTabComponent: React.FC<SolutionPartTabsProps> = ({ className, partData }) => {
+const SolutionPartTabComponent = ({ className, partData }: SolutionPartTabsProp) => {
 	const navigate = useNavigate()
 
 	// TAB CHANGE LOGIC

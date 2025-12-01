@@ -17,7 +17,7 @@ export type TestState = {
 	examDuration: number // count down from initial time limit (in seconds)
 	isSubmitting: boolean
 	isSaving: boolean
-	isClose: boolean
+	isClosing: boolean
 }
 
 type TestAction =
@@ -31,7 +31,7 @@ type TestAction =
 	| { type: 'SET_EXAM_DURATION'; payload: number }
 	| { type: 'SET_IS_SUBMITTING'; payload: boolean }
 	| { type: 'SET_IS_SAVING'; payload: boolean }
-	| { type: 'SET_IS_CLOSE'; payload: boolean }
+	| { type: 'SET_IS_CLOSING'; payload: boolean }
 
 
 const testReducer = (state: TestState, action: TestAction): TestState => {
@@ -74,8 +74,8 @@ const testReducer = (state: TestState, action: TestAction): TestState => {
 		case 'SET_IS_SAVING':
 			newState = { ...state, isSaving: action.payload }
 			break
-		case 'SET_IS_CLOSE':
-			newState = { ...state, isClose: action.payload }
+		case 'SET_IS_CLOSING':
+			newState = { ...state, isClosing: action.payload }
 			break
 		default:
 			newState = state
@@ -96,7 +96,7 @@ type TestContextType = {
 	examDuration: number
 	isSubmitting: boolean
 	isSaving: boolean
-	isClose: boolean
+	isClosing: boolean
 
 	// Actions
 	setTestId: (testId: number) => void
@@ -109,7 +109,7 @@ type TestContextType = {
 	setExamDuration: (duration: number) => void
 	setIsSubmitting: (action: boolean) => void
 	setIsSaving: (action: boolean) => void
-	setIsClose: (action: boolean) => void
+	setIsClosing: (action: boolean) => void
 }
 
 const TestContext = createContext<TestContextType | null>(null)
@@ -135,7 +135,7 @@ export const TestProvider = ({
 		examDuration: state.examDuration,
 		isSubmitting: state.isSubmitting,
 		isSaving: state.isSaving,
-		isClose: state.isClose,
+		isClosing: state.isClosing,
 
 		// Actions
 		setTestId: (testId: number) =>
@@ -168,8 +168,8 @@ export const TestProvider = ({
 		setIsSaving: (action: boolean) =>
 			dispatch({ type: 'SET_IS_SAVING', payload: action }),
 
-		setIsClose: (action: boolean) =>
-			dispatch({ type: 'SET_IS_CLOSE', payload: action })
+		setIsClosing: (action: boolean) =>
+			dispatch({ type: 'SET_IS_CLOSING', payload: action })
 
 	}), [state])
 

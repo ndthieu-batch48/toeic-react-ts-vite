@@ -29,6 +29,13 @@ export interface HistoryCreateResponse {
   message: string
 }
 
+export interface PartResultDetail {
+  part_order: string;
+  total_question: number;
+  correct_count: number;
+  incorrect_count: number;
+  no_answer: number;
+}
 export interface HistoryResultDetailResponse {
   history_id: number;
   test_id: number;
@@ -46,6 +53,7 @@ export interface HistoryResultDetailResponse {
   create_at: string;
   data_progress: Record<string, string>
   part_id_list: string[];
+  result_by_part: PartResultDetail[];
 }
 
 export interface HistoryResultListResponse {

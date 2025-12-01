@@ -15,7 +15,7 @@ import { GeminiGradientDefs } from '@/common/component/GeminiIcon'
 import type { AnswerDetailResponse } from '../type/testServiceType'
 import { hasNoMeaningfulContent } from '../helper/testHelper'
 
-interface GeminiAssistCardProps {
+interface GeminiAssistCardProp {
 	isExpanded: boolean
 	mediaId: number
 	questionId: number
@@ -24,14 +24,14 @@ interface GeminiAssistCardProps {
 	answerList: AnswerDetailResponse[]
 }
 
-export const GeminiAssistCard: React.FC<GeminiAssistCardProps> = ({
+export const GeminiAssistCard = ({
 	isExpanded,
 	// mediaId,
 	questionId,
 	audioScript,
 	questionContent,
 	answerList,
-}) => {
+}: GeminiAssistCardProp) => {
 	const [selectedLang, setSelectedLang] = useState<LANGUAGE_ID>('vi');
 	const [activeTab, setActiveTab] = useState('translate');
 	const [clickedTab, setClickedTab] = useState('');

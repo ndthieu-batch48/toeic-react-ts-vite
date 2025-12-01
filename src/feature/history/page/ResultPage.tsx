@@ -2,18 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shadcn/component/ui/
 import { Badge } from '@/shadcn/component/ui/badge';
 import { Progress } from '@/shadcn/component/ui/progress';
 import { Separator } from '@/shadcn/component/ui/separator';
-import { CheckCircle, XCircle, Clock, Calendar, BookOpen, Headphones, Eye, Home, RotateCcw } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, MinusCircle, Calendar, BookOpen, Headphones, Eye, Home, RotateCcw } from 'lucide-react';
 import type { HistoryResultDetailResponse } from '../type/historyServiceType';
 import { Button } from '@/shadcn/component/ui/button';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-type ResultPageProps = {
+type ResultPageProp = {
 	detailResult: HistoryResultDetailResponse;
 };
 
 const STANDARD_EXAM_DURATION = 7200 // 120 minutes
 
-const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
+const ResultPage = ({ detailResult }: ResultPageProp) => {
 	const navigate = useNavigate();
 
 	const isFailed = detailResult.accuracy < 50
@@ -168,9 +168,9 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 									</Badge>
 								</div>
 
-								<div className="flex items-center justify-between p-3 font-bold bg-background rounded-lg">
+								<div className="flex items-center justify-between p-3 font-bold border bg-background rounded-lg">
 									<div className="flex items-center gap-2">
-										<Clock />
+										<MinusCircle />
 										<span>No Answer</span>
 									</div>
 									<Badge variant="secondary">
@@ -248,29 +248,56 @@ const ResultPage: React.FC<ResultPageProps> = ({ detailResult }) => {
 					<CardTitle>Performance Insights</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div className="space-y-3">
-							<h4 className="font-semibold">Listening Section</h4>
-							<div className="space-y-2">
-								<div className="flex justify-between text-sm">
-									<span>Correct Answers</span>
-									<span>{detailResult.correct_listening}/100</span>
-								</div>
-								<Progress value={(detailResult.correct_listening / 100) * 100} />
-							</div>
+					{detailResult.result_by_part.length === 0 ? (
+						<div className="flex items-center justify-center">
+							<p className="text-lg text-muted-foreground">No answer is selected</p>
 						</div>
+					) : (
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+							{detailResult.result_by_part.map((part) => {
+								const accuracy = part.total_question > 0
+									? Math.round((part.correct_count / part.total_question) * 100)
+									: 0;
 
-						<div className="space-y-3">
-							<h4 className="font-semibold">Reading Section</h4>
-							<div className="space-y-2">
-								<div className="flex justify-between text-sm">
-									<span>Correct Answers</span>
-									<span>{detailResult.correct_reading}/100</span>
-								</div>
-								<Progress value={(detailResult.correct_reading / 100) * 100} />
-							</div>
+								return (
+									<div key={part.part_order} className="flex flex-col rounded-lg gap-1 mx-2">
+										{/* Header with part name and accuracy */}
+										<div className="flex items-center justify-between">
+											<h4 className="text-sm font-bold">{part.part_order}</h4>
+											<span className="text-xs font-semibold">{accuracy}%</span>
+										</div>
+
+										<Progress
+											value={(part.correct_count / part.total_question) * 100}
+											className='[&>div]:bg-positive/50'
+										/>
+
+										{/* Stats badges */}
+										<div className="flex gap-3 justify-end">
+											<div className="flex items-center gap-1">
+												<span className="text-xs">Correct</span>
+												<div className="w-8 h-8 rounded-full bg-positive/20 flex items-center justify-center">
+													<span className="text-xs font-bold text-positive">{part.correct_count}</span>
+												</div>
+											</div>
+											<div className="flex items-center gap-1">
+												<span className="text-xs">Incorrect</span>
+												<div className="w-8 h-8 rounded-full bg-destructive/20 flex items-center justify-center">
+													<span className="text-xs font-bold text-destructive">{part.incorrect_count}</span>
+												</div>
+											</div>
+											<div className="flex items-center gap-1">
+												<span className="text-xs">No answer</span>
+												<div className="w-8 h-8 rounded-full border bg-background flex items-center justify-center">
+													<span className="text-xs font-bold">{part.no_answer}</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								);
+							})}
 						</div>
-					</div>
+					)}
 				</CardContent>
 			</Card>
 

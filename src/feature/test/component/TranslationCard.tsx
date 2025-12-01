@@ -2,15 +2,12 @@ import { Skeleton } from '@/shadcn/component/ui/skeleton';
 import type { GeminiTranslateQuestionResponse } from '../type/testServiceType';
 import { Languages } from 'lucide-react';
 
-type TranslationCardProps = {
+type TranslationCardProp = {
 	translateScript?: GeminiTranslateQuestionResponse;
 	isTranslatePending: boolean;
 }
 
-export const TranslationCard: React.FC<TranslationCardProps> = ({
-	translateScript,
-	isTranslatePending,
-}) => {
+export const TranslationCard = ({ translateScript, isTranslatePending }: TranslationCardProp) => {
 	const shouldShowPlaceholder = !isTranslatePending && !translateScript;
 
 	return (

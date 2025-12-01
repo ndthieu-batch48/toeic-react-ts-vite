@@ -6,11 +6,11 @@ import { LoginForm } from "../component/LoginForm";
 import { RegisterForm } from "../component/RegisterForm";
 import { TmaLogo } from "@/common/component/TmaLogo";
 
-type LoginPageProps = {
+type LoginPageProp = {
 	onAuthSuccess: () => Promise<void>
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onAuthSuccess }) => {
+export const LoginPage = ({ onAuthSuccess }: LoginPageProp) => {
 
 	const { loginMutation, registerMutation } = useAuthMutation();
 

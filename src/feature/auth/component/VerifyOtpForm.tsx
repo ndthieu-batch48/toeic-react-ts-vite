@@ -30,7 +30,7 @@ const otpSchema = z.object({
 });
 
 
-type VerifyOTPFormProps = {
+type VerifyOTPFormProp = {
 	onOtpVerify: (otpValue: string) => Promise<void>
 	onResendOtp: () => Promise<void>
 	verifyStatus: "error" | "idle" | "pending" | "success"
@@ -42,8 +42,7 @@ export function VerifyOTPForm({
 	onResendOtp,
 	verifyStatus,
 	resendStatus,
-
-}: VerifyOTPFormProps) {
+}: VerifyOTPFormProp) {
 	const RESEND_OTP_COUNTDOWN = 60
 	const [countDown, setCountDown] = useState(0)
 

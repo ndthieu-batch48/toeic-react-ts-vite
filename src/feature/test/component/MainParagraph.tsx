@@ -1,13 +1,13 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { ImageIcon } from "lucide-react";
 import { isMainParagraphHasContent } from "../helper/testHelper";
 
-interface MainParagraphProps {
+interface MainParagraphProp {
 	mainParagraph: string;
 }
 
-export const MainParagraph: React.FC<MainParagraphProps> = ({ mainParagraph }) => {
+export const MainParagraph = ({ mainParagraph }: MainParagraphProp) => {
 	const [imgError, setImgError] = useState(false);
 
 	const hasContent = isMainParagraphHasContent(mainParagraph);
@@ -43,7 +43,7 @@ export const MainParagraph: React.FC<MainParagraphProps> = ({ mainParagraph }) =
 
 	// Handle other HTML content
 	return (
-		<div 
+		<div
 			className="text-2xl prose max-w-none [&>*]:text-foreground"
 			dangerouslySetInnerHTML={{ __html: mainParagraph }}
 		/>

@@ -7,14 +7,14 @@ import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useTestContext } from "../context/TestContext"
 import { useBlocker } from "@tanstack/react-router"
 
-type TestPracticePageProps = {
+type TestPracticePageProp = {
 	testTitle: string
 	partData: PartDetailResponse[],
 }
 
-export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, partData }) => {
+export const TestPracticePage = ({ testTitle, partData }: TestPracticePageProp) => {
 	const { isScrolling, scrollPosition } = useScrollControl('window');
-	const { testType, selectedAnswers, isSubmitting, isClose } = useTestContext()
+	const { testType, selectedAnswers, isSubmitting, isClosing } = useTestContext()
 
 	const getTotalQuestion = () => {
 		return partData.reduce((totalQuestions, part) => {
@@ -31,7 +31,7 @@ export const TestPracticePage: React.FC<TestPracticePageProps> = ({ testTitle, p
 	useBlocker({
 		shouldBlockFn: () => {
 			// Allow navigation during submit/close operations
-			if (isSubmitting || isClose) {
+			if (isSubmitting || isClosing) {
 				return false;
 			}
 

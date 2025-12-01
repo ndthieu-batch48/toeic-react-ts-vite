@@ -8,13 +8,13 @@ import { useScrollControl } from "@/common/hook/useScrollControl"
 import { useSolutionContext } from "../context/SolutionContext"
 
 
-type SolutionPageProps = {
+type SolutionPageProp = {
 	detailHistory: HistoryResultDetailResponse
 	partData: PartDetailResponse[]
 	testTitle: string
 }
 
-export const SolutionPage: React.FC<SolutionPageProps> = ({ partData, testTitle }) => {
+export const SolutionPage = ({ partData, testTitle }: SolutionPageProp) => {
 	const { isScrolling, scrollPosition } = useScrollControl('window');
 	const { selectedAnswers } = useSolutionContext()
 

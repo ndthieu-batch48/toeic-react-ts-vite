@@ -1,13 +1,13 @@
 import { Button } from '@/shadcn/component/ui/button'
 import { ArrowUp } from 'lucide-react'
 
-type ScrollToTopProps = {
+type ScrollToTopProp = {
 	isVisible: boolean
 	onScrollToTop: () => void
 
 }
 
-export const ScrollToTop: React.FC<ScrollToTopProps> = ({ isVisible, onScrollToTop }) => {
+export const ScrollToTop = ({ isVisible, onScrollToTop }: ScrollToTopProp) => {
 	if (!isVisible) return null;
 
 	return (

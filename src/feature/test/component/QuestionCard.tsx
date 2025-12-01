@@ -16,13 +16,11 @@ import { GeminiIconFill, GeminiIconOutline } from '@/common/component/GeminiIcon
 import { GeminiAssistCard } from './GeminiAssistCard'
 import { shouldShowGeminiAssistButton } from '../helper/testHelper'
 
-type QuestionMediaCardProps = {
+type QuestionMediaCardProp = {
 	mediaQuestion: MediaQuestionDetailResponse,
 }
 
-export const QuestionMediaCard: React.FC<QuestionMediaCardProps> = ({
-	mediaQuestion,
-}) => {
+export const QuestionMediaCard = ({ mediaQuestion }: QuestionMediaCardProp) => {
 	const {
 		media_question_id: mediaId,
 		media_question_name: mediaName,

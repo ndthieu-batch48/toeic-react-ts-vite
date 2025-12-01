@@ -2,15 +2,12 @@ import type { GeminiExplainQuestionResponse } from '@/feature/test/type/testServ
 import { Skeleton } from '@/shadcn/component/ui/skeleton'
 import { Lightbulb } from 'lucide-react'
 
-type ExplainationCardProps = {
+type ExplainationCardProp = {
 	explainScript?: GeminiExplainQuestionResponse;
 	isExplainPending: boolean;
 }
 
-export const ExplainationCard: React.FC<ExplainationCardProps> = ({
-	explainScript,
-	isExplainPending,
-}) => {
+export const ExplainationCard = ({ explainScript, isExplainPending }: ExplainationCardProp) => {
 	const hasRequirement = Boolean(explainScript?.question_need)
 	const hasIntent = Boolean(explainScript?.question_ask)
 	const hasCorrectReason = Boolean(explainScript?.correct_answer_reason)

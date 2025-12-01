@@ -1,10 +1,10 @@
 import { Headphones } from "lucide-react"
 
-interface TranslateAudioScriptCardProps {
+interface TranslateAudioScriptCardProp {
 	audioScript: string
 }
 
-export const TranslateAudioScriptCard: React.FC<TranslateAudioScriptCardProps> = ({ audioScript }) => {
+export const TranslateAudioScriptCard = ({ audioScript }: TranslateAudioScriptCardProp) => {
 
 	return (
 		<div className="w-full border border-foreground bg-background rounded-lg p-4">
