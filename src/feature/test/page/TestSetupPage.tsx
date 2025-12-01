@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shadcn/component/ui/card'
 import { Button } from '@/shadcn/component/ui/button'
 import { Checkbox } from '@/shadcn/component/ui/checkbox'
