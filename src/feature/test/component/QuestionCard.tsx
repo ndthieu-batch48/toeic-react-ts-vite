@@ -166,11 +166,11 @@ export const QuestionMediaCard = ({ mediaQuestion }: QuestionMediaCardProp) => {
 														) : (
 															<GeminiIconOutline size={30} strokeWidth={2} />
 														)}
-														<span className="font-semibold">English Assistant</span>
+														<span className="font-semibold">Quick Help</span>
 													</Button>
 												</TooltipTrigger>
 												<TooltipContent align="end" side="bottom">
-													Get AI Help ?
+													Get quick help to understand the question ?
 												</TooltipContent>
 											</Tooltip>
 										</TooltipProvider>

@@ -14,7 +14,7 @@ export const TranslationCard = ({ translateScript, isTranslatePending }: Transla
 		<div className="w-full border border-foreground bg-background rounded-lg p-3">
 			{isTranslatePending ? (
 				<>
-					<span className="font-semibold">AI is working...</span>
+					<span className="font-semibold">Processing...</span>
 					<Skeleton className="h-5 w-full" />
 				</>
 			) : shouldShowPlaceholder ? (

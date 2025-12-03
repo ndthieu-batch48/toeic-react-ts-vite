@@ -19,7 +19,7 @@ export const ExplainationCard = ({ explainScript, isExplainPending }: Explainati
 	if (isExplainPending) {
 		return (
 			<div className="w-full border border-foreground bg-background rounded-lg p-3 space-y-2">
-				<span className="font-semibold">AI is working...</span>
+				<span className="font-semibold">Processing...</span>
 				<Skeleton className="h-5 w-full" />
 			</div>
 		)
