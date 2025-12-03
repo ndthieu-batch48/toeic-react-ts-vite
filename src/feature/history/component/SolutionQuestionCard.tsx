@@ -166,7 +166,7 @@ export const SolutionQuestionMediaCard = ({ mediaQuestion }: SolutionQuestionMed
 														) : (
 															<GeminiIconOutline size={30} strokeWidth={2} />
 														)}
-														<span className="font-semibold">AI Assistant</span>
+														<span className="font-semibold">English Assistant</span>
 													</Button>
 												</TooltipTrigger>
 												<TooltipContent align="end" side="bottom">
