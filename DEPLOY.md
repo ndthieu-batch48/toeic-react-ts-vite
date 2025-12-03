@@ -2,10 +2,12 @@
 
 ## Mục lục
 1. [Cài đặt NSSM](#1-cài-đặt-nssm)
-2. [Chạy FastAPI với NSSM](#2-chạy-fastapi-với-nssm)
-3. [Chạy Django với NSSM](#3-chạy-django-với-nssm)
-4. [Cấu hình Nginx](#4-cấu-hình-nginx)
-5. [Kiểm tra và Troubleshooting](#5-kiểm-tra-và-troubleshooting)
+2. [Quản lý Services với NSSM](#2-quản-lý-services-với-nssm)
+   - [2.1. Tạo mới FastAPI Service](#21-tạo-mới-fastapi-service)
+   - [2.2. Tạo mới Django Service](#22-tạo-mới-django-service)
+   - [2.3. Quản lý Services đã tồn tại](#23-quản-lý-services-đã-tồn-tại)
+3. [Cấu hình Nginx](#3-cấu-hình-nginx)
+4. [Kiểm tra và Troubleshooting](#4-kiểm-tra-và-troubleshooting)
 
 ---
 
@@ -22,9 +24,13 @@ NSSM (Non-Sucking Service Manager) là công cụ giúp chạy ứng dụng Wind
 
 ---
 
-## 2. Chạy FastAPI với NSSM
+## 2. Quản lý Services với NSSM
 
-### 2.1. Tạo file `run_fastapi.bat`
+### 2.1. Tạo mới FastAPI Service
+
+> **Lưu ý:** Phần này dành cho việc tạo service **lần đầu tiên**. Nếu service đã tồn tại, xem mục [2.3. Quản lý Services đã tồn tại](#23-quản-lý-services-đã-tồn-tại).
+
+#### Bước 1: Tạo file `run_fastapi.bat`
 
 **Đường dẫn:** `C:\TOEIC_NEW\toeic-fastapi\run_fastapi.bat`
 
@@ -37,7 +43,7 @@ call python main.py
 - `call venv\Scripts\activate.bat` - Kích hoạt virtual environment
 - `call python main.py` - Chạy FastAPI từ file main.py (cấu hình port trong code Python)
 
-### 2.2. Cài đặt FastAPI Service
+#### Bước 2: Cài đặt Service
 
 **Cách 1: Sử dụng GUI (Khuyến nghị cho người mới)**
 
@@ -64,64 +70,30 @@ Nhấn **Install service**
 
 ---
 
-**Cách 2: Cài đặt qua Command Line (Nhanh)**
+**Cách 2: Cài đặt qua Command Line**
 
 ```cmd
 cd C:\nssm-2.24\win64
 nssm install ToeicFastApiWindowsService "C:\TOEIC_NEW\toeic-fastapi\run_fastapi.bat"
-```
-
-### 2.3. Cấu hình Service
-
-```cmd
 nssm set ToeicFastApiWindowsService AppDirectory "C:\TOEIC_NEW\toeic-fastapi"
 nssm set ToeicFastApiWindowsService DisplayName "Toeic FastAPI Service"
 nssm set ToeicFastApiWindowsService Description "FastAPI backend service for Toeic application"
 nssm set ToeicFastApiWindowsService Start SERVICE_AUTO_START
 ```
 
-### 2.4. Khởi động Service
+#### Bước 3: Khởi động Service
 
 ```cmd
 nssm start ToeicFastApiWindowsService
 ```
 
-### 2.5. Các lệnh quản lý khác
-
-```cmd
-# Xem trạng thái
-nssm status ToeicFastApiWindowsService
-
-# Dừng service
-nssm stop ToeicFastApiWindowsService
-
-# Restart service
-nssm restart ToeicFastApiWindowsService
-
-# Mở GUI để chỉnh sửa cấu hình service
-nssm edit ToeicFastApiWindowsService
-
-# Xóa service (hiện GUI xác nhận)
-nssm remove ToeicFastApiWindowsService
-
-# Xóa service (không cần xác nhận)
-nssm remove ToeicFastApiWindowsService confirm
-
-# Xem thông tin chi tiết một parameter
-nssm get ToeicFastApiWindowsService AppDirectory
-
-# Set một parameter cụ thể
-nssm set ToeicFastApiWindowsService AppDirectory "C:\TOEIC_NEW\toeic-fastapi"
-
-# Reset parameter về mặc định
-nssm reset ToeicFastApiWindowsService AppDirectory
-```
-
 ---
 
-## 3. Chạy Django với NSSM
+### 2.2. Tạo mới Django Service
 
-### 3.1. Tạo file `run_django.bat`
+> **Lưu ý:** Phần này dành cho việc tạo service **lần đầu tiên**. Nếu service đã tồn tại, xem mục [2.3. Quản lý Services đã tồn tại](#23-quản-lý-services-đã-tồn-tại).
+
+#### Bước 1: Tạo file `run_django.bat`
 
 **Đường dẫn:** `C:\TOEIC_NEW\toeic-django\run_django.bat`
 
@@ -134,7 +106,7 @@ call python runserver.py
 - `call venv\Scripts\activate.bat` - Kích hoạt virtual environment
 - `call python runserver.py` - Chạy Django từ file runserver.py (cấu hình port trong code Python)
 
-### 3.2. Cài đặt Django Service
+#### Bước 2: Cài đặt Service
 
 **Cách 1: Sử dụng GUI (Khuyến nghị cho người mới)**
 
@@ -142,7 +114,7 @@ Mở **Command Prompt (Administrator)**:
 
 ```cmd
 cd C:\nssm-2.24\win64
-nssm install DjangoWindowsService
+nssm install ToeicDjangoWindowsService
 ```
 
 Một cửa sổ GUI sẽ hiện ra, điền các thông tin:
@@ -150,7 +122,7 @@ Một cửa sổ GUI sẽ hiện ra, điền các thông tin:
 **Tab "Application":**
 - **Path:** `C:\TOEIC_NEW\toeic-django\run_django.bat`
 - **Startup directory:** `C:\TOEIC_NEW\toeic-django`
-- **Service name:** `DjangoWindowsService`
+- **Service name:** `ToeicDjangoWindowsService`
 
 **Tab "Details":**
 - **Display name:** `Django Toeic Service`
@@ -161,60 +133,180 @@ Nhấn **Install service**
 
 ---
 
-**Cách 2: Cài đặt qua Command Line (Nhanh)**
+**Cách 2: Cài đặt qua Command Line**
 
 ```cmd
 cd C:\nssm-2.24\win64
-nssm install DjangoWindowsService "C:\TOEIC_NEW\toeic-django\run_django.bat"
+nssm install ToeicDjangoWindowsService "C:\TOEIC_NEW\toeic-django\run_django.bat"
+nssm set ToeicDjangoWindowsService AppDirectory "C:\TOEIC_NEW\toeic-django"
+nssm set ToeicDjangoWindowsService DisplayName "Django Toeic Service"
+nssm set ToeicDjangoWindowsService Description "Django backend service for Toeic application"
+nssm set ToeicDjangoWindowsService Start SERVICE_AUTO_START
 ```
 
-### 3.3. Cấu hình Service
+#### Bước 3: Khởi động Service
 
 ```cmd
-nssm set DjangoWindowsService AppDirectory "C:\TOEIC_NEW\toeic-django"
-nssm set DjangoWindowsService DisplayName "Django Toeic Service"
-nssm set DjangoWindowsService Description "Django backend service for Toeic application"
-nssm set DjangoWindowsService Start SERVICE_AUTO_START
-```
-
-### 3.4. Khởi động Service
-
-```cmd
-nssm start DjangoWindowsService
-```
-
-### 3.5. Các lệnh quản lý khác
-
-```cmd
-# Xem trạng thái
-nssm status DjangoWindowsService
-
-# Dừng service
-nssm stop DjangoWindowsService
-
-# Restart service
-nssm restart DjangoWindowsService
-
-# Mở GUI để chỉnh sửa cấu hình service
-nssm edit DjangoWindowsService
-
-# Xóa service (hiện GUI xác nhận)
-nssm remove DjangoWindowsService
-
-# Xóa service (không cần xác nhận)
-nssm remove DjangoWindowsService confirm
-
-# Xem/Set/Reset parameters
-nssm get DjangoWindowsService AppDirectory
-nssm set DjangoWindowsService AppDirectory "C:\TOEIC_NEW\toeic-django"
-nssm reset DjangoWindowsService AppDirectory
+nssm start ToeicDjangoWindowsService
 ```
 
 ---
 
-## 4. Cấu hình Nginx
+### 2.3. Quản lý Services đã tồn tại
 
-### 4.1. Cấu trúc thư mục
+> **Áp dụng cho:** Services đã được cài đặt và đang chạy (ToeicFastApiWindowsService, ToeicDjangoWindowsService)
+
+#### Các lệnh quản lý cơ bản
+
+```cmd
+# Xem trạng thái service
+nssm status <ServiceName>
+
+# Khởi động service
+nssm start <ServiceName>
+
+# Dừng service
+nssm stop <ServiceName>
+
+# Khởi động lại service (restart)
+nssm restart <ServiceName>
+```
+
+**Ví dụ cụ thể:**
+
+```cmd
+# FastAPI Service
+nssm status ToeicFastApiWindowsService
+nssm start ToeicFastApiWindowsService
+nssm stop ToeicFastApiWindowsService
+nssm restart ToeicFastApiWindowsService
+
+# Django Service
+nssm status ToeicDjangoWindowsService
+nssm start ToeicDjangoWindowsService
+nssm stop ToeicDjangoWindowsService
+nssm restart ToeicDjangoWindowsService
+```
+
+#### Chỉnh sửa cấu hình service
+
+**Sử dụng GUI (Khuyến nghị):**
+
+```cmd
+# Mở GUI để chỉnh sửa cấu hình
+nssm edit <ServiceName>
+```
+
+Ví dụ:
+```cmd
+nssm edit ToeicFastApiWindowsService
+nssm edit ToeicDjangoWindowsService
+```
+
+Cửa sổ GUI sẽ hiện ra cho phép bạn thay đổi:
+- Application path
+- Startup directory
+- Environment variables
+- Log files
+- Startup type
+- v.v.
+
+**Sử dụng Command Line:**
+
+```cmd
+# Xem giá trị của một parameter
+nssm get <ServiceName> <Parameter>
+
+# Thay đổi giá trị của một parameter
+nssm set <ServiceName> <Parameter> <Value>
+
+# Reset parameter về mặc định
+nssm reset <ServiceName> <Parameter>
+```
+
+**Ví dụ thực tế:**
+
+```cmd
+# Xem đường dẫn application
+nssm get ToeicFastApiWindowsService AppDirectory
+
+# Thay đổi đường dẫn application
+nssm set ToeicFastApiWindowsService AppDirectory "C:\TOEIC_NEW\toeic-fastapi"
+
+# Thay đổi startup type
+nssm set ToeicDjangoWindowsService Start SERVICE_AUTO_START
+
+# Reset về mặc định
+nssm reset ToeicFastApiWindowsService AppDirectory
+```
+
+#### Xóa service
+
+```cmd
+# Xóa service với GUI xác nhận
+nssm remove <ServiceName>
+
+# Xóa service không cần xác nhận
+nssm remove <ServiceName> confirm
+```
+
+**⚠️ Lưu ý:** Nên dừng service trước khi xóa:
+
+```cmd
+nssm stop ToeicFastApiWindowsService
+nssm remove ToeicFastApiWindowsService confirm
+```
+
+#### Các tình huống thường gặp
+
+**1. Cập nhật code và cần restart service:**
+
+```cmd
+# Dừng service
+nssm stop ToeicFastApiWindowsService
+
+# Pull code mới, update dependencies...
+cd C:\TOEIC_NEW\toeic-fastapi
+git pull
+venv\Scripts\activate
+pip install -r requirements.txt
+
+# Khởi động lại service
+nssm start ToeicFastApiWindowsService
+```
+
+**2. Thay đổi cấu hình (port, environment variables):**
+
+```cmd
+# Mở GUI để chỉnh sửa
+nssm edit ToeicFastApiWindowsService
+
+# Hoặc dùng command line
+nssm set ToeicFastApiWindowsService AppEnvironmentExtra "PORT=8005"
+
+# Restart để áp dụng thay đổi
+nssm restart ToeicFastApiWindowsService
+```
+
+**3. Service không start được:**
+
+```cmd
+# Xem trạng thái chi tiết
+nssm status ToeicFastApiWindowsService
+
+# Test chạy trực tiếp file .bat
+cd C:\TOEIC_NEW\toeic-fastapi
+run_fastapi.bat
+
+# Kiểm tra logs
+# Logs mặc định: C:\nssm-2.24\win64\ToeicFastApiWindowsService-stderr.log
+```
+
+---
+
+## 3. Cấu hình Nginx
+
+### 3.1. Cấu trúc thư mục
 
 ```
 C:\nginx-1.27.4\nginx-1.27.4\
@@ -223,7 +315,7 @@ C:\nginx-1.27.4\nginx-1.27.4\
 └── nginx.exe
 ```
 
-### 4.2. Cấu hình SSL Certificate
+### 3.2. Cấu hình SSL Certificate
 
 **Đường dẫn cert:** `C:\cert\tma.com.vn`
 
@@ -231,7 +323,7 @@ Các file cần thiết:
 - `tma.com.vn-full.crt` - Full chain certificate
 - `tma.com.vn.key` - Private key
 
-### 4.3. Cấu hình Nginx cho Server 3004
+### 3.3. Cấu hình Nginx cho Server 3004
 
 File: `C:\nginx-1.27.4\nginx-1.27.4\conf\nginx.conf`
 
@@ -286,7 +378,7 @@ http {
 }
 ```
 
-### 4.4. Build React Application
+### 3.4. Build React Application
 
 Trước khi deploy, cần build React app:
 
@@ -297,7 +389,7 @@ npm run build
 
 Kết quả sẽ tạo thư mục `dist` chứa static files.
 
-### 4.5. Khởi động Nginx
+### 3.5. Khởi động Nginx
 
 **⚠️ LƯU Ý QUAN TRỌNG:** Chỉ start Nginx **1 LẦN DUY NHẤT** khi lần đầu khởi động hoặc sau khi dừng hoàn toàn.
 
@@ -326,7 +418,7 @@ tasklist /fi "imagename eq nginx.exe"
 
 Nếu thấy kết quả có `nginx.exe`, nghĩa là Nginx đã chạy → Chỉ dùng `nginx -s reload`
 
-### 4.6. Các lệnh quản lý Nginx
+### 3.6. Các lệnh quản lý Nginx
 
 ```cmd
 # Kiểm tra cấu hình có lỗi không
@@ -356,7 +448,7 @@ taskkill /f /im nginx.exe
    - `nginx -s reload` (áp dụng thay đổi)
 3. **KHÔNG BAO GIỜ:** Chạy `start nginx` nhiều lần liên tiếp!
 
-### 4.7. Cài đặt Nginx như Windows Service (khuyến nghị)
+### 3.7. Cài đặt Nginx như Windows Service (khuyến nghị)
 
 Dùng NSSM để chạy Nginx như service:
 
@@ -370,18 +462,18 @@ nssm start NginxService
 
 ---
 
-## 5. Kiểm tra và Troubleshooting
+## 4. Kiểm tra và Troubleshooting
 
-### 5.1. Kiểm tra Services đang chạy
+### 4.1. Kiểm tra Services đang chạy
 
 ```cmd
 # Kiểm tra tất cả services
 nssm status ToeicFastApiWindowsService
-nssm status DjangoWindowsService
+nssm status ToeicDjangoWindowsService
 nssm status NginxService
 ```
 
-### 5.2. Kiểm tra Ports
+### 4.2. Kiểm tra Ports
 
 ```cmd
 # Kiểm tra port 8004 (FastAPI)
@@ -394,7 +486,7 @@ netstat -ano | findstr :8080
 netstat -ano | findstr :3004
 ```
 
-### 5.3. Test Endpoints
+### 4.3. Test Endpoints
 
 ```bash
 # Test Django
@@ -407,7 +499,7 @@ curl https://english-practice.tma.com.vn:3004/fastapi/
 curl https://english-practice.tma.com.vn:3004/
 ```
 
-### 5.4. Xem Logs
+### 4.4. Xem Logs
 
 **NSSM Services:**
 - Logs mặc định: `C:\nssm-2.24\win64\[ServiceName]-stderr.log`
@@ -417,7 +509,7 @@ curl https://english-practice.tma.com.vn:3004/
 - Access log: `C:\nginx-1.27.4\nginx-1.27.4\logs\access.log`
 - Error log: `C:\nginx-1.27.4\nginx-1.27.4\logs\error.log`
 
-### 5.5. Các lỗi thường gặp
+### 4.5. Các lỗi thường gặp
 
 **1. Service không start được:**
 - Kiểm tra đường dẫn trong file `.bat`
@@ -443,6 +535,8 @@ curl https://english-practice.tma.com.vn:3004/
 
 ## Tóm tắt Quy trình Deploy
 
+### Deploy lần đầu tiên
+
 1. **Chuẩn bị ứng dụng:**
    - Tạo virtual environment cho Django và FastAPI
    - Build React app: `npm run build`
@@ -452,7 +546,7 @@ curl https://english-practice.tma.com.vn:3004/
    - `run_fastapi.bat` cho FastAPI (port 8004)
 
 3. **Cài đặt Windows Services:**
-   - Install DjangoWindowsService
+   - Install ToeicDjangoWindowsService
    - Install ToeicFastApiWindowsService
    - Start cả 2 services
 
@@ -466,10 +560,38 @@ curl https://english-practice.tma.com.vn:3004/
    - Test các endpoints: `/django/`, `/fastapi/`
    - Kiểm tra React app load được không
 
+### Quản lý hàng ngày (Services đã tồn tại)
+
+1. **Cập nhật code:**
+   ```cmd
+   nssm stop ToeicFastApiWindowsService
+   # Pull code, update dependencies
+   nssm start ToeicFastApiWindowsService
+   ```
+
+2. **Thay đổi cấu hình:**
+   ```cmd
+   nssm edit ToeicFastApiWindowsService
+   nssm restart ToeicFastApiWindowsService
+   ```
+
+3. **Cập nhật Nginx config:**
+   ```cmd
+   nginx -t
+   nginx -s reload
+   ```
+
+4. **Deploy React mới:**
+   ```cmd
+   npm run build
+   nginx -s reload
+   ```
+
 ---
 
 ## Lưu ý quan trọng
 
+- **NSSM Services:** Dùng `nssm edit` để chỉnh sửa cấu hình, `nssm restart` để áp dụng thay đổi
 - **Nginx Start/Reload:** 
   - ✅ Chỉ `start nginx` **1 LẦN DUY NHẤT** khi khởi động
   - ✅ Sau đó luôn dùng `nginx -s reload` khi thay đổi cấu hình
